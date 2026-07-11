@@ -83,19 +83,23 @@
             gap: 25px; padding: 20px 0;
         }
 
-         {
+        {
             width: 100%;
             max-width: 450px;
+            aspect-ratio: 4 / 3;
             position: relative;
+            background: rgba(5, 5, 5, 0.4);
+          
+            border-radius: 20px;
+            padding: 15px;
             display: flex;
             justify-content: center;
             align-items: center;
         }
-       {
+         {
             width: 100%;
-            height: auto;
-            max-height: 60vh;
-            object-fit: contain;
+            height: 100%;
+            object-fit: cover;
             border-radius: 10px;
         }
 
@@ -109,6 +113,7 @@
             background: rgba(5, 5, 5, 0.4);
             border-radius: 20px;
             padding: 25px;
+       
         }
         .mode-grid {
             width: 100%;
@@ -126,7 +131,6 @@
             position: relative;
             overflow: hidden;
             cursor: pointer;
-            border: 1px solid rgba(255, 215, 0, 0.3);
             font-size: 16px;
             font-weight: bold;
             backdrop-filter: blur(3px);
@@ -138,7 +142,11 @@
         }
         .mode-card:hover::before { top: 100%; left: 100%; }
         .mode-card:hover { transform: translateY(-5px) scale(1.02); border-color: #ffd700; box-shadow: 0 0 15px rgba(255,215,0,0.2); }
-        @media(max-width:600px){ .mode-grid{ grid-template-columns: 1fr; } }
+@media(max-width:600px){ 
+    .mode-grid{ grid-template-columns: repeat(2, 1fr); } 
+    .mode-icon-top{ display: flex; justify-content: center; }
+    .mode-icon-top img{ width: 85%; max-width: 220px; }
+}
 
         /* ===== Intro (countdown) ekran ===== */
         #intro-screen {
