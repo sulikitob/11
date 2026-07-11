@@ -143,7 +143,10 @@
         }
         .mode-card:hover::before { top: 100%; left: 100%; }
         .mode-card:hover { transform: translateY(-5px) scale(1.02); border-color: #ffd700; box-shadow: 0 0 15px rgba(255,215,0,0.2); }
-        @media(max-width:600px){ .mode-grid{ grid-template-columns: 1fr; } }
+     @media(max-width:600px){ 
+    .mode-grid{ grid-template-columns: repeat(2, 1fr); } 
+    .mode-icon-top img{ width: 70%; max-width: 220px; }
+}
 
         /* ===== Intro (countdown) ekran ===== */
         #intro-screen {
