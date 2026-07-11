@@ -89,6 +89,18 @@
 
     @media(max-width:1000px){ .menu-grid{ grid-template-columns:repeat(2,1fr); } }
     @media(max-width:600px){ .menu-grid{ grid-template-columns:1fr; } .floating-text h1{ font-size:24px; } }
+
+   .premium { position: relative; }
+.premium::after {
+    content: "⭐";
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    font-size: 20px;
+    color: #b388ff;
+    text-shadow: 0 0 10px #b388ff, 0 0 20px #7c4dff;
+    z-index: 3;
+}
 </style>
 </head>
 <body>
@@ -119,7 +131,7 @@
 
         <h2 class="section-title">Kategoriyalar </h2>
         <div class="menu-grid">
-           <a href="quiz.html" target="_blank" class="card card-blue"><span class="icon">👤</span><h2>Shaxs nomlari</h2></a>
+           <a href="quiz.html" target="_blank" class="card card-blue"><span class="icon">👤</span>onclick="checkPremium(event)<h2>Shaxs nomlari</h2></a>
            <a href="quiz.html" target="_blank" class="card card-blue"><span class="icon">📝</span><h2>Shaxslar ta'rifi</h2></a>
            <a href="quiz.html" target="_blank" class="card card-blue"><span class="icon">🎂</span><h2>Shaxs yoshlari</h2></a>
            <a href="quiz.html" target="_blank" class="card card-blue"><span class="icon">🏠</span><h2>Shaxslar yashash manzillari</h2></a>
@@ -137,6 +149,13 @@
 
     <div class="footer">zuhos.uz ©</div>
 </div>
-
+   
+<script>
+function checkPremium(e) {
+    e.preventDefault();
+    alert("Bu bo'lim premium obunachilar uchun mo'ljallangan 🔒");
+}
+</script>
+   
 </body>
 </html>
