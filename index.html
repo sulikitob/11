@@ -2,8 +2,10 @@
 <html lang="uz">
 <head>
     <meta charset="UTF-8">
-<meta name="viewport" content="width=1200, initial-scale=0.3, maximum-scale=1.0, user-scalable=yes">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
     <title>Yosh Kitobxon 2026-2027-yil 20-30 yosh toifasi</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap" rel="stylesheet">
     <style>
         * { box-sizing: border-box; }
 
@@ -28,7 +30,7 @@
             z-index: -1; 
             pointer-events: none;
             opacity: 0;
-            animation: mainFadeIn 1s ease forwards 7.5s;
+            animation: mainFadeIn 1s ease forwards 4.4s;
         }
 
         .star {
@@ -56,7 +58,7 @@
             justify-content: center;
             gap: 12px;
             opacity: 0;
-            animation: mainFadeIn 1s ease forwards 7.5s;
+            animation: mainFadeIn 1s ease forwards 4.4s;
             flex-wrap: wrap;
         }
 
@@ -66,161 +68,102 @@
             margin: 0 auto;
             padding: 0 20px 20px; 
             opacity: 0;
-            animation: mainFadeIn 1s ease forwards 7.5s;
+            animation: mainFadeIn 1s ease forwards 4.4s;
         }
 
         @keyframes mainFadeIn {
             to { opacity: 1; }
         }
 
-        /* ===== SN BREND LOGOTIPI (header ichida) ===== */
-        .sn-logo {
-            display: inline-flex;
-            align-items: center;
+        /* ===== OLTIN KALLIGRAFIYA EKRANI: "Yaratgan Robbing nomi bilan o'qi" ===== */
+        .calligraphy-screen {
+            position: fixed;
+            inset: 0;
+            background: #000;
+            z-index: 98;
+            display: flex;
             justify-content: center;
-            width: 44px;
-            height: 44px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #00ff99, #00c2ff);
-            color: #111;
-            font-weight: 900;
-            font-family: 'Georgia', 'Lucida Handwriting', cursive, serif;
-            font-style: italic;
-            font-size: 18px;
-            letter-spacing: 0.5px;
+            align-items: center;
             opacity: 0;
-            transform: scale(0);
-            box-shadow: 0 0 10px rgba(0,255,153,0.7), 0 0 20px rgba(0,194,255,0.4);
-            animation: snAppear 0.5s ease forwards 7.4s,
-                       snFloat 2.4s ease-in-out infinite 7.9s;
-            flex-shrink: 0;
+            animation: callyFadeIn 0.6s ease forwards 4.4s,
+                       callyFadeOut 1s ease forwards 8s;
         }
 
-        @keyframes snAppear {
+        @keyframes callyFadeIn { to { opacity: 1; } }
+        @keyframes callyFadeOut { to { opacity: 0; visibility: hidden; } }
+
+        .cally-text {
+            font-family: 'Great Vibes', 'Segoe Script', 'Lucida Handwriting', cursive;
+            font-size: 58px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: baseline;
+            max-width: 85%;
+            text-align: center;
+            padding: 0 20px;
+            row-gap: 6px;
+        }
+
+        .cally-text span {
+            opacity: 0;
+            display: inline-block;
+            transform: translateY(14px);
+            background: linear-gradient(110deg, #8a6a12 0%, #ffe89b 22%, #fffceb 42%, #ffcc00 60%, #a8790a 82%, #ffe89b 100%);
+            background-size: 260% 100%;
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            filter: drop-shadow(0 0 8px rgba(255, 204, 0, 0.55));
+            animation: callyLetter 0.5s ease forwards, goldShimmer 2.6s linear infinite;
+        }
+
+        @keyframes callyLetter {
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes goldShimmer {
+            0% { background-position: 0% center; }
+            100% { background-position: 260% center; }
+        }
+
+        @media(max-width:600px) {
+            .cally-text { font-size: 34px; }
+        }
+
+        /* ===== SARLAVHA IKKI CHETIDA QOLIB KETUVCHI OLTIN KALLIGRAFIK YOZUV ===== */
+        .cally-badge {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            font-family: 'Great Vibes', 'Segoe Script', 'Lucida Handwriting', cursive;
+            font-size: 30px;
+            line-height: 1;
+            color: #ffcc00;
+            text-shadow: 0 0 10px rgba(255,204,0,0.9), 0 0 22px rgba(255,204,0,0.6);
+            opacity: 0;
+            transform: scale(0);
+            animation: badgeAppear 0.7s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards 8.2s;
+            flex-shrink: 0;
+            white-space: nowrap;
+            padding: 2px 4px;
+        }
+
+        @keyframes badgeAppear {
             to { opacity: 1; transform: scale(1); }
         }
 
-        @keyframes snFloat {
-            0%, 100% { transform: translateY(0) scale(1); box-shadow: 0 0 10px rgba(0,255,153,0.7), 0 0 20px rgba(0,194,255,0.4); }
-            50% { transform: translateY(-4px) scale(1.05); box-shadow: 0 0 16px rgba(0,255,153,1), 0 0 30px rgba(0,194,255,0.7); }
-        }
-
-        /* ===== SN BREND - ATOM VA INTEGRALLASHGAN ELEKTRONLAR INTROSI ===== */
-        .brand-intro {
-            position: fixed;
-            inset: 0;
-            z-index: 99;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+        .cally-badge .sparkle-star {
+            position: absolute;
+            width: 3px;
+            height: 3px;
+            background: #fff8d6;
+            border-radius: 50%;
+            box-shadow: 0 0 6px 2px #ffcc00;
             pointer-events: none;
-        }
-
-        .atom-container {
-            position: relative;
-            width: 320px;
-            height: 320px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            transform-style: preserve-3d;
-            perspective: 1000px;
-            opacity: 0;
-            transform: scale(0);
-            animation: 
-                bigSnAppear 1s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards 3.5s,
-                infinityFly 3s ease-in-out forwards 4.5s;
-        }
-
-        .brand-intro-circle {
-            width: 130px;
-            height: 130px;
-            border-radius: 50%;
-            background: #111;
-            border: 3px solid #00ff99;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 54px;
-            font-weight: 900;
-            font-family: 'Georgia', 'Lucida Handwriting', cursive, serif;
-            font-style: italic;
-            color: #00ff99;
-            z-index: 10;
-            text-shadow: 0 0 15px rgba(0,255,153,0.8);
-            box-shadow: 0 0 30px rgba(0,255,153,0.4), inset 0 0 25px rgba(0,255,153,0.3);
-        }
-
-        /* Atom yo'llari (Yaqqol ko'rinadigan qalin neon chiziqlar) */
-        .atom-orbit {
-            position: absolute;
-            border: 3px solid transparent;
-            border-radius: 50%;
-            width: 280px;
-            height: 100px;
-            transform-style: preserve-3d;
-        }
-
-        .atom-orbit::after {
-            content: "";
-            position: absolute;
-            width: 14px;
-            height: 14px;
-            border-radius: 50%;
-            top: -7px;
-            left: 50%;
-            margin-left: -7px;
-        }
-
-        .atom-orbit:nth-child(1) {
-            border-color: rgba(0, 255, 153, 0.4);
-            transform: rotateX(70deg) rotateY(0deg);
-            animation: orbitAnim1 2s linear infinite;
-        }
-        .atom-orbit:nth-child(1)::after {
-            background: #00ff99;
-            box-shadow: 0 0 15px #00ff99, 0 0 25px #00ff99;
-        }
-
-        .atom-orbit:nth-child(2) {
-            border-color: rgba(0, 194, 255, 0.4);
-            transform: rotateX(70deg) rotateY(60deg);
-            animation: orbitAnim2 2s linear infinite;
-        }
-        .atom-orbit:nth-child(2)::after {
-            background: #00c2ff;
-            box-shadow: 0 0 15px #00c2ff, 0 0 25px #00c2ff;
-        }
-
-        .atom-orbit:nth-child(3) {
-            border-color: rgba(255, 0, 153, 0.4);
-            transform: rotateX(70deg) rotateY(-60deg);
-            animation: orbitAnim3 2s linear infinite;
-        }
-        .atom-orbit:nth-child(3)::after {
-            background: #ff0099;
-            box-shadow: 0 0 15px #ff0099, 0 0 25px #ff0099;
-        }
-
-        @keyframes orbitAnim1 { 100% { transform: rotateX(70deg) rotateY(0deg) rotateZ(360deg); } }
-        @keyframes orbitAnim2 { 100% { transform: rotateX(70deg) rotateY(60deg) rotateZ(360deg); } }
-        @keyframes orbitAnim3 { 100% { transform: rotateX(70deg) rotateY(-60deg) rotateZ(360deg); } }
-
-        @keyframes bigSnAppear {
-            0% { opacity: 0; transform: scale(0) rotate(-30deg); }
-            100% { opacity: 1; transform: scale(1) rotate(0deg); }
-        }
-
-        @keyframes infinityFly {
-            0% { transform: translate(0, 0) scale(1); }
-            20% { transform: translate(90px, -45px) scale(0.95); }
-            40% { transform: translate(-90px, 45px) scale(0.9); }
-            60% { transform: translate(90px, 45px) scale(0.85); }
-            80% { transform: translate(-90px, -45px) scale(0.8); }
-            100% { 
-                transform: translate(var(--move-x, -35vw), var(--move-y, -45vh)) scale(0.12); 
-                opacity: 0;
-            }
+            animation-name: twinkle;
+            animation-timing-function: ease-in-out;
+            animation-iteration-count: infinite;
         }
 
         /* Kitoblar Gridi */
@@ -270,6 +213,7 @@
             align-items: center; 
             justify-content: center;
             border-top: 3px solid #FFD700; 
+            width: 100%;
         }
 
         .book p { 
@@ -277,6 +221,9 @@
             font-weight: bold; 
             margin: 0; 
             color: white; 
+            width: 100%;
+            overflow-wrap: break-word;
+            word-break: break-word;
         }
 
         /* ===== MOBIL EKRANLAR UCHUN TO'LIQ MOSLASHUV ===== */
@@ -304,10 +251,8 @@
                 gap: 8px;
             }
 
-            .sn-logo {
-                width: 36px;
-                height: 36px;
-                font-size: 15px;
+            .cally-badge {
+                font-size: 18px;
             }
         }
 
@@ -365,20 +310,16 @@
         <div class="vortex-container" id="vortex"></div>
     </div>
 
-    <div class="brand-intro">
-        <div class="atom-container" id="atom-brand">
-            <div class="atom-orbit"></div>
-            <div class="atom-orbit"></div>
-            <div class="atom-orbit"></div>
-            <div class="brand-intro-circle">SN</div>
-        </div>
+    <div class="calligraphy-screen">
+        <div class="cally-text" id="cally-text"></div>
     </div>
 
     <div id="stars-layer"></div>
 
     <header>
-        <span class="sn-logo" id="header-logo">SN</span>
+        <span class="cally-badge cally-badge-left" id="cally-left">Yaratgan Robbing ✦</span>
         📚 Yosh Kitobxon 2026-2027 (20-30 yosh)
+        <span class="cally-badge cally-badge-right" id="cally-right">✦ nomi bilan o'qi</span>
     </header>
 
     <div class="container">
@@ -411,21 +352,6 @@
     </div>
 
     <script>
-        function adjustFlyCoords() {
-            const brand = document.getElementById('atom-brand');
-            const logo = document.getElementById('header-logo');
-            if(brand && logo) {
-                const bRect = brand.getBoundingClientRect();
-                const lRect = logo.getBoundingClientRect();
-                const xDiff = lRect.left + (lRect.width/2) - (window.innerWidth/2);
-                const yDiff = lRect.top + (lRect.height/2) - (window.innerHeight/2);
-                brand.style.setProperty('--move-x', xDiff + 'px');
-                brand.style.setProperty('--move-y', yDiff + 'px');
-            }
-        }
-        window.addEventListener('load', adjustFlyCoords);
-        window.addEventListener('resize', adjustFlyCoords);
-
         const vortex = document.getElementById('vortex');
         const totalIntroPetals = 1500;
         for (let i = 0; i < totalIntroPetals; i++) {
@@ -463,6 +389,42 @@
             star.style.animationDelay = Math.random() * 5 + "s";
             starsLayer.appendChild(star);
         }
+
+        /* ===== OLTIN KALLIGRAFIYA MATNI: harf-barharf yozilishi ===== */
+        const callyPhrase = "✦ Yaratgan Robbing nomi bilan o'qi ✦";
+        const callyContainer = document.getElementById('cally-text');
+        const letterStartDelay = 4.6;   // soniya — ekran ochilgach boshlanadi
+        const letterStagger = 0.045;    // har bir harf orasidagi farq
+
+        [...callyPhrase].forEach((ch, i) => {
+            const span = document.createElement('span');
+            span.textContent = ch === ' ' ? '\u00A0' : ch;
+            const letterDelay = (letterStartDelay + i * letterStagger);
+            const shimmerOffset = (Math.random() * 1.2).toFixed(2);
+            // ikkita animatsiya: callyLetter (paydo bo'lish) va goldShimmer (tovlanish)
+            span.style.animationDelay = letterDelay + 's, ' + shimmerOffset + 's';
+            callyContainer.appendChild(span);
+        });
+
+        /* ===== SARLAVHA ATROFIDAGI OLTIN BEZAKLARGA TINMAY PORILLOVCHI YULDUZCHALAR ===== */
+        function addSparkles(el, count) {
+            for (let i = 0; i < count; i++) {
+                const star = document.createElement('span');
+                star.className = 'sparkle-star';
+                star.style.top = Math.random() * 80 + '%';
+                star.style.left = Math.random() * 80 + '%';
+                star.style.animationDuration = (0.8 + Math.random() * 1.4) + 's';
+                star.style.animationDelay = (Math.random() * 1.5) + 's';
+                el.appendChild(star);
+            }
+        }
+
+        window.addEventListener('load', function () {
+            setTimeout(function () {
+                addSparkles(document.getElementById('cally-left'), 6);
+                addSparkles(document.getElementById('cally-right'), 6);
+            }, 9000); // oltin bezaklar joyiga tushgach ishga tushadi
+        });
     </script>
 </body>
 </html>
