@@ -43,6 +43,84 @@
             50% { opacity: 1; transform: scale(1.2); }
         }
 
+        /* ===== INTRO SPLASH EKRANI ===== */
+        #intro-screen {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            z-index: 999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #111;
+            transition: background 1.1s ease;
+        }
+
+        #intro-screen.fade-bg {
+            background: rgba(17,17,17,0);
+            pointer-events: none;
+        }
+
+        .intro-text {
+            font-family: 'Great Vibes', 'Segoe Script', 'Lucida Handwriting', cursive;
+            font-size: 46px;
+            text-align: center;
+            line-height: 1.4;
+            white-space: nowrap;
+            background: linear-gradient(110deg, #8a6a12 0%, #ffe89b 22%, #fffceb 42%, #ffcc00 60%, #a8790a 82%, #ffe89b 100%);
+            background-size: 260% 100%;
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            filter: drop-shadow(0 0 10px rgba(255, 204, 0, 0.6));
+            animation: goldShimmer 2.6s linear infinite, introPulse 1.6s ease-in-out infinite;
+            opacity: 0;
+            transform: scale(1);
+            animation-fill-mode: forwards;
+        }
+
+        .intro-text.intro-show {
+            animation: goldShimmer 2.6s linear infinite, introAppear 1s ease forwards;
+        }
+
+        .intro-text.intro-travel {
+            animation: goldShimmer 2.6s linear infinite, introTravel 1.1s cubic-bezier(.6,-0.1,.3,1) forwards;
+        }
+
+        @keyframes introAppear {
+            0% { opacity: 0; transform: scale(0.7); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+
+        @keyframes introTravel {
+            0% { opacity: 1; transform: translateY(0) scale(1); }
+            100% { opacity: 0; transform: translateY(-42vh) scale(0.28); }
+        }
+
+        @keyframes introPulse {
+            0%, 100% { filter: drop-shadow(0 0 10px rgba(255, 204, 0, 0.6)); }
+            50% { filter: drop-shadow(0 0 20px rgba(255, 204, 0, 0.95)); }
+        }
+
+        @keyframes goldShimmer {
+            0% { background-position: 0% center; }
+            100% { background-position: 260% center; }
+        }
+
+        /* ===== ASOSIY KONTENT (intro tugagach sekin ko'rinadi) ===== */
+        #main-content {
+            opacity: 0;
+        }
+
+        #main-content.reveal header {
+            animation: fadeIn 0.9s ease forwards;
+        }
+
+        @keyframes fadeIn {
+            0% { opacity: 0; transform: translateY(-8px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+
         header { 
             background: #1e1e1e; 
             padding: 20px 12px; 
@@ -56,6 +134,7 @@
             justify-content: center;
             gap: 12px;
             flex-wrap: wrap;
+            opacity: 0;
         }
 
         .container { 
@@ -84,11 +163,6 @@
             padding: 2px 4px;
         }
 
-        @keyframes goldShimmer {
-            0% { background-position: 0% center; }
-            100% { background-position: 260% center; }
-        }
-
         .cally-badge .sparkle-star {
             position: absolute;
             width: 3px;
@@ -113,7 +187,7 @@
         .book { 
             background: #1e1e1e; 
             border-radius: 20px; 
-            transition: 0.4s; 
+            transition: transform 0.4s, box-shadow 0.4s, border 0.4s; 
             box-shadow: 0 0 10px rgba(0,0,0,0.5); 
             text-decoration: none; 
             color: white; 
@@ -122,6 +196,17 @@
             border: 2px solid transparent; 
             padding: 15px;
             width: 100%;
+            opacity: 0;
+            transform: translateY(24px);
+        }
+
+        .book.book-appear {
+            animation: bookFadeIn 0.8s ease forwards;
+        }
+
+        @keyframes bookFadeIn {
+            0% { opacity: 0; transform: translateY(24px); }
+            100% { opacity: 1; transform: translateY(0); }
         }
 
         .book:hover { 
@@ -190,6 +275,12 @@
             .cally-badge {
                 font-size: 18px;
             }
+
+            .intro-text {
+                font-size: 28px;
+                white-space: normal;
+                padding: 0 20px;
+            }
         }
 
         @media(max-width:360px) {
@@ -202,38 +293,45 @@
 
     <div id="stars-layer"></div>
 
-    <header>
-        <span class="cally-badge cally-badge-left" id="cally-left">✦Yaratgan Robbing</span>
-        📚 Yosh Kitobxon 2026-2027 (20-30 yosh)
-        <span class="cally-badge cally-badge-right" id="cally-right">nomi bilan o'qi ✦</span>
-    </header>
+    <!-- ===== INTRO SPLASH ===== -->
+    <div id="intro-screen">
+        <div class="intro-text" id="intro-text">✦ Yaratgan Robbing<br>nomi bilan o'qi ✦</div>
+    </div>
 
-    <div class="container">
-        <div class="grid">
-            <a href="momoqaldiroq ostida sayr.html" target="_blank" class="book">
-                <img src="sayr.jpg" alt="Kitob muqovasi">
-                <div class="title-box"><p>E'rkin A'zam  <br> Momoqaldiroq ostida sayr</p></div>
-            </a>
-            
-            <a href="kiptikda qolgan tong chiqish sanasi.html" target="_blank" class="book">
-                <img src="til.jpg" alt="Kitob muqovasi">
-                <div class="title-box"><p>Ahmad A'zam <br> Til nomusi </p></div>
-            </a>
-            
-            <a href="kiptikda qolgan tong chiqish sanasi.html" target="_blank" class="book">
-                <img src="izidan.jpg" alt="Kitob muqovasi">
-                <div class="title-box"><p>Eshqobil Shukur <br> Bobo so'z izidan</p></div>
-            </a>
+    <div id="main-content">
+        <header>
+            <span class="cally-badge cally-badge-left" id="cally-left">✦Yaratgan Robbing</span>
+            📚 Yosh Kitobxon 2026-2027 (20-30 yosh)
+            <span class="cally-badge cally-badge-right" id="cally-right">nomi bilan o'qi ✦</span>
+        </header>
 
-            <a href="kiptikda qolgan tong chiqish sanasi.html" target="_blank" class="book">
-                <img src="tong.jpg" alt="Kitob muqovasi">
-                <div class="title-box"><p>Said Ahmad <br> Kiprikda qolgan tong</p></div>
-            </a>
+        <div class="container">
+            <div class="grid" id="book-grid">
+                <a href="momoqaldiroq ostida sayr.html" target="_blank" class="book">
+                    <img src="sayr.jpg" alt="Kitob muqovasi">
+                    <div class="title-box"><p>E'rkin A'zam  <br> Momoqaldiroq ostida sayr</p></div>
+                </a>
+                
+                <a href="kiptikda qolgan tong chiqish sanasi.html" target="_blank" class="book">
+                    <img src="til.jpg" alt="Kitob muqovasi">
+                    <div class="title-box"><p>Ahmad A'zam <br> Til nomusi </p></div>
+                </a>
+                
+                <a href="kiptikda qolgan tong chiqish sanasi.html" target="_blank" class="book">
+                    <img src="izidan.jpg" alt="Kitob muqovasi">
+                    <div class="title-box"><p>Eshqobil Shukur <br> Bobo so'z izidan</p></div>
+                </a>
 
-            <a href="kiptikda qolgan tong chiqish sanasi.html" target="_blank" class="book">
-                <img src="vatan.jpg" alt="Kitob muqovasi">
-                <div class="title-box"><p>A'zam Xoshimiy <br> Alvido Vatan</p></div>
-            </a>
+                <a href="kiptikda qolgan tong chiqish sanasi.html" target="_blank" class="book">
+                    <img src="tong.jpg" alt="Kitob muqovasi">
+                    <div class="title-box"><p>Said Ahmad <br> Kiprikda qolgan tong</p></div>
+                </a>
+
+                <a href="kiptikda qolgan tong chiqish sanasi.html" target="_blank" class="book">
+                    <img src="vatan.jpg" alt="Kitob muqovasi">
+                    <div class="title-box"><p>A'zam Xoshimiy <br> Alvido Vatan</p></div>
+                </a>
+            </div>
         </div>
     </div>
 
@@ -267,6 +365,37 @@
         }
         addSparkles(document.getElementById('cally-left'), 3);
         addSparkles(document.getElementById('cally-right'), 3);
+
+        // ===== INTRO ANIMATSIYA KETMA-KETLIGI =====
+        const introScreen = document.getElementById('intro-screen');
+        const introText = document.getElementById('intro-text');
+        const mainContent = document.getElementById('main-content');
+        const bookCards = document.querySelectorAll('.book');
+
+        // 1) Matn paydo bo'ladi (ko'rinib turadi)
+        introText.classList.add('intro-show');
+
+        // 2) Bir muncha vaqt ko'rinib tursin, so'ng o'z joyiga (headerga) uchib ketadi
+        setTimeout(function () {
+            introText.classList.remove('intro-show');
+            introText.classList.add('intro-travel');
+            introScreen.classList.add('fade-bg');
+        }, 2300);
+
+        // 3) Intro matni "joyiga borib joylashgach" - asosiy kontent (header) ko'rinadi
+        setTimeout(function () {
+            introScreen.style.display = 'none';
+            mainContent.style.opacity = '1';
+            mainContent.classList.add('reveal');
+        }, 3350);
+
+        // 4) Qolgan joylar (kitob kartalari) birma-bir sekin ko'rina boshlaydi
+        setTimeout(function () {
+            bookCards.forEach(function (card, index) {
+                card.style.animationDelay = (index * 0.25) + 's';
+                card.classList.add('book-appear');
+            });
+        }, 3600);
     </script>
 </body>
 </html>
