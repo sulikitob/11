@@ -52,7 +52,7 @@
             justify-content: center;
             align-items: center;
             z-index: 998;
-            animation: fadeOutPetals 0.8s cubic-bezier(0.7, 0, 0.3, 1) forwards 3.6s;
+            animation: fadeOutPetals 0.8s cubic-bezier(0.7, 0, 0.3, 1) forwards 7.5s;
         }
 
         @keyframes fadeOutPetals {
@@ -422,8 +422,8 @@
             const rot = Math.random() * 360;
             const radStart = (50 + Math.random() * 45) + 'vw';
             const radEnd = (100 + Math.random() * 450) + 'px';
-            const dur = (1.5 + Math.random() * 1.2).toFixed(2) + 's';
-            const del = (Math.random() * 2.2).toFixed(2) + 's';
+            const dur = (2 + Math.random() * 2.5).toFixed(2) + 's';
+            const del = (Math.random() * 5).toFixed(2) + 's';
             const size = Math.floor(6 + Math.random() * 10);
             const sc = (0.7 + Math.random() * 0.6).toFixed(1);
 
@@ -445,25 +445,25 @@
         const mainContent = document.getElementById('main-content');
         const bookCards = document.querySelectorAll('.book');
 
-        // 1) Gullar bo'roni tugagach (~3.6s), matn paydo bo'ladi
+        // 1) Gullar bo'roni tugagach (~7.5s), matn paydo bo'ladi va to'liq ko'rinadi
         setTimeout(function () {
             petalScreen.style.display = 'none';
             introText.classList.add('intro-show');
-        }, 3700);
+        }, 7600);
 
-        // 2) Matn bir muncha vaqt ko'rinib tursin, so'ng sekin kichrayib o'z joyiga (headerga) boradi
+        // 2) Matn to'liq ko'rinib tursin, so'ng sekin kichrayib o'z joyiga (headerga) boradi
         setTimeout(function () {
             introText.classList.remove('intro-show');
             introText.classList.add('intro-travel');
             introScreen.classList.add('fade-bg');
-        }, 6000);
+        }, 10600);
 
         // 3) Intro matni "joyiga borib joylashgach" - asosiy kontent (header) ko'rinadi
         setTimeout(function () {
             introScreen.style.display = 'none';
             mainContent.style.opacity = '1';
             mainContent.classList.add('reveal');
-        }, 7050);
+        }, 11700);
 
         // 4) Qolgan joylar (kitob kartalari) birma-bir sekin ko'rina boshlaydi
         setTimeout(function () {
@@ -471,7 +471,7 @@
                 card.style.animationDelay = (index * 0.25) + 's';
                 card.classList.add('book-appear');
             });
-        }, 7300);
+        }, 11900);
     </script>
 </body>
 </html>
