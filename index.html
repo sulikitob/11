@@ -75,37 +75,51 @@
             to { opacity: 1; }
         }
 
-        /* ===== OLTIN KALLIGRAFIYA EKRANI: "Yaratgan Robbing nomi bilan o'qi" ===== */
+        /* ===== OLTIN KALLIGRAFIYA EKRANI ===== */
+        /* Bu ekran endi CSS bilan avtomatik yo'qolmaydi — u JS orqali,
+           matn header'dagi joyiga "uchib borib" bo'lgach, o'chiriladi. */
         .calligraphy-screen {
             position: fixed;
             inset: 0;
             background: #000;
             z-index: 98;
-            display: flex;
-            justify-content: center;
-            align-items: center;
             opacity: 0;
-            animation: callyFadeIn 0.6s ease forwards 4.4s,
-                       callyFadeOut 1s ease forwards 8s;
+            animation: callyFadeIn 0.8s ease forwards 3.6s; /* intro bilan bir vaqtda crossfade */
+            transition: opacity 0.8s ease;
         }
 
         @keyframes callyFadeIn { to { opacity: 1; } }
-        @keyframes callyFadeOut { to { opacity: 0; visibility: hidden; } }
 
-        .cally-text {
-            font-family: 'Great Vibes', 'Segoe Script', 'Lucida Handwriting', cursive;
-            font-size: 58px;
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            align-items: baseline;
-            max-width: 85%;
-            text-align: center;
-            padding: 0 20px;
-            row-gap: 6px;
+        .calligraphy-screen.hide {
+            opacity: 0;
+            pointer-events: none;
         }
 
-        .cally-text span {
+        /* Markazda joylashgan, keyin ikkiga bo'linib header tomon "uchadigan" yozuv */
+        .cally-typing-wrap {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            display: flex;
+            align-items: baseline;
+            justify-content: center;
+            gap: 22px;
+            flex-wrap: wrap;
+            width: 90%;
+            max-width: 1000px;
+            pointer-events: none;
+        }
+
+        .cally-fly {
+            font-family: 'Great Vibes', 'Segoe Script', 'Lucida Handwriting', cursive;
+            font-size: 58px;
+            line-height: 1;
+            white-space: nowrap;
+            will-change: transform;
+        }
+
+        .cally-letter {
             opacity: 0;
             display: inline-block;
             transform: translateY(14px);
@@ -128,10 +142,12 @@
         }
 
         @media(max-width:600px) {
-            .cally-text { font-size: 34px; }
+            .cally-fly { font-size: 30px; }
+            .cally-typing-wrap { gap: 10px; }
         }
 
-        /* ===== SARLAVHA IKKI CHETIDA QOLIB KETUVCHI OLTIN KALLIGRAFIK YOZUV ===== */
+        /* ===== SARLAVHA IKKI CHETIDA QOLADIGAN OLTIN KALLIGRAFIK YOZUV ===== */
+        /* Bular — parvozning YAKUNIY manzili. Matn shu joyga "qo'nadi". */
         .cally-badge {
             position: relative;
             display: inline-flex;
@@ -141,16 +157,17 @@
             line-height: 1;
             color: #ffcc00;
             text-shadow: 0 0 10px rgba(255,204,0,0.9), 0 0 22px rgba(255,204,0,0.6);
+            visibility: hidden;
             opacity: 0;
-            transform: scale(0);
-            animation: badgeAppear 0.7s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards 8.2s;
+            transition: opacity 0.25s ease;
             flex-shrink: 0;
             white-space: nowrap;
             padding: 2px 4px;
         }
 
-        @keyframes badgeAppear {
-            to { opacity: 1; transform: scale(1); }
+        .cally-badge.landed {
+            visibility: visible;
+            opacity: 1;
         }
 
         .cally-badge .sparkle-star {
@@ -269,7 +286,7 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            z-index: 100;
+            z-index: 97;
             animation: fadeOutIntro 0.8s cubic-bezier(0.7, 0, 0.3, 1) forwards 3.6s;
         }
 
@@ -310,8 +327,11 @@
         <div class="vortex-container" id="vortex"></div>
     </div>
 
-    <div class="calligraphy-screen">
-        <div class="cally-text" id="cally-text"></div>
+    <div class="calligraphy-screen" id="calligraphy-screen">
+        <div class="cally-typing-wrap">
+            <span class="cally-fly" id="fly-left"></span>
+            <span class="cally-fly" id="fly-right"></span>
+        </div>
     </div>
 
     <div id="stars-layer"></div>
@@ -352,6 +372,7 @@
     </div>
 
     <script>
+        // ===== 1) Gullar bo'roni (intro) =====
         const vortex = document.getElementById('vortex');
         const totalIntroPetals = 1500;
         for (let i = 0; i < totalIntroPetals; i++) {
@@ -376,8 +397,9 @@
             vortex.appendChild(petal);
         }
 
+        // ===== 2) Yulduzlar (orqa fon) =====
         const starsLayer = document.getElementById('stars-layer');
-        for(let i = 0; i < 150; i++) {
+        for (let i = 0; i < 150; i++) {
             const star = document.createElement('div');
             star.className = 'star';
             star.style.left = Math.random() * 100 + "%";
@@ -390,23 +412,96 @@
             starsLayer.appendChild(star);
         }
 
-        /* ===== OLTIN KALLIGRAFIYA MATNI: harf-barharf yozilishi ===== */
-        const callyPhrase = "✦ Yaratgan Robbing nomi bilan o'qi ✦";
-        const callyContainer = document.getElementById('cally-text');
-        const letterStartDelay = 4.6;   // soniya — ekran ochilgach boshlanadi
-        const letterStagger = 0.045;    // har bir harf orasidagi farq
+        // ===== 3) Kalligrafik matnni harf-barharf yozish (ikki guruhga bo'lib) =====
+        // Chap guruh header'dagi chap belgiga, o'ng guruh o'ng belgiga mos keladi —
+        // shu bilan yozuv keyinchalik AYNAN o'sha joyga "qo'nadi".
+        const leftPhrase  = "Yaratgan Robbing ✦";
+        const rightPhrase = "✦ nomi bilan o'qi";
 
-        [...callyPhrase].forEach((ch, i) => {
-            const span = document.createElement('span');
-            span.textContent = ch === ' ' ? '\u00A0' : ch;
-            const letterDelay = (letterStartDelay + i * letterStagger);
-            const shimmerOffset = (Math.random() * 1.2).toFixed(2);
-            // ikkita animatsiya: callyLetter (paydo bo'lish) va goldShimmer (tovlanish)
-            span.style.animationDelay = letterDelay + 's, ' + shimmerOffset + 's';
-            callyContainer.appendChild(span);
-        });
+        const flyLeft  = document.getElementById('fly-left');
+        const flyRight = document.getElementById('fly-right');
 
-        /* ===== SARLAVHA ATROFIDAGI OLTIN BEZAKLARGA TINMAY PORILLOVCHI YULDUZCHALAR ===== */
+        const letterStartDelay = 4.6;   // soniya — intro/kalligrafiya crossfade tugagach boshlanadi
+        const letterStagger    = 0.045; // har bir harf orasidagi farq
+        const letterAnimDur    = 0.5;   // callyLetter animatsiyasi davomiyligi (CSS bilan mos)
+
+        let charIndex = 0;
+        function typeInto(container, phrase) {
+            [...phrase].forEach((ch) => {
+                const span = document.createElement('span');
+                span.className = 'cally-letter';
+                span.textContent = ch === ' ' ? '\u00A0' : ch;
+                const delay = (letterStartDelay + charIndex * letterStagger).toFixed(3);
+                const shimmerOffset = (Math.random() * 1.2).toFixed(2);
+                span.style.animationDelay = delay + 's, ' + shimmerOffset + 's';
+                container.appendChild(span);
+                charIndex++;
+            });
+        }
+        typeInto(flyLeft, leftPhrase);
+        typeInto(flyRight, rightPhrase);
+
+        const totalChars = charIndex;
+        const typingFinishSec = letterStartDelay + totalChars * letterStagger + letterAnimDur;
+
+        // ===== 4) Yozuv header joyiga "uchib borishi" (FLIP animatsiyasi) =====
+        const pauseBeforeFlySec = 0.5; // yozuv to'liq yozilgach kichik pauza
+        const flyDurationMs     = 900; // uchish davomiyligi
+        const fadeOutMs         = 700; // qorong'ulikning ochilishi
+
+        function flyToTarget(source, target, durationMs) {
+            const s = source.getBoundingClientRect();
+            const t = target.getBoundingClientRect();
+
+            // Shrift o'lchami nisbatiga asoslangan bir xil masshtab (matn cho'zilib ketmasligi uchun)
+            const scale = t.height / s.height;
+
+            // Ikkala elementning markazlarini bir-biriga moslashtiramiz
+            const sCenterX = s.left + s.width / 2;
+            const sCenterY = s.top + s.height / 2;
+            const tCenterX = t.left + t.width / 2;
+            const tCenterY = t.top + t.height / 2;
+
+            const dx = tCenterX - sCenterX;
+            const dy = tCenterY - sCenterY;
+
+            source.style.transformOrigin = 'center center';
+            source.style.transition = `transform ${durationMs}ms cubic-bezier(0.65,0,0.35,1)`;
+            // reflow'ni majburlash
+            void source.offsetWidth;
+            source.style.transform = `translate(${dx}px, ${dy}px) scale(${scale})`;
+        }
+
+        function runFlySequence() {
+            const targetLeft  = document.getElementById('cally-left');
+            const targetRight = document.getElementById('cally-right');
+            const screen      = document.getElementById('calligraphy-screen');
+
+            flyToTarget(flyLeft, targetLeft, flyDurationMs);
+            flyToTarget(flyRight, targetRight, flyDurationMs);
+
+            setTimeout(() => {
+                // Uchib borgan matn bilan header'dagi belgi bir xil joy/o'lchamda —
+                // shuning uchun almashtirish sezilmaydi.
+                flyLeft.style.visibility = 'hidden';
+                flyRight.style.visibility = 'hidden';
+                targetLeft.classList.add('landed');
+                targetRight.classList.add('landed');
+
+                addSparkles(targetLeft, 6);
+                addSparkles(targetRight, 6);
+
+                // Qorong'ulik ochilib, sahifa to'liq ko'rinadi
+                screen.classList.add('hide');
+                setTimeout(() => {
+                    screen.style.display = 'none';
+                }, fadeOutMs);
+            }, flyDurationMs);
+        }
+
+        setTimeout(runFlySequence, (typingFinishSec + pauseBeforeFlySec) * 1000);
+
+        // ===== 5) Header belgilari atrofidagi porillovchi yulduzchalar =====
         function addSparkles(el, count) {
             for (let i = 0; i < count; i++) {
                 const star = document.createElement('span');
@@ -418,13 +513,6 @@
                 el.appendChild(star);
             }
         }
-
-        window.addEventListener('load', function () {
-            setTimeout(function () {
-                addSparkles(document.getElementById('cally-left'), 6);
-                addSparkles(document.getElementById('cally-right'), 6);
-            }, 9000); // oltin bezaklar joyiga tushgach ishga tushadi
-        });
     </script>
 </body>
 </html>
