@@ -77,12 +77,27 @@ body
     border-radius:20px;
 }
 
+.floating-text h1{
+    font-size:45px;
+    color: white;
+    position: relative;
+    z-index: 2;
+}
+
 /* MENU */
 
 .container{
     max-width:1300px;
     margin:auto;
     padding:50px 20px;
+}
+
+.section-title{
+    text-align: center;
+    margin-top: 50px;
+    margin-bottom: 25px;
+    font-size: 32px;
+    color: white;
 }
 
 .menu-grid{
@@ -126,10 +141,152 @@ body
     box-shadow:0 0 35px rgba(0,255,150,0.5);
 }
 
+/* Yashil karta */
+.card-green { box-shadow:0 0 20px rgba(0,255,150,0.1); }
+.card-green::before{
+    content:"";
+    position:absolute;
+    width:200%;
+    height:200%;
+    background:linear-gradient(45deg,transparent,#00ff99,transparent);
+    top:-150%;
+    left:-150%;
+    transform:rotate(25deg);
+    transition:0.7s;
+}
+.card-green:hover::before{ top:100%; left:100%; }
+.card-green:hover{
+    transform:translateY(-12px) scale(1.03);
+    box-shadow:0 0 35px rgba(0,255,150,0.5);
+}
+
+/* Qizil karta */
+.card-red { box-shadow:0 0 20px rgba(255,50,50,0.1); }
+.card-red::before{
+    content:"";
+    position:absolute;
+    width:200%;
+    height:200%;
+    background:linear-gradient(45deg,transparent,#ff3232,transparent);
+    top:-150%;
+    left:-150%;
+    transform:rotate(25deg);
+    transition:0.7s;
+}
+.card-red:hover::before{ top:100%; left:100%; }
+.card-red:hover{
+    transform:translateY(-12px) scale(1.03);
+    box-shadow:0 0 35px rgba(255,50,50,0.5);
+}
+
+/* Ko'k karta */
+.card-blue { box-shadow:0 0 20px rgba(0,150,255,0.1); }
+.card-blue::before{
+    content:"";
+    position:absolute;
+    width:200%;
+    height:200%;
+    background:linear-gradient(45deg,transparent,#00aaff,transparent);
+    top:-150%;
+    left:-150%;
+    transform:rotate(25deg);
+    transition:0.7s;
+}
+.card-blue:hover::before{ top:100%; left:100%; }
+.card-blue:hover{
+    transform:translateY(-12px) scale(1.03);
+    box-shadow:0 0 35px rgba(0,150,255,0.5);
+}
+
+/* Tilla (oltin) karta */
+.card-gold { box-shadow:0 0 20px rgba(255,204,0,0.15); border: 1px solid #ffcc00; }
+.card-gold::before{
+    content:"";
+    position:absolute;
+    width:200%;
+    height:200%;
+    background:linear-gradient(45deg,transparent,#ffcc00,transparent);
+    top:-150%;
+    left:-150%;
+    transform:rotate(25deg);
+    transition:0.7s;
+}
+.card-gold:hover::before{ top:100%; left:100%; }
+.card-gold:hover{
+    transform:translateY(-12px) scale(1.03);
+    box-shadow:0 0 45px rgba(255,204,0,0.6);
+}
+.card-gold h2 { color: #ffcc00 !important; }
+
+.premium { position: relative; }
+.premium::after {
+    content: "⭐";
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    font-size: 20px;
+    color: #b388ff;
+    text-shadow: 0 0 10px #b388ff, 0 0 20px #7c4dff;
+    z-index: 3;
+}
+
+.gold-section-title{
+    color: #ffcc00 !important;
+    text-shadow: 0 0 12px rgba(255,204,0,0.7);
+}
+
+/* PDF kartasi uchun maxsus porillash (yashil, doimiy) */
+.card-pdf {
+    border: 1px solid #00ff99;
+    box-shadow: 0 0 20px rgba(0,255,150,0.25);
+}
+.card-pdf h2 { color: #00ff99 !important; }
+
+.sparkle-star{
+    position:absolute;
+    width:3px;
+    height:3px;
+    background:#fff8d6;
+    border-radius:50%;
+    box-shadow:0 0 6px 2px #ffcc00;
+    pointer-events:none;
+    z-index:1;
+    animation-name: twinkle;
+    animation-timing-function: ease-in-out;
+    animation-iteration-count: infinite;
+}
+
+.sparkle-star-green{
+    position:absolute;
+    width:3px;
+    height:3px;
+    background:#d6fff0;
+    border-radius:50%;
+    box-shadow:0 0 6px 2px #00ff99;
+    pointer-events:none;
+    z-index:1;
+    animation-name: twinkle;
+    animation-timing-function: ease-in-out;
+    animation-iteration-count: infinite;
+}
+
+@keyframes twinkle{
+    0%, 100% { opacity:0; transform:scale(0.4); }
+    50% { opacity:1; transform:scale(1.3); }
+}
+
 .card h2{
     position:relative;
     z-index:2;
     font-size:30px;
+}
+
+.icon{
+    position:relative;
+    z-index:2;
+    font-size: 35px;
+    margin-bottom: 5px;
+    display: block;
 }
 
 .quiz-card{
@@ -179,55 +336,89 @@ body
 .overlay p{
     font-size:16px;
 }
+
+.floating-text h1{
+    font-size:24px;
+}
 }
 
 </style>
 </head>
 
-</style>
-</head>
-
-<div id="countdown">3</div>
-
-    <div id="quiz-container">
-        </div>
-
 <body>
 
 <div class="hero">
 
-    <img src="til.jpg">
+    <img src="til.jpg" alt="Til nomusi">
 
     <div class="overlay">
-       
+
     </div>
 
-    <!-- 🔥 SHU YERGA QO‘SHASAN -->
     <div class="floating-text"><h1>📚 Til nomusi</h1></div>
-
 
 </div>
 
 <!-- MENU -->
 
 <div class="container">
-
+    <h2 class="section-title">Asar boblari</h2>
     <div class="menu-grid">
+       <a href="1-Bob.html" target="_blank" class="card card-green"><h2><br>1-Bob<br>Se'l</h2></a>
+       <a href="2-Bob.html" target="_blank" class="card card-green"><h2><br>2-Bob<br>Iskandar-1</h2></a>
+       <a href="3-Bob.Html" target="_blank" class="card card-green"><h2><br>3-Bob<br>Oyravshan-1</h2></a>
+       <a href="4-Bob.html" target="_blank" class="card card-green"><h2><br>4-Bob<br>G'ayrat-1</h2></a>
+       <a href="5-Bob.Oyravshan-2 oyna.html" target="_blank" class="card card-green"><h2><br>5-Bob<br>Oyravshan-2</h2></a>
+       <a href="6-bob.Oyravshan 3-oyna.html" target="_blank" class="card card-green"><h2><br>6-Bob<br>Oyravshan-3</h2></a>
+       <a href="7-Bob.html" target="_blank" class="card card-green"><h2><br>7-Bob<br>G'ayrat-2</h2></a>
+       <a href="Tilnomusi.pdf" target="_blank" class="card card-green card-pdf"><span class="icon">⭐</span><h2><br><br>Til nomusi pdf</h2></a>
 
-       <a href="Tilnomusi.pdf" target="_blank" class="card"><h2>kitob pdf</h2></a>
-       <a href="quiz.html"target="_blank" class="card"><h2>quiz test</h2></a>
-       <a href="yopiq.html" class="card"><h2>Yopiq savol javob</h2></a>
-
-
-
-
+      <a href="quiz.html" target="_blank" class="card card-red premium" onclick="checkPremium(event)"><span class="icon">📝</span><h2>Umumiy quiz testlar</h2></a>
+       <a href="quiz.html" target="_blank" class="card card-red premium" onclick="checkPremium(event)"><span class="icon">💬</span><h2>Umumiy yopiq savol-javob</h2></a>
     </div>
 
+
+    <!-- OLTIN BO'LIM — eng pastda, alohida ajratilgan -->
+    <h2 class="section-title gold-section-title">✨ Maxsus bo'lim ✨</h2>
+    <div class="menu-grid">
+       <a href="quiz.html" target="_blank" class="card card-gold premium" onclick="checkPremium(event)"><span class="icon">⭐</span><h2>Taqriz</h2></a>
+       <a href="quiz.html" target="_blank" class="card card-gold premium" onclick="checkPremium(event)"><span class="icon">📖</span><h2>Mundarija va savollar soni</h2></a>
+       <a href="quiz.html" target="_blank" class="card card-gold premium" onclick="checkPremium(event)"><span class="icon">🏆</span><h2>Barcha ma'lumotlar</h2></a>
+       <a href="quiz.html" target="_blank" class="card card-gold premium" onclick="checkPremium(event)"><span class="icon">🎁</span><h2>Maxsus</h2></a>
+    </div>
 </div>
 
-<div class="footer">
-    Nazarovs.uz ©
-</div>
+<div class="footer">zuhos.uz ©</div>
+
+<script>
+function checkPremium(e) {
+    e.preventDefault();
+    alert("Bu bo'lim premium obunachilar uchun mo'ljallangan 🔒 Murojat uchun anonimkitobxon2026 telegram kanali adminiga murojat qiling");
+}
+
+// Yulduzchalarni kartaga qo'shish (rang klassi bilan)
+function addSparkles(card, count, starClass) {
+    for (let i = 0; i < count; i++) {
+        const star = document.createElement('span');
+        star.className = starClass;
+        star.style.top = Math.random() * 85 + '%';
+        star.style.left = Math.random() * 90 + '%';
+        star.style.animationDuration = (0.8 + Math.random() * 1.5) + 's';
+        star.style.animationDelay = (Math.random() * 2) + 's';
+        card.appendChild(star);
+    }
+}
+
+// Oltin kartalarga sariq yulduzcha
+document.querySelectorAll('.card-gold').forEach(function (card) {
+    addSparkles(card, 10, 'sparkle-star');
+});
+
+// PDF kartasiga yashil yulduzcha
+document.querySelectorAll('.card-pdf').forEach(function (card) {
+    addSparkles(card, 10, 'sparkle-star-green');
+});
+</script>
 
 </body>
 </html>
