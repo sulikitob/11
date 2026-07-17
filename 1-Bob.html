@@ -280,7 +280,7 @@
 <div id="stars"></div>
 
 <div id="select-screen">
-    <h1>🌙 2-Bob.Iskandar-1</h1>
+    <h1>🌙1-Bob.Buzuq til havosi</h1>
     <p>Savollar sonini belgilang</p>
     <div id="range-info">Boshlang'ich raqamni tanlang</div>
     <div class="number-grid" id="numberGrid"></div>
@@ -317,41 +317,41 @@
 
 <script>
 const quizData = [
-    { q: "Ahmad A’zamning eng yaxshi ko‘rgan lug‘ati?", correct: "O‘zbekcha-ruscha", wrongs: ["Mahmud Qoshg‘ariy", "Frazeologik", "Chappa lug‘at"] },
-    { q: "Ahmad A’zam nechanchi yildagi ruscha-o‘zbekcha lug‘atni yaxshi ko‘rar edi?", correct: "1979", wrongs: ["1959", "1965", "1983"] },
-    { q: "... ham mafkura quroliga aylandi:", correct: "Til", wrongs: ["Lug‘at", "Maqol", "So‘z"] },
-    { q: "\"плоскогубцы\" nima?", correct: "Yassi ombir", wrongs: ["Tishlog‘ich", "Kampir og‘iz", "Ombir"] },
-    { q: "Mixni tishlab sug‘uradiganni Samarqandda nima deyiladi?", correct: "Ombir", wrongs: ["Yassi ombir", "Omoch", "Kampir og‘iz"] },
-    { q: "Mixni tishlab sug‘urgich Qashqadaryoda nima deyiladi?", correct: "Kampir og‘iz", wrongs: ["Yassi ombir", "Ombir", "Tishlog‘ich"] },
-    { q: "Domba nima?", correct: "Ko‘prik", wrongs: ["To‘g‘on", "Suv ko‘prik", "Charxpalak"] },
-    { q: "To‘g‘on o‘zbek tilida:", correct: "Domba", wrongs: ["Damn", "Danba", "Dam"] },
-    { q: "G‘allaoroldagi temir yo‘l bekati...:", correct: "Bogarniy", wrongs: ["Raziz", "Ayrima", "Boundarly"] },
-    { q: "Bogarniy asli o‘zimizniki ya’ni:", correct: "Baxorgi", wrongs: ["Bolgarniy", "Bogatiy", "Bokuni eski norni"] },
-    { q: "Po‘yezdlar bir-biriga yo‘l beradigan bekat:", correct: "Ayirg‘ich ayirma", wrongs: ["Bekat", "Adress", "Manzil"] },
-    { q: "Po‘yezdlar bir-biriga yo‘l beradigan bekat ruschada nima deyiladi?", correct: "Разъезд", wrongs: ["Остановка", "Raziz", "Разиз"] },
-    { q: "Shaharchamiz yonidan katta o‘zbek yo‘li o‘tdi qishloqlardan chiqqan yo‘l bilan kesishgan joy...:", correct: "Переkрёска", wrongs: ["Ayrima", "Qo‘shma yo‘l", "Разъезд"] },
-    { q: "Переkрёskani o‘rniga bozor qurildi va nima deb ataldi:", correct: "Ayrima", wrongs: ["Raziz", "Shaymon", "Jonboy"] },
-    { q: "Jonli so‘zlashuv tilini yana qanday atasa bo‘ladi:", correct: "Hammasi to‘g‘ri", wrongs: ["Qora", "Avom", "Yalpoq"] },
-    { q: "Avom so‘zining ma’nosi nima:", correct: "Omma ko‘plik", wrongs: ["Mahalliy", "Ajnably", "Orrijo‘n"] },
-    { q: "Chiptasiz yurgan odam:", correct: "Quyon", wrongs: ["Gepard", "O‘g‘ri", "Boshqa"] },
-    { q: "Transport o‘rniga qanday so‘z ishlatsa bo‘ladi:", correct: "Ulov", wrongs: ["Qulov", "Avtomal", "Arava"] },
-    { q: "Toponimka bilimdoni:", correct: "Suyun Qorayev", wrongs: ["A.Navoiy", "Musulmon namoz", "Ahmad A’zam"] },
-    { q: "Dala malikasi:", correct: "Makka jo‘xori", wrongs: ["Archa", "Eman", "Terak"] },
-    { q: "Volga daryosi boyida yashovchi og‘ir ahvolli xalq nima deb ataladi:", correct: "Burlok", wrongs: ["Soldav", "Durlok", "Stachki"] },
-    { q: "Volga daryosi boyida yashovchi og‘ir ahvolli xalq o‘zimizda qanday ataladi:", correct: "Burlaklar", wrongs: ["Soldav", "Durlak", "Stachi"] },
-    { q: "Tarix darsliklarida o‘tmishdagi ishchilar boshlig‘i:", correct: "Stachki", wrongs: ["Durlak", "Burlak", "Boshqa"] },
-    { q: "Mem tug‘ilgan tumanda 2 ta bozornin biri nima deb ataladi:", correct: "Ukraina", wrongs: ["Lenin", "Gazira", "Hammasi"] },
-    { q: "Botinka o‘zbekchada nima:", correct: "Boshmoq", wrongs: ["Etik", "Etikcha", "Kavush"] },
-    { q: "Tufli o‘zbekchada qanday ataladi:", correct: "Kavush", wrongs: ["Boshmoq", "Etik", "Etikcha"] },
-    { q: "Сопошка:", correct: "Etikcha", wrongs: ["Boshmoq", "Ulton", "Etik"] },
-    { q: "Носки?:", correct: "Paypoq", wrongs: ["Jolop", "Qolqop", "Hammasi to‘g‘ri"] },
-    { q: "Носки ni yana qanday atasa bo‘ladi:", correct: "Jo‘lop", wrongs: ["Pyatka", "Napyatka", "Jilop"] },
-    { q: "Осьмушка nima degani?:", correct: "8 dan 1", wrongs: ["Hammasi to‘g‘ri", "Yarim", "Nimchirok"] },
-    { q: "Кипяток o‘rniga qanday so‘z o‘zimizda bor edi?:", correct: "Hammasi to‘g‘ri", wrongs: ["Qaynatma", "Objosh", "Damlam"] },
-    { q: "Bizning shaharcha qanday atalgan?:", correct: "Jomboy", wrongs: ["Jonboy", "Yonboy", "Boshqa"] },
-    { q: "Yuriy Gagarin ... o‘tirib qoldi:", correct: "Mirzacho‘lga", wrongs: ["Jomboyga", "Ko‘chaga", "Maktabga"] },
-    { q: "Rus turkologi kim:", correct: "N.A.Boskonov", wrongs: ["Badr ogli", "S.L.Dubrovskiy", "D.I.Pushkin"] },
-    { q: "N.A.Boskonov qancha familiyani o‘zgarganini ko‘rsatib o‘tgan:", correct: "200", wrongs: ["100", "300", "500"] }
+    { q: "Ahmad A'zamning eng yaxshi ko'rgan lug'ati", correct: "O'zbekcha ruscha lug'at", wrongs: ["Mahmud Qoshg'ariy lug'ati", "Frazeaologik lug'at", "Chappa lug'at"] },
+    { q: "Ahmad Azam nechchinchi yilda chiqqan ruscha-o'zbekcha lug'atni yaxshi ko'rar edi", correct: "1959", wrongs: ["1979", "1965", "1983"] },
+    { q: "... ham mafkura quroliga aylandi", correct: "Lug'at", wrongs: ["Maqol", "Til", "So'z"] },
+    { q: "плоскогубцы nima?", correct: "Yassi ombir", wrongs: ["Kampir og'iz", "Tishlog'ich", "Ombir"] },
+    { q: "Mixni tishlab sug'uradigan samarqandda nima deyiladi", correct: "Kampirog'iz", wrongs: ["Omoch", "Yassi ombir", "Ombir"] },
+    { q: "mixni tishlab sug'urgich qashqadaryoda nima deyiladi", correct: "Tishlog'ich", wrongs: ["Yassi ombir", "Kampir og'iz", "Ombir"] },
+    { q: "дoмба nima", correct: "To'g'on", wrongs: ["Ko'prik", "Suv ko'prik", "Charxpalak"] },
+    { q: "To'g'on o'zbek tilida", correct: "Dam", wrongs: ["Domba", "Damn", "Danba"] },
+    { q: "G'allaoroldagi temir yo'l bekati ...", correct: "Bogarniy", wrongs: ["Raziz", "Ayrima", "Boundariy"] },
+    { q: "Bogarniy asli o'zimizniki ya'ni", correct: "Baxorgi", wrongs: ["Bolgarniy", "Bogatiy", "Bokuni eski nomi"] },
+    { q: "Po'yezdlar bir-biriga yo'l beradigan bekat", correct: "Ayirg'ich ayirma", wrongs: ["Bekat", "Adress", "Manzil"] },
+    { q: "Po'yezdlar bir-biriga y'ol beradigan bekat ruschada nima deyiladi", correct: "Разездь", wrongs: ["Остановка", "Raziz", "Разиз"] },
+    { q: "Shaxarchamiz yonidan katta o'zbek yo'li o'tdi qishloqlardan chiqqan yo'l u bilan kesishgan joy ...", correct: "Перкрёска", wrongs: ["Ayrima", "Qo'shma yo'l", "Разездь"] },
+    { q: "Перекрёскани orniga bozor qurildi va nima deb ataldi", correct: "Shaymon", wrongs: ["Ayrima", "Raziz", "Jonboy"] },
+    { q: "Jonli so'zlashuv tilini yana qanday atasa boladi", correct: "Hammasi tori", wrongs: ["Qora", "Avom", "Yalpoq(jalqop)"] },
+    { q: "Avom so'zining manosi nima", correct: "Omma ko'plik", wrongs: ["Mahalliy", "Ajnabiy", "Omi,jo'n"] },
+    { q: "Chiptasiz yurgan odam", correct: "Quyon", wrongs: ["Gepard", "O'g'ri", "Jinoyatchi"] },
+    { q: "Transport o'rnoga qanday so'z ishlatsa bo'ladi", correct: "Ulov", wrongs: ["Qulov", "Avtomat", "Arava"] },
+    { q: "Toponimka bilimdoni", correct: "Suyun Qorayev", wrongs: ["Musulmon namoz", "A.Navoiy", "Ahmad azam"] },
+    { q: "Dala malikasi", correct: "Makka jo'xori", wrongs: ["Eman", "Archa", "Terak"] },
+    { q: "Volga daryosi boyida yashovchi ogir ahvolli xalq nima seb ataladi", correct: "Бурлок", wrongs: ["Солдав", "Дурлок", "Стачки"] },
+    { q: "Volga daryozi boyida yashovchi og'ir ahvolli xalq ozimizda qanday ataladi", correct: "Солдав", wrongs: ["Дурлак", "Бурлаклар", "Стачи"] },
+    { q: "Tarix darsliklarida o'tmishdagi ishchilar boshlig'i", correct: "Стачки", wrongs: ["Дурлак", "Бурлак", "Солдав"] },
+    { q: "Mem tugulgan tumanda 2 ta bozorninh biri nima deb atalar edi", correct: "Hammasi", wrongs: ["Газира", "Lenin", "Ukraina"] },
+    { q: "Ботинка uzbekchada nima", correct: "Boshmoq", wrongs: ["Etikcha", "Etik", "Kavush"] },
+    { q: "Туфли o'zbekchada qanday ataladi", correct: "Etik", wrongs: ["Boshmoq", "Kavush", "Etikcha"] },
+    { q: "Сопошка", correct: "Etikcha", wrongs: ["Boshmoq", "Ulton", "Etik"] },
+    { q: "Носки ?", correct: "Paypoq", wrongs: ["Jolop", "Qolqop", "Hammasi togri"] },
+    { q: "Носки ни yana qanday atasa boladi", correct: "Jilop", wrongs: ["Napyatka", "Jo'lop", "Pyatka"] },
+    { q: "Avvalari asmishka choy olib kel deyishardi осьмушка nima degani", correct: "Hammasi to'g'ri", wrongs: ["Yarim", "8 dan 1", "Nimchirok"] },
+    { q: "Кипиток keng qollanildi o'rniga qanday so's o'zimizda bor edi", correct: "Hammasi to'g'ri", wrongs: ["Objosh", "Qaynatma", "Damlam"] },
+    { q: "Bizninh shaharcha qanday atalgan", correct: "Jomboy", wrongs: ["Yonboy", "Jonboy", "Yomboy"] },
+    { q: "Yuriy Gagarin ... O'tirib qoldi", correct: "Mirzacho'lga", wrongs: ["Jomboyga", "Ko'chaga", "Maktabga"] },
+    { q: "Rus turkоlogi kim", correct: "Н.А.босконов", wrongs: ["Сергей Лазарев Дубровский", "Дмитрий Иванович Пушкин", "Бадр огли гетди"] },
+    { q: "Н.А.Босконов Русские фамилии Тюркского происхождение наука 1979 da nechta familiyani o'zgarganini ko'rsatib o'tgan", correct: "300", wrongs: ["500", "100", "200"] }
 ];
 
 const ayats = [
