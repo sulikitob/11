@@ -1,163 +1,592 @@
 <!DOCTYPE html>
 <html lang="uz">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Ahmad A'zam.Til nomusi yopiq savol-javob</title>
-<style>
-    body { margin:0; padding:0; background:#111; font-family:Arial; color:white; display:flex; justify-content:center; align-items:center; height:100vh; overflow:hidden; }
-    #startScreen { position:fixed; top:0; left:0; width:100%; height:100%; background:#111; display:flex; flex-direction:column; justify-content:center; align-items:center; text-align:center; z-index:9999; padding:20px; }
-    #startScreen h1 { color:#00ff99; font-size:50px; }
-    .oyat { max-width:800px; font-size:28px; line-height:1.8; color:#ddd; margin-top:20px; }
-    #startScreen h3 { color:#00ff99; margin-top:20px; }
-    #count { font-size:100px; color:#00ff99; margin-top:40px; animation:pulse 1s infinite; }
-    @keyframes pulse { 0%{transform:scale(1);} 50%{transform:scale(1.2);} 100%{transform:scale(1);} }
-    .box { width:650px; background:#1e1e1e; padding:30px; border-radius:20px; text-align:center; box-shadow:0 0 20px black; }
-    h2 { color:#00ff99; }
-    input { width:100%; padding:15px; margin-top:15px; border:none; border-radius:10px; font-size:18px; }
-    button { width:100%; padding:15px; margin-top:15px; border:none; border-radius:10px; background:#00ff99; color:black; font-weight:bold; cursor:pointer; font-size:18px; }
-    #result { margin-top:15px; font-size:20px; }
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>4-Bob.Ona tilim jonu-dilim </title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            font-family: 'Arial', sans-serif; 
+            background: linear-gradient(135deg, #050505, #121212, #1d1d1d); 
+            color: white; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            padding: 20px; 
+            min-height: 100vh; 
+        }
+
+        /* ===== Raqam tanlash ekrani ===== */
+        #select-screen {
+            width: 100%; max-width: 700px;
+            display: flex; flex-direction: column; align-items: center;
+            gap: 25px; padding: 20px 0;
+        }
+        #select-screen h1 {
+            font-size: 26px; color: #00ff99; text-align: center;
+        }
+        #select-screen p { color: #999; font-size: 14px; text-align: center; }
+        .number-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(55px, 1fr));
+            gap: 10px;
+            width: 100%;
+            max-height: 60vh;
+            overflow-y: auto;
+            padding: 10px;
+            background: #111;
+            border-radius: 20px;
+            box-shadow: 0 0 25px rgba(0,255,150,0.15);
+        }
+        .number-grid::-webkit-scrollbar { width: 8px; }
+        .number-grid::-webkit-scrollbar-thumb { background: #00ff99; border-radius: 10px; }
+        .num-btn {
+            background: #1b1b1b;
+            border: 2px solid #00ff99;
+            color: #00ff99;
+            border-radius: 12px;
+            padding: 12px 0;
+            font-size: 15px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.25s;
+            text-shadow: 0 0 8px rgba(0,255,153,0.6);
+        }
+        .num-btn:hover {
+            background: #00ff99;
+            color: #050505;
+            box-shadow: 0 0 20px rgba(0,255,150,0.8);
+            transform: scale(1.08);
+        }
+        .num-btn.picked {
+            background: #ff9900;
+            border-color: #ff9900;
+            color: #050505;
+            box-shadow: 0 0 20px rgba(255,153,0,0.8);
+        }
+        #range-info {
+            color: #ff9900; font-size: 15px; font-weight: bold; min-height: 22px;
+        }
+
+        /* ===== Funksiya tanlash ekrani ===== */
+            #mode-screen {
+            display: none;
+            width: 100%; max-width: 700px;
+            flex-direction: column; align-items: center;
+            gap: 25px; padding: 20px 0;
+        }
+
+        {
+            width: 100%;
+            max-width: 450px;
+            aspect-ratio: 4 / 3;
+            position: relative;
+            background: rgba(5, 5, 5, 0.4);
+          
+            border-radius: 20px;
+            padding: 15px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+         {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 10px;
+        }
+
+        #mode-screen h1 {
+            font-size: 24px; color: #00ff99; text-align: center;
+            margin: 5px 0;
+        }
+
+        .mode-wrapper {
+            width: 100%;
+            background: rgba(5, 5, 5, 0.4);
+            border-radius: 20px;
+            padding: 25px;
+       
+        }
+        .mode-grid {
+            width: 100%;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+        .mode-card {
+            background: rgba(27, 27, 27, 0.85);
+            border-radius: 20px;
+            padding: 30px 15px;
+            text-align: center;
+            transition: 0.4s;
+            color: white;
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            backdrop-filter: blur(3px);
+        }
+        .mode-card::before {
+            content: ""; position: absolute; width: 200%; height: 200%;
+            background: linear-gradient(45deg,transparent,#00ff99,transparent);
+            top: -150%; left: -150%; transform: rotate(25deg); transition: 0.7s;
+        }
+        .mode-card:hover::before { top: 100%; left: 100%; }
+        .mode-card:hover { transform: translateY(-5px) scale(1.02); border-color: #ffd700; box-shadow: 0 0 15px rgba(255,215,0,0.2); }
+@media(max-width:600px){ 
+    .mode-grid{ grid-template-columns: repeat(2, 1fr); } 
+    .mode-icon-top{ display: flex; justify-content: center; }
+    .mode-icon-top img{ width: 85%; max-width: 220px; }
+}
+
+        /* ===== Intro (countdown) ekran ===== */
+        #intro-screen {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: #050505; display: none; flex-direction: column;
+            justify-content: center; align-items: center; z-index: 5;
+            transition: opacity 0.8s ease;
+        }
+        #stars {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none; z-index: 0; overflow: hidden;
+        }
+        #select-screen, #mode-screen, .quiz-box, #intro-screen .content-box, #intro-screen #countdown {
+            position: relative; z-index: 2;
+        }
+        .star {
+            position: absolute;
+            width: 2px; height: 2px;
+            background: #fff;
+            border-radius: 50%;
+            animation: twinkle 2.5s infinite ease-in-out;
+        }
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.15; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.6); }
+        }
+        .content-box { text-align: center; margin-bottom: 50px; z-index: 1; position: relative; padding: 0 20px; }
+        #countdown { 
+            position: absolute; bottom: 50px;
+            font-size: 80px; color: #00ff99; font-weight: bold;
+            animation: pulse 1s infinite;
+            z-index: 1;
+        }
+        @keyframes pulse {
+            0% { transform: scale(0.9); opacity: 0.5; }
+            50% { transform: scale(1); opacity: 1; }
+            100% { transform: scale(0.9); opacity: 0.5; }
+        }
+
+        /* Qur'on sarlavhalari uslubidagi tilla naqshinkor to'rtburchak hoshiya */
+        .quran-box {
+            display: block;
+            margin: 25px auto 0 auto;
+            padding: 20px 30px;
+            max-width: 550px;
+            border: 4px double #ffd700; 
+            background: rgba(20, 16, 5, 0.6);
+            text-align: center;
+        }
+        .quran-ayat-text {
+            font-size: 18px;
+            line-height: 1.6;
+            color: #f0f0f0;
+            margin-bottom: 15px;
+            display: block;
+        }
+        .quran-meta {
+            display: inline-block;
+            font-size: 15px;
+            font-weight: bold;
+            color: #ffd700;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            border-top: 1px solid rgba(255, 215, 0, 0.3);
+            padding-top: 8px;
+            width: 100%;
+        }
+
+        /* ===== Quiz ekrani ===== */
+        .quiz-box { 
+            display: none;
+            width: 100%; max-width: 600px; background: #1b1b1b; padding: 30px; 
+            border-radius: 25px; box-shadow: 0 0 35px rgba(0, 255, 150, 0.1); 
+            text-align: center; margin-top: 50px;
+        }
+        h2 { color: #00ff99; margin-bottom: 20px; font-size: 22px; }
+        .option { 
+            display: block; width: 100%; padding: 15px; margin: 10px 0; 
+            background: #2a2a2a; border: 2px solid #333; border-radius: 15px; 
+            cursor: pointer; transition: 0.3s; text-align: left;
+        }
+        .option:hover { border-color: #00ff99; }
+        .correct { 
+            background: #00ff99 !important; color: black; font-weight: bold; 
+            animation: bubbleEffect 0.5s ease-out;
+        }
+        @keyframes bubbleEffect {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.03); }
+            100% { transform: scale(1); }
+        }
+        .wrong { background: #ff4d4d !important; color: white; }
+        .btn-finish { 
+            width: 100%; padding: 15px; background: transparent; border: 2px solid #00ff99; 
+            color: #00ff99; border-radius: 15px; cursor: pointer; margin-top: 20px; 
+            font-weight: bold; transition: 0.3s; 
+        }
+        .btn-finish:hover { background: #00ff99; color: black; }
+        
+        .closed-input {
+            width: 100%; padding: 15px; margin-top: 10px; border: 2px solid #333;
+            border-radius: 12px; font-size: 17px; outline: none; background: #2a2a2a;
+            color: white;
+        }
+        .closed-input:focus { border-color: #00ff99; }
+        .btn-check {
+            width: 100%; padding: 15px; margin-top: 15px; border: 2px solid #00ff99; border-radius: 15px;
+            background: transparent; color: #00ff99; font-weight: bold; cursor: pointer; font-size: 17px;
+            transition: 0.3s;
+        }
+        .btn-check:hover { background: #00ff99; color: black; }
+        #closed-result { margin-top: 15px; font-size: 18px; min-height: 30px; text-align: center; }
+    </style>
 </head>
 <body>
 
-<div id="startScreen">
-    <h1>📚4-Bob.Ona tilim-Jonu dilim testiga tayyorlaning </h1>
-    <p class="oyat">“Robbing seni tark etmadi va g‘azab ham qilmadi.<br> Albatta oxirat sen uchun bu dunyodan yaxshidir.”</p>
-    <h3>🌙 Zuho surasi 93:3-4</h3>
-    <div id="count">3</div>
+<div id="stars"></div>
+
+<div id="select-screen">
+    <h1>🌙4-Bob.Ona tilim jonu-dilim</h1>
+    <p>Savollar sonini belgilang</p>
+    <div id="range-info">Boshlang'ich raqamni tanlang</div>
+    <div class="number-grid" id="numberGrid"></div>
 </div>
 
-<div class="box">
-    <h2 id="question"></h2>
-    <input type="text" id="answer" placeholder="Javob yozing...">
-    <button onclick="check()">Tekshirish</button>
-    <button onclick="finishQuiz()" style="background:#ff4444; color:white; margin-top:10px;">Testni tugatish</button>
-    <div id="result"></div>
+<div id="mode-screen">
+    <div class="mode-icon-top">
+        <img src="sayr.jpg" alt="rasm">
+    </div>
+    <h1>Qaysi funksiyani xohlaysiz?</h1>
+    <div class="mode-wrapper">
+        <div class="mode-grid">
+            <div class="mode-card" onclick="chooseMode('quiz')">Quiz testlar</div>
+            <div class="mode-card" onclick="chooseMode('quiz-aralash')">Quiz aralash</div>
+            <div class="mode-card" onclick="chooseMode('yopiq')">Yopiq savol-javob</div>
+            <div class="mode-card" onclick="chooseMode('yopiq-aralash')">Yopiq savol-javob aralash</div>
+        </div>
+    </div>
+</div>
+
+<div id="intro-screen">
+    <div class="content-box">
+        <h1 style="color:#00ff99; font-size: 32px;">3-Bob.Tiluvzani makivopizza</h1>
+        <div id="random-ayat"></div>
+    </div>
+    <div id="countdown">3</div>
+</div>
+
+<div class="quiz-box" id="quiz">
+    <h2 id="question">Yuklanmoqda...</h2>
+    <div id="options"></div>
+    <button class="btn-finish" onclick="finishQuiz()">Testni yakunlash</button>
 </div>
 
 <script>
-    /* COUNTDOWN */
-    let time = 3;
-    let timer = setInterval(()=>{
-        document.getElementById("count").innerText = time;
-        time--;
-        if(time < 0){
-            clearInterval(timer);
-            document.getElementById("startScreen").style.display="none";
-        }
-    },1000);
+const quizData = [
+    { q: "1. Teshik munchoq yerda qolmas, aslida munchoqni o'rniga nima deyilishi kerak?", correct: "teshik kulcha", wrongs: ["o'zgartirilmaydi", "teshik uzuk", "teshik munchoq"] },
+    { q: "2. Shevalar tilning ildizlari, aslidachi?", correct: "buloqlari", wrongs: ["qismlari", "zaminlari", "irmoqlari"] },
+    { q: "3. OAV minbariga chiqqan odam, ko'pchilikka yuzlangan odam, o'zini hurmat qilgan odam nima qilsin deb aytadi Ahmad A'zam?", correct: "adabiy tilda gapirsin", wrongs: ["chet tilida gapirsin", "shevada gapirsin", "hohlaganday aralashtirib gapirsin"] },
+    { q: "4. Ahmad A'zam eski shaharning markazida turadi, mahallasining nomi nima?", correct: "Eshonguzar", wrongs: ["abdulla qahhor", "dalaguzar", "eshongul"] },
+    { q: "5. Beshik tebratadigan kelinlarning bir qo'li beshikda, 2 ko'zi esa qayerda edi?", correct: "televizorda", wrongs: ["kitobda", "bolada", "telefonda"] },
+    { q: "6. Onalar ro'zg'ordan bo'shamay nimaga qadalib qolishadi?", correct: "televizorga", wrongs: ["bolasiga", "eriga", "telefonga"] },
+    { q: "7. Dasturxonda guringlar aridi, nima sababdan?", correct: "televizor", wrongs: ["telefon", "suniylik", "internet"] },
+    { q: "8. Tilni bilishning yana bir muhim omili nima?", correct: "kitob badiiy asar", wrongs: ["televizor", "telefon", "ijtimoiy tarmoqlar"] },
+    { q: "9. O'zbek tili nechta boylikni o'zbek tilini birlashtirgan?", correct: "92", wrongs: ["95", "90", "99"] },
+    { q: "10. Millatni o'zining ichidan parchalashga olib keladigan, tarixda esa bir necha bor takrorlangan narsa nima?", correct: "tiliga rahna solish", wrongs: ["adabiy tilini o'zgartirish", "tarixini buzish", "ona tilisini unuttirish"] },
+    { q: "11. Oltoy o'lkalari qaysilar?", correct: "barcha javob to'g'ri", wrongs: ["Xitoy", "Mo'g'uliston", "Mo'g'uliston"] },
+    { q: "12. Ulkan areal qaysi lahja?", correct: "Qipchoq", wrongs: ["Usmonli turk", "Og'uz", "Qarluq"] },
+    { q: "13. Qipchoq lahjasi shevasi aksar boyliklari kiritilmagani uchun biz jahoning yetakchi tillar qatoriga chiqa olmaymiz va qaysi davlatlarda yashayotgan turkiy halqlardan uzoqlashganmiz?", correct: "Barcha javob to'g'ri", wrongs: ["Mog'uliston Xitoy xududlari", "Rossiyaning markaziy janubiy g'arbiy shimoliy qismlari", "Qozoq Qirg'iz Qoraqalpoq tatar boshqirt oltoy"] },
+    { q: "14. Ayni paytda leksikografiyamizga o'g'uz lahjasi sheva boyliklaridan juda oz kiritilgani uchun bugungi kunda qaysi davlatlar tillarini tushunishimiz qiyin va lug'atga muhtojmiz?", correct: "Barcha javob to'g'ri", wrongs: ["Usmonli turk", "Usmonli turk", "Turkman"] },
+    { q: "15. \"Biz kim, mulki Turon, Amiri Turkistonmiz, millatlarning eng qadimi va ulug'i turkning bosh bo'g'inimiz\" so'zlarining muallifi kim?", correct: "Amir Temur", wrongs: ["Zahiriddin Muhammad Bobur", "Ahmad A'zam", "Alisher Navoiy"] },
+    { q: "16. Turkiy ... ya'ni hozirgi o'zbek tilimiz o'tmishda barcha turkiy el va elatlarga tushunarli bo'lgan.", correct: "chig'atoy", wrongs: ["og'uz", "qipchoq", "qarluq"] },
+    { q: "17. Yunus Emro millati qaysi?", correct: "turk", wrongs: ["ozarbayjon", "qozoq", "turkman"] },
+    { q: "18. Maxtumquli millati nima?", correct: "turkman", wrongs: ["turk", "ozarbayjon", "qozoq"] },
+    { q: "19. Fuzuliy millati nima?", correct: "ozar", wrongs: ["turkman", "turk", "Qozoq"] },
+    { q: "20. Abay millati nima?", correct: "qozoq", wrongs: ["turkman", "turk", "qoraqalpoq"] },
+    { q: "21. Berdaq millati nima?", correct: "Qoraqalpoq", wrongs: ["turkiston", "turkman", "qozoq"] },
+    { q: "22. Qaysi dostonlar bir ona tilimiz zamirida yaratilgan?", correct: "barcha javob to'g'ri", wrongs: ["O'g'uznoma", "Go'ro'g'li", "Manas Qorqut ota"] },
+    { q: "23. Tafakkurning siyrati nima?", correct: "so'z", wrongs: ["basirat", "tasavvur", "idrok"] },
+    { q: "24. Zominning til qomusida -man qo'shimchasi bilan yasalgan adabiy tilga kirmagan nechta so'z keltirilgan?", correct: "20", wrongs: ["15", "25", "30"] },
+    { q: "25. Xazrati Bobomiz Muhokamat ul-lug'atayn asarida yig'lamoq so'zini nechta ma'nosini keltirib o'tgan?", correct: "19", wrongs: ["20", "15", "30"] },
+    { q: "26. Professor To'ta Nasafov o'z tadqiqotida qora so'zining 10 dan oshiq ma'nosi va nechtadan tovlanishini ko'rsatib beradi?", correct: "70", wrongs: ["90", "80", "50"] },
+    { q: "27. Axlatni tashlama, axlatni to'kma deyishadi, axlat o'zi asli nima?", correct: "odam najosati", wrongs: ["keraksiz mahsulotlar", "barcha javob to'g'ri", "sabzavotlar qoldig'i"] },
+    { q: "28. Axlat so'zining o'rniga qaysi so'zni ishlatishimiz mumkin?", correct: "chiqindi", wrongs: ["musor", "chiqit", "barcha javob to'g'ri"] },
+    { q: "29. O'z tilimizni avaylashda qaysi davlatdan o'rnak olish kerak?", correct: "Fransiya", wrongs: ["amerika", "italiya", "rossiya"] },
+    { q: "30. Fransuz tili nechtadan ortiq davlatning milliy tili?", correct: "30", wrongs: ["20", "40", "25"] },
+    { q: "31. Fransuz tilida nechta million aholi gaplashadi?", correct: "130", wrongs: ["140", "120", "125"] },
+    { q: "32. Fransuz tilida gaplashadigan davlatlar uyushmasi nima deb ataladi?", correct: "Frankofoniya", wrongs: ["fransofobiya", "Frankofobiya", "fransafoniya"] },
+    { q: "33. Fransuz tilida 130 million odam gaplashadi va nechta odam erkin fikr yurita oladi?", correct: "200 mln", wrongs: ["120 mln", "130 mln", "150 mln"] },
+    { q: "34. Frankofoniya nechta davlatni a'zo qilgan?", correct: "56", wrongs: ["100", "55", "40"] },
+    { q: "35. Frankofoniya 56 davlatni a'zo va nechta davlatni ... sifatida tanilgan?", correct: "14", wrongs: ["20", "30", "15"] },
+    { q: "36. Fransuz tilini yod ta'sirlardan himoya qilish uchun birinchi qonun nechchinchi yilda qabul qilingan?", correct: "1975", wrongs: ["1950", "1940", "1980"] },
+    { q: "37. Fransuz tilini anglo-amerikan ta'sirlardan himoya qilish uchun Jak Tubon qonuni qachon qabul qilingan?", correct: "1995", wrongs: ["1980", "1990", "1975"] },
+    { q: "38. Yozuvlarda fransuz tilida muqobili bo'lgan yo yasalishi mumkin bo'lgan chet tili so'zi ishlatilsa jarima qilingan va reyd o'tkazilib nechta til qonunbuzarligi aniqlangan?", correct: "1236", wrongs: ["1235", "1238", "1230"] },
+    { q: "39. ...nechta xolatga nisbatan sud xukmi chiqarilgan?", correct: "33", wrongs: ["40", "35", "34"] },
+    { q: "40. Bu ishlarga Fransiyada kim bosh-qosh?", correct: "bosh vazir huzuridagi oliy komissiya institut, fanlar akademiyasi shunday nomlanadi", wrongs: ["fransuz tili institutlari", "barcha bosh qosh", "hatto prezident va vazir"] },
+    { q: "41. Bosh vazir huzuridagi Oliy komissiya nechta assotsatsiya muhofaza qiladi fransuz tilini?", correct: "5", wrongs: ["3", "4", "6"] },
+    { q: "42. ...bu dastur nomi nima?", correct: "barhayotlar", wrongs: ["abadiy masala", "barcha javoblar to'g'ri", "abadiy fransuz tili"] },
+    { q: "43. Barcha rasmiy hujjatlarda ... roziligi va ruxsatisiz chetdan bironta yangi va isloh kiritilishi mumkin emas.", correct: "institut", wrongs: ["vazirlik", "akademiya", "prezident"] },
+    { q: "44. ...nuqtalar o'rnini to'ldiring.", correct: "jurnal offisel", wrongs: ["de ja vu offisel", "jo te amo offisel", "frans offisel"] },
+    { q: "45. Pishgan go'shtning yog'siz qismi nima deyiladi?", correct: "go'shtning qorasi", wrongs: ["go'shtning sarasi", "qora go'sht", "stack"] },
+    { q: "46. Jonli mavjudotlar to'dasi nima?", correct: "qo'ra", wrongs: ["qora", "kora", "qop qora"] },
+    { q: "47. Qorani oldim nima?", correct: "uloqni chavandozlar to'dasidan olib chiqib ma'lum bir masofadagi belgiga olib borib tashlash", wrongs: ["xachirni ushlab olish", "chavandoz otini olish", "uloqni yetkazish"] },
+    { q: "48. 5-10 qo'ram bor, qo'ra nima?", correct: "qoramol", wrongs: ["mol", "sigir", "ot"] },
+    { q: "49. \"Meni qorasi yo'q ayol deb o'ylamang\", qora bu yerda qanday ma'noda kelgan?", correct: "Barcha javoblar to'g'ri", wrongs: ["er", "umr yo'ldosh", "ega"] },
+    { q: "50. Qora bosmoq so'zining ma'nosi nima?", correct: "xastalanmoq", wrongs: ["uyini hasharot bosmoq", "barcha javob to'g'ri", "toshma bosish"] },
+    { q: "51. Qoraga bormoq so'zining ma'nosi nima?", correct: "katta yoshga yetmoq", wrongs: ["moxlonaga bormoq", "uloqqa bormoq", "xastalanmoq"] },
+    { q: "52. Qoraga yetmoq so'zining ma'nosi nima?", correct: "maqsadga yetmoq, martabaga erishmoq", wrongs: ["uloqqa yetish", "yoshi bir joyga yetmoq", "qoraga yetib kelish"] },
+    { q: "53. Qora ovqat nima?", correct: "go'shtsiz pishgan ovqat", wrongs: ["qora sabsizdan tayyorlangan ovqat", "barcha javob to'g'ri", "qora rangli ovqat"] },
+    { q: "54. Qora piyoda so'zining ma'nosi?", correct: "ulov, ot, eshak, transport", wrongs: ["qari odam", "yolg'iz odam", "qop qora odam yurishi"] },
+    { q: "55. Qora narsa so'zining ma'nosi nima?", correct: "boylik bisot", wrongs: ["qop-qora narsalar", "barcha javob to'g'ri", "qora buyumlar"] },
+    { q: "56. Shevashunos olim qora so'zi ishtirokida nechta so'zni lug'aviy ma'nosini izohlagan?", correct: "71", wrongs: ["75", "72", "70"] },
+    { q: "57. Koptok tepilmaydi, nima qilinadi?", correct: "zarba beriladi", wrongs: ["solinadi", "aylantiriladi", "tepiladi"] }
+];
 
-    /* QUIZ DATA */
-const quiz = [
-        {question: "Teshik munchoq yerda qolmas, aslida munchoqni o'rniga nima deyilishi kerak?", correct: "teshik kulcha"},
-        {question: "Shevalar tilning ildizlari, aslidachi?", correct: "buloqlari"},
-        {question: "OAV minbariga chiqqan odam, ko'pchilikka yuzlangan odam, o'zini hurmat qilgan odam nima qilsin deb aytadi Ahmad A'zam?", correct: "adabiy tilda gapirsin"},
-        {question: "Ahmad A'zam eski shaharning markazida turadi, mahallasining nomi nima?", correct: "Eshonguzar"},
-        {question: "Beshik tebratadigan kelinlarning bir qo'li beshikda, 2 ko'zi esa qayerda edi?", correct: "televizorda"},
-        {question: "Onalar ro'zg'ordan bo'shamay nimaga qadalib qolishadi?", correct: "televizorga"},
-        {question: "Dasturxonda gurunglar aridi, nima sababdan?", correct: "televizor"},
-        {question: "Tilni bilishning yana bir muhim omili nima?", correct: "kitob badiiy asar"},
-        {question: "O'zbek tili necha bovli o'zbek tilini birlashtirgan?", correct: "92"},
-        {question: "Millatning o'zining ichidan parchalashga olib keladigan, tarixda esa bir necha bor takrorlangan narsa nima?", correct: "tiliga rahna solish"},
-        {question: "Oltoy o'lkalari qaysilar?", correct: "barcha javob to'g'ri"},
-        {question: "Ulkan areal qaysi lahja?", correct: "Qipchoq"},
-        {question: "Qipchoq lahjasi shevasi aksar boyliklari kiritilmagani uchun biz jahonning yetakchi tillar qatoriga chiqa olmaymiz va qaysi davlatlarda yashayotgan turkiy halqlardan uzoqlashtirgan?", correct: "Barcha javob to'g'ri"},
-        {question: "Ayni paytda leksikografiyamizga o'g'uz lahjasi sheva boyliklaridan juda oz kiritilgani uchun bugungi kunda qaysi davlatlar tillarini tushunishimiz qiyin va lug'atga muhtojmiz?", correct: "Barcha javob to'g'ri"},
-        {question: "Biz kim mulki turon, Amiri Turkistonmiz, millatlarning eng qadimi va ulug'i turkning bosh bo'g'inimiz so'zlarining muallifi kim?", correct: "Amir temur"},
-        {question: "Turkiy ... ya'ni hozirgi o'zbek tilimiz o'tmishda barcha turkiy el va elatlarga tushunarli bo'lgan?", correct: "chig'atoy"},
-        {question: "Yunus Emro millati qaysi?", correct: "turk"},
-        {question: "Maxtumqulining millati nima?", correct: "turkman"},
-        {question: "Fuzuliyning millati nima?", correct: "ozar"},
-        {question: "Abayning millati nima?", correct: "qozoq"},
-        {question: "Berdaqning millati nima?", correct: "Qoraqalpoq"},
-        {question: "Qaysi dostonlar bir ona tilimiz zamirida yaratilgan?", correct: "barcha javob to'g'ri"},
-        {question: "Tafakkurning siyrati nima?", correct: "so'z"},
-        {question: "Zominning til qomusida -man qo'shimchasi bilan yasalgan adabiy tilga kirmagan nechta so'z keltirilgan?", correct: "20"},
-        {question: "Hazrati Bobomiz 'Muhokamat ul-lug'atayn' asarida 'yig'lamoq' so'zini nechta ma'nosini keltirib o'tgan?", correct: "19"},
-        {question: "Professor To'ta Nasafov o'z tadqiqotida 'qora' so'zining 10 dan oshiq ma'nosi va nechtadan tovlanishini ko'rsatib beradi?", correct: "70"},
-        {question: "Axlatni tashlama, axlatni to'kma deyishadi, axlat o'zi asli nima?", correct: "odam najosati"},
-        {question: "Axlat so'zining o'rniga qaysi so'zni ishlatishimiz mumkin?", correct: "chiqindi"},
-        {question: "O'z tilimizni avaylashda qaysi davlatdan o'rnak olish kerak?", correct: "Fransiya"},
-        {question: "Fransuz tili nechtadan ortiq davlatning milliy tili?", correct: "30"},
-        {question: "Fransuz tilida nechta million aholi gaplashadi?", correct: "130"},
-        {question: "Fransuz tilida gaplashadigan davlatlar uyushmasi nima deb ataladi?", correct: "Franqofoniya"},
-        {question: "Fransuz tilida 130 million odam gaplashadi va nechta odam erkin fikr yurita oladi?", correct: "200 mln"},
-        {question: "Frankofoniya nechta davlatni a'zo qilgan?", correct: "56"},
-        {question: "Frankofoniya 56 davlatni a'zo va nechta davlatni ... sifatida tanilgan?", correct: "14"},
-        {question: "Fransuz tilini yod ta'sirlardan himoya qilish uchun birinchi qonun nechchinchi yilda qabul qilingan?", correct: "1975"},
-        {question: "Fransuz tilini anglo-amerikan ta'sirlardan himoya qilish, o'zga madaniyatlar ta'siridan himoya qilish uchun Jak Tubon qonuni qachon qabul qilingan?", correct: "1995"},
-        {question: "Yozuvlarda fransuz tilida muqobili bo'lgan yo yasalishi mumkin bo'lgan chet tili so'zi ishlatilsa jarima qilingan va reyd o'tkazilib nechta til qonunbuzarligi qilingan?", correct: "1236"},
-        {question: "Yozuvlarda fransuz tilida muqobili bo'lgan yo yasalishi mumkin bo'lgan chet tili so'zi ishlatilsa jarima qilingan va reyd o'tkazilib nechta holatga nisbatan sud xukmi chiqarilgan?", correct: "33"},
-        {question: "Bu ishlarga Fransiyada kim bosh-qosh?", correct: "bosh vazir xuzuridagi oliy komissiya institut fanlar akademiyasi shunday nomlanadi"},
-        {question: "Bosh vazir huzuridagi Oliy komissiya nechta assotsatsiyani muhofaza qiladi fransuz tilini?", correct: "5"},
-        {question: "Yozuvchilar, madaniyat arboblaridan iborat ... institutga azolik bir umr davlatning fransuz tilini muxofaza qilish dasturini ishga tushirishgan, bu dastur nomi nima?", correct: "barhayotlar"},
-        {question: "Barcha rasmiy hujjatlarda ... roziligi va ruxsatisiz chetdan bironta yangi va isloh kiritilishi mumkin emas?", correct: "institut"},
-        {question: "Chet tilidan yangi isloh kiritish uchun davlat qarmog'ida ... va boshqa assotsatsiyalar nashriyotlarida atamalar berib boriladi?", correct: "jurnal offisel"},
-        {question: "Pishgan go'shtning yog'siz qismi nima deyiladi?", correct: "go'shtning qorasi"},
-        {question: "Jonli mavjudotlar to'dasi nima?", correct: "qo'ra"},
-        {question: "Qorani oldim nima?", correct: "uloqni chavandozlar to'dasidan olib chiqib ma'lum bir masofadagi belgiga olib borib tashlash"},
-        {question: "5-10 qo'ram bor, qo'ra nima?", correct: "qoramol"},
-        {question: "Meni qorasi yo'q ayol deb o'ylamang, qora bu yerda qanday ma'noda kelgan?", correct: "Barcha javoblar to'g'ri"},
-        {question: "Qora bosmoq so'zining ma'nosi nima?", correct: "xastalanmoq"},
-        {question: "Qoraga bormoq so'zining ma'nosi nima?", correct: "katta yoshga yetmoq"},
-        {question: "Qoraga yetmoq so'zining ma'nosi nima?", correct: "maqsadga yetmoq martabaga erishmoq"},
-        {question: "qora ovqat nima?", correct: "go'shtsiz pishgan ovqat"},
-        {question: "Qora piyoda so'zining ma'nosi?", correct: "ulov ot eshak transport"},
-        {question: "Qora narsa so'zining ma'nosi nima?", correct: "boylik bisot"},
-        {question: "Shevashunos olim qora so'zi ishtirokida nechta so'zni lug'aviy ma'nosini izohlagan?", correct: "71"},
-        {question: "Koptok tepilmaydi, nima qilinadi?", correct: "zarba beriladi"}
-    ];
+const ayats = [
+    { text: "Robbing seni tark qilmadi va g'azab ham qilmadi.", meta: "Zuho 93:3" },
+    { text: "Albatta bir qiyinchilik bilan osonchilik bordir.", meta: "Sharh 94:5" },
+    { text: "Yaratgan Robbing nomi bilan o'qi!", meta: "Alaq 96:1" },
+    { text: "O'qi, Robbing karamlilar karamlisidir.", meta: "Alaq 96:3" },
+    { text: "Va tezda Robbing senga ato qilur va sen rozi bo'lursan.", meta: "Zuho 93:5" },
+    { text: "Ammo kimki ato bersa va taqvo qilsa, va yaxshiliklarni tasdiq qilsa, bas, Biz uni osonga muyassar etamiz.", meta: "Layl 92:5-7" },
+    { text: "Albatta hidoyatga boshlash Bizning zimmamizdadir.", meta: "Layl 92:12" },
+    { text: "Va albatta tezda rozi bo'ladir.", meta: "Layl 92:21" },
+    { text: "Seni oson yo'lga muyassar etamiz.", meta: "A'lo 87:8" },
+    { text: "Bas, kim xohlasa Parvardigori tomon qaytadigan yo'lni tutar.", meta: "Naba 78:39" },
+    { text: "Albatta Biz senga ochiq g'alaba berdik.", meta: "Fath 48:1" }
+];
 
-    let i = 0;
-    let score = 0;
+let activeQuiz = [];
+let currentQ = 0, score = 0, answered = 0;
 
-    function load(){
-        document.getElementById("result").innerHTML = "";
-        document.getElementById("answer").value = "";
-        document.getElementById("question").innerText = (i + 1) + "/" + quiz.length + ". " + quiz[i].question;
+function shuffle(array) {
+    return array.sort(() => Math.random() - 0.5);
+}
+
+function buildStars() {
+    const container = document.getElementById('stars');
+    container.innerHTML = '';
+    const count = 100; // Yulduzlar zichligi oshirildi
+    for (let i = 0; i < count; i++) {
+        const s = document.createElement('div');
+        s.className = 'star';
+        s.style.left = Math.random() * 100 + '%';
+        s.style.top = Math.random() * 100 + '%';
+        const size = (Math.random() * 2 + 1).toFixed(1);
+        s.style.width = size + 'px';
+        s.style.height = size + 'px';
+        s.style.animationDelay = (Math.random() * 2.5).toFixed(2) + 's';
+        s.style.animationDuration = (1.5 + Math.random() * 2).toFixed(2) + 's';
+        container.appendChild(s);
     }
+}
 
-    function check(){
-        let user = document.getElementById("answer").value.toLowerCase().trim();
-        let correct = quiz[i].correct.toLowerCase();
+let rangeStart = null;
+let numButtons = [];
 
-        if(user === correct){
-            document.getElementById("result").innerHTML = "✅ To'g'ri";
-            score++;
+window.onload = function() {
+    const grid = document.getElementById('numberGrid');
+    for (let i = 1; i <= quizData.length; i++) {
+        const btn = document.createElement('button');
+        btn.className = 'num-btn';
+        btn.innerText = i;
+        btn.onclick = () => pickNumber(i, btn);
+        grid.appendChild(btn);
+        numButtons.push(btn);
+    }
+    buildStars();
+    
+    const randomIdx = Math.floor(Math.random() * ayats.length);
+    const selectedAyat = ayats[randomIdx];
+    document.getElementById('random-ayat').innerHTML = `
+        <div class="quran-box">
+            <span class="quran-ayat-text">"${selectedAyat.text}"</span>
+            <span class="quran-meta">${selectedAyat.meta}</span>
+        </div>
+    `;
+};
+
+function pickNumber(num, btnEl) {
+    const info = document.getElementById('range-info');
+
+    if (rangeStart === null) {
+        rangeStart = num;
+        btnEl.classList.add('picked');
+        info.innerText = `Boshlang'ich: ${num}. Endi oxirgi raqamni tanlang`;
+    } else {
+        let start = rangeStart;
+        let end = num;
+        if (end < start) { const t = start; start = end; end = t; }
+        btnEl.classList.add('picked');
+        info.innerText = `Tanlandi: ${start} - ${end}`;
+        setTimeout(() => startWithRange(start, end), 400);
+    }
+}
+
+function startWithRange(start, end) {
+    activeQuiz = quizData.slice(start - 1, end);
+    document.getElementById('select-screen').style.display = 'none';
+    document.getElementById('mode-screen').style.display = 'flex';
+}
+
+let quizMode = 'quiz';
+
+function chooseMode(mode) {
+    quizMode = mode;
+    if (mode === 'quiz-aralash' || mode === 'yopiq-aralash') {
+        activeQuiz = shuffle([...activeQuiz]);
+    }
+    document.getElementById('mode-screen').style.display = 'none';
+    document.getElementById('intro-screen').style.display = 'flex';
+    document.getElementById('intro-screen').style.opacity = '1';
+    startTimer();
+}
+
+function startTimer() {
+    let count = 3;
+    let disp = document.getElementById("countdown");
+    disp.innerText = count;
+    let timer = setInterval(() => {
+        count--;
+        if (count > 0) {
+            disp.innerText = count;
+        } else if (count === 0) {
+            disp.innerText = "Boshladik!";
         } else {
-            document.getElementById("result").innerHTML = "❌ Noto'g'ri. To'g'ri javob: " + quiz[i].correct;
+            clearInterval(timer);
+            document.getElementById("intro-screen").style.opacity = "0";
+            setTimeout(() => {
+                document.getElementById("intro-screen").style.display = "none";
+                document.getElementById("quiz").style.display = "block";
+                loadQ();
+            }, 800);
         }
+    }, 1000);
+}
 
-        setTimeout(()=>{
-            i++;
-            if(i < quiz.length){
-                load();
-            } else {
-                finishQuiz();
-            }
-        }, 1500);
+function getOptionsFor(qData) {
+    return shuffle([qData.correct, ...qData.wrongs]);
+}
+
+function loadQ() {
+    const qData = activeQuiz[currentQ];
+    document.getElementById('question').innerText = `${currentQ + 1}/${activeQuiz.length}. ${qData.q}`;
+    const optDiv = document.getElementById('options');
+    optDiv.innerHTML = '';
+
+    if (quizMode === 'yopiq' || quizMode === 'yopiq-aralash') {
+        loadClosedQ(qData, optDiv);
+    } else {
+        loadMultipleChoiceQ(qData, optDiv);
+    }
+}
+
+function loadMultipleChoiceQ(qData, optDiv) {
+    let shuffledOptions = getOptionsFor(qData);
+
+    shuffledOptions.forEach((opt) => {
+        const btn = document.createElement('div');
+        btn.className = 'option';
+        btn.innerText = opt;
+        btn.onclick = () => check(opt, btn, qData.correct);
+        optDiv.appendChild(btn);
+    });
+}
+
+function loadClosedQ(qData, optDiv) {
+    const input = document.createElement('input');
+    input.type = 'text';
+    input.className = 'closed-input';
+    input.id = 'closed-answer';
+    input.placeholder = 'Javob yozing...';
+    input.onkeypress = (e) => { if (e.key === 'Enter') checkClosed(qData); };
+
+    const checkBtn = document.createElement('button');
+    checkBtn.className = 'btn-check';
+    checkBtn.innerText = 'Tekshirish';
+    checkBtn.onclick = () => checkClosed(qData);
+
+    const resultDiv = document.createElement('div');
+    resultDiv.id = 'closed-result';
+
+    optDiv.appendChild(input);
+    optDiv.appendChild(checkBtn);
+    optDiv.appendChild(resultDiv);
+
+    input.focus();
+}
+
+function checkClosed(qData) {
+    const inputEl = document.getElementById('closed-answer');
+    const resultDiv = document.getElementById('closed-result');
+    const user = inputEl.value.toLowerCase().trim();
+    const correct = qData.correct.toLowerCase().trim();
+
+    answered++;
+    inputEl.disabled = true;
+    document.querySelector('.btn-check').disabled = true;
+
+    if (user === correct) {
+        resultDiv.innerHTML = '<b style="color:#00ff99;">✅ To\'g\'ri</b>';
+        score++;
+    } else {
+        resultDiv.innerHTML = '<b style="color:#ff4444;">❌ Noto\'g\'ri.</b><br> Javob: ' + qData.correct;
     }
 
-    function finishQuiz() {
-        i = quiz.length;
-        document.getElementById("question").innerText = "🎉 Quiz Yakunlandi";
-        document.getElementById("answer").style.display = "none";
-        
-        document.querySelectorAll(".box > button").forEach(b => b.style.display = "none");
-        
-        document.getElementById("result").innerHTML = `
-            <div style="font-size:24px; color:#fff; line-height:2;">
-                ✅ To'g'ri: <b style="color:#00ff99;">${score}</b><br>
-                ❌ Noto'g'ri: <b style="color:#ff4444;">${quiz.length - score}</b><br>
-                Yakuniy natija: <b>${score} / ${quiz.length}</b>
-            </div>
-            <button onclick="location.reload()" style="background:#00ff99; margin-top:20px;">🔄 Qayta ishlash</button>
-        `;
-    }
+    setTimeout(() => {
+        currentQ++;
+        if (currentQ < activeQuiz.length) loadQ();
+        else finishQuiz();
+    }, 2000);
+}
 
-    load();
+function check(selected, element, correct) {
+    const options = element.parentElement.querySelectorAll('.option');
+    options.forEach(opt => opt.style.pointerEvents = 'none');
+    answered++;
+
+    if (selected === correct) {
+        element.classList.add('correct');
+        score++;
+    } else {
+        element.classList.add('wrong');
+        options.forEach(opt => {
+            if (opt.innerText === correct) opt.classList.add('correct');
+        });
+    }
+    setTimeout(() => {
+        currentQ++;
+        if (currentQ < activeQuiz.length) loadQ();
+        else finishQuiz();
+    }, 1000);
+}
+
+function finishQuiz() {
+    let wrong = answered - score;
+    document.getElementById('quiz').innerHTML = `
+        <h2>Natijalar</h2>
+        <div style="line-height: 2.2; font-size: 19px;">
+            Jami savollar: <b>${activeQuiz.length} ta</b><br>
+            To'g'ri javoblar: <span style="color:#00ff99;">${score} ta</span><br>
+            Xato javoblar: <span style="color:#ff4d4d;">${wrong} ta</span>
+        </div>
+        <button class="btn-finish" onclick="location.reload()">Qaytadan boshlash</button>
+    `;
+}
 </script>
-
 </body>
 </html>
