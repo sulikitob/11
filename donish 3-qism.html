@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Xurshid Do'stmuhmmad.Donishmand Sizif</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            font-family: 'Arial', sans-serif; 
+            background: linear-gradient(135deg, #050505, #121212, #1d1d1d); 
+            color: white; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            padding: 20px; 
+            min-height: 100vh; 
+        }
+
+        /* ===== Raqam tanlash ekrani ===== */
+        #select-screen {
+            width: 100%; max-width: 700px;
+            display: flex; flex-direction: column; align-items: center;
+            gap: 25px; padding: 20px 0;
+        }
+        #select-screen h1 {
+            font-size: 26px; color: #00ff99; text-align: center;
+        }
+        #select-screen p { color: #999; font-size: 14px; text-align: center; }
+        .number-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(55px, 1fr));
+            gap: 10px;
+            width: 100%;
+            max-height: 60vh;
+            overflow-y: auto;
+            padding: 10px;
+            background: #111;
+            border-radius: 20px;
+            box-shadow: 0 0 25px rgba(0,255,150,0.15);
+        }
+        .number-grid::-webkit-scrollbar { width: 8px; }
+        .number-grid::-webkit-scrollbar-thumb { background: #00ff99; border-radius: 10px; }
+        .num-btn {
+            background: #1b1b1b;
+            border: 2px solid #00ff99;
+            color: #00ff99;
+            border-radius: 12px;
+            padding: 12px 0;
+            font-size: 15px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.25s;
+            text-shadow: 0 0 8px rgba(0,255,153,0.6);
+        }
+        .num-btn:hover {
+            background: #00ff99;
+            color: #050505;
+            box-shadow: 0 0 20px rgba(0,255,150,0.8);
+            transform: scale(1.08);
+        }
+        .num-btn.picked {
+            background: #ff9900;
+            border-color: #ff9900;
+            color: #050505;
+            box-shadow: 0 0 20px rgba(255,153,0,0.8);
+        }
+        #range-info {
+            color: #ff9900; font-size: 15px; font-weight: bold; min-height: 22px;
+        }
+
+        /* ===== Funksiya tanlash ekrani ===== */
+            #mode-screen {
+            display: none;
+            width: 100%; max-width: 700px;
+            flex-direction: column; align-items: center;
+            gap: 25px; padding: 20px 0;
+        }
+
+    .mode-icon-top {
+    width: 100%;
+    max-width: 450px;
+    aspect-ratio: 4 / 3;
+    position: relative;
+    background: rgba(5, 5, 5, 0.4);
+    border-radius: 20px;
+    padding: 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.mode-icon-top img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 10px;
+}
+
+        #mode-screen h1 {
+            font-size: 24px; color: #00ff99; text-align: center;
+            margin: 5px 0;
+        }
+
+        .mode-wrapper {
+            width: 100%;
+            background: rgba(5, 5, 5, 0.4);
+            border-radius: 20px;
+            padding: 25px;
+       
+        }
+        .mode-grid {
+            width: 100%;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+        .mode-card {
+            background: rgba(27, 27, 27, 0.85);
+            border-radius: 20px;
+            padding: 30px 15px;
+            text-align: center;
+            transition: 0.4s;
+            color: white;
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            backdrop-filter: blur(3px);
+        }
+        .mode-card::before {
+            content: ""; position: absolute; width: 200%; height: 200%;
+            background: linear-gradient(45deg,transparent,#00ff99,transparent);
+            top: -150%; left: -150%; transform: rotate(25deg); transition: 0.7s;
+        }
+        .mode-card:hover::before { top: 100%; left: 100%; }
+        .mode-card:hover { transform: translateY(-5px) scale(1.02); border-color: #ffd700; box-shadow: 0 0 15px rgba(255,215,0,0.2); }
+@media(max-width:600px){ 
+    .mode-grid{ grid-template-columns: repeat(2, 1fr); } 
+    .mode-icon-top{ display: flex; justify-content: center; }
+    .mode-icon-top img{ width: 85%; max-width: 220px; }
+}
+
+        /* ===== Intro (countdown) ekran ===== */
+        #intro-screen {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: #050505; display: none; flex-direction: column;
+            justify-content: center; align-items: center; z-index: 5;
+            transition: opacity 0.8s ease;
+        }
+        #stars {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none; z-index: 0; overflow: hidden;
+        }
+        #select-screen, #mode-screen, .quiz-box, #intro-screen .content-box, #intro-screen #countdown {
+            position: relative; z-index: 2;
+        }
+        .star {
+            position: absolute;
+            width: 2px; height: 2px;
+            background: #fff;
+            border-radius: 50%;
+            animation: twinkle 2.5s infinite ease-in-out;
+        }
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.15; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.6); }
+        }
+        .content-box { text-align: center; margin-bottom: 50px; z-index: 1; position: relative; padding: 0 20px; }
+        #countdown { 
+            position: absolute; bottom: 50px;
+            font-size: 80px; color: #00ff99; font-weight: bold;
+            animation: pulse 1s infinite;
+            z-index: 1;
+        }
+        @keyframes pulse {
+            0% { transform: scale(0.9); opacity: 0.5; }
+            50% { transform: scale(1); opacity: 1; }
+            100% { transform: scale(0.9); opacity: 0.5; }
+        }
+
+        /* Qur'on sarlavhalari uslubidagi tilla naqshinkor to'rtburchak hoshiya */
+        .quran-box {
+            display: block;
+            margin: 25px auto 0 auto;
+            padding: 20px 30px;
+            max-width: 550px;
+            border: 4px double #ffd700; 
+            background: rgba(20, 16, 5, 0.6);
+            text-align: center;
+        }
+        .quran-ayat-text {
+            font-size: 18px;
+            line-height: 1.6;
+            color: #f0f0f0;
+            margin-bottom: 15px;
+            display: block;
+        }
+        .quran-meta {
+            display: inline-block;
+            font-size: 15px;
+            font-weight: bold;
+            color: #ffd700;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            border-top: 1px solid rgba(255, 215, 0, 0.3);
+            padding-top: 8px;
+            width: 100%;
+        }
+
+        /* ===== Quiz ekrani ===== */
+        .quiz-box { 
+            display: none;
+            width: 100%; max-width: 600px; background: #1b1b1b; padding: 30px; 
+            border-radius: 25px; box-shadow: 0 0 35px rgba(0, 255, 150, 0.1); 
+            text-align: center; margin-top: 50px;
+        }
+        h2 { color: #00ff99; margin-bottom: 20px; font-size: 22px; }
+        .option { 
+            display: block; width: 100%; padding: 15px; margin: 10px 0; 
+            background: #2a2a2a; border: 2px solid #333; border-radius: 15px; 
+            cursor: pointer; transition: 0.3s; text-align: left;
+        }
+        .option:hover { border-color: #00ff99; }
+        .correct { 
+            background: #00ff99 !important; color: black; font-weight: bold; 
+            animation: bubbleEffect 0.5s ease-out;
+        }
+        @keyframes bubbleEffect {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.03); }
+            100% { transform: scale(1); }
+        }
+        .wrong { background: #ff4d4d !important; color: white; }
+        .btn-finish { 
+            width: 100%; padding: 15px; background: transparent; border: 2px solid #00ff99; 
+            color: #00ff99; border-radius: 15px; cursor: pointer; margin-top: 20px; 
+            font-weight: bold; transition: 0.3s; 
+        }
+        .btn-finish:hover { background: #00ff99; color: black; }
+        
+        .closed-input {
+            width: 100%; padding: 15px; margin-top: 10px; border: 2px solid #333;
+            border-radius: 12px; font-size: 17px; outline: none; background: #2a2a2a;
+            color: white;
+        }
+        .closed-input:focus { border-color: #00ff99; }
+        .btn-check {
+            width: 100%; padding: 15px; margin-top: 15px; border: 2px solid #00ff99; border-radius: 15px;
+            background: transparent; color: #00ff99; font-weight: bold; cursor: pointer; font-size: 17px;
+            transition: 0.3s;
+        }
+        .btn-check:hover { background: #00ff99; color: black; }
+        #closed-result { margin-top: 15px; font-size: 18px; min-height: 30px; text-align: center; }
+    </style>
+</head>
+<body>
+
+<div id="stars"></div>
+
+<div id="select-screen">
+    <h1>🌙 3-Qism</h1>
+    <p>Savollar sonini belgilang</p>
+    <div id="range-info">Boshlang'ich raqamni tanlang</div>
+    <div class="number-grid" id="numberGrid"></div>
+</div>
+
+<div id="mode-screen">
+    <div class="mode-icon-top">
+        <img src="donishmadn.jpg" alt="rasm">
+    </div>
+    <h1>Qaysi funksiyani xohlaysiz?</h1>
+    <div class="mode-wrapper">
+        <div class="mode-grid">
+            <div class="mode-card" onclick="chooseMode('quiz')">Quiz testlar</div>
+            <div class="mode-card" onclick="chooseMode('quiz-aralash')">Quiz aralash</div>
+            <div class="mode-card" onclick="chooseMode('yopiq')">Yopiq savol-javob</div>
+            <div class="mode-card" onclick="chooseMode('yopiq-aralash')">Yopiq savol-javob aralash</div>
+        </div>
+    </div>
+</div>
+
+<div id="intro-screen">
+    <div class="content-box">
+        <h1 style="color:#00ff99; font-size: 32px;">1-Qism</h1>
+        <div id="random-ayat"></div>
+    </div>
+    <div id="countdown">3</div>
+</div>
+
+<div class="quiz-box" id="quiz">
+    <h2 id="question">Yuklanmoqda...</h2>
+    <div id="options"></div>
+    <button class="btn-finish" onclick="finishQuiz()">Testni yakunlash</button>
+</div>
+
+<script>
+const quizData = [
+
+  { q: "Sizif boshiga tushgan jamiki mashaqqat, jamiki uqubatga dosh berdi, xarsangtosh esa dosh bermadi! Bir parcha etdan paydo bo'lgan inson chidadi, temirmi, metin xarsangtosh chidamadi.", correct: "Sizif", wrongs: ["Xarsangtosh", "Asop", "Korinf donishmandi"] },
+  { q: "Sizif xarsangtoshni cho'qqi sari yumalatish jazosini o'tashga kirishganidan anchagina keyin o'zida nimaning ko'nikmasi shakllana boshlaganini sezdi", correct: "hovliqmaslik, shoshmashosharlik qilmaslik", wrongs: ["sabr-toqat, chidamlilik", "kuch-quvvat, matonat", "sukut, jimlik"] },
+  { q: "zamonlar kelib, butun insoniyat qadr-qimmatini ulug'lash uchun xizmat qiladigan savob amal ekanu, kerak bo'lsa... Nima qilishdan hech qaytmayman degan falsafani o'zi uchun hayotiy maslakka aylantirib olgandi", correct: "shakkoklikka qo'l urishdan qaytmayman, degan", wrongs: ["xudolarga qarshi chiqishdan qaytmayman, degan", "taqdirga bo'ysunmaslikdan qaytmayman, degan", "jazoga qarshi kurashishdan qaytmayman, degan"] },
+  { q: "nima degandi korinflik bir donishmand,", correct: "Nazdimda, odam bolasi bag'oyat chala", wrongs: ["Nazdimda, odam bolasi bag'oyat kuchli", "Nazdimda, odam bolasi bag'oyat yolg'iz", "Nazdimda, odam bolasi bag'oyat baxtsiz"] },
+  { q: "Sizif kim ekan u avliyo deb surishtirishni ko'ngliga tugib yurgan kunlarning birida yanayam g'alati hikmat tarqatdi o'sha qariya. Nima emish,", correct: "inson eng vahshiy, eng qo'rqmas hayvonlarga havas qilib ularning barcha yaxshiliklarini o'zlashtirib olaola, pirovardida, shu yo'l bilan insonga aylangan emish!", wrongs: ["inson eng zaif, eng nochor jonzotlarga achinib ularga yordam berish orqali komil bo'lgan emish!", "inson eng qadimiy xudolar bilan muloqot qilib ulardan hikmat o'rgangan emish!", "inson tabiat bilan kurashib, uni yengib insonga aylangan emish!"] },
+  { q: "Bundan chiqdi, har banda yetuk va komillikka yetishmog'i uchun nafaqat vahshiy hayvonotdan, shular qatori tabiatdan ham eng zarur yaxshiliklarni o'zlashtirishi kerak. Nimani", correct: "tabiat irodasini", wrongs: ["tabiat sabrini", "tabiat kuchini", "tabiat sukunatini"] },
+  { q: "Nima mammi simob tomchisiday oppoq, g'oyatda nozik, lekin odam bo'yidan ancha-muncha baland ekan", correct: "Tosh", wrongs: ["Daraxt", "Xarsangtosh", "Cho'qqi"] },
+  { q: "Qanday so'z toshni kesadi deb hisoblardi.", correct: "Haq so'z", wrongs: ["Rost so'z", "Achchiq so'z", "Qattiq so'z"] },
+  { q: "Garchi bu aqidasidan butkul voz kechmagan esa-da, o'rni kelganda, nima haq so'zdan-da kattaroq, qudratliroq kuchga ega ekanligiga iqror bo'ldi.", correct: "ishonch, e'tibor, mehr-muruvvat", wrongs: ["sabr, toqat, matonat", "kuch, qudrat, jasorat", "umid, orzu, ishtiyoq"] },
+  { q: "qo'rqqandan nima yomon...", correct: "hovliqqan", wrongs: ["shoshilgan", "aldangan", "yolg'onchi"] },
+  { q: "aslida ham unga qanday yashash malol kelardi", correct: "birovlarning nazorati ostida qolish, o'zgalarning nazar-nigohi ostida yashash avval-azaldan judajuda malol kelardi. Qo'rquv va uyat hissi iskanjasida qolib ketardi.", wrongs: ["yolg'iz, hech kimsiz qolib yashash avval-azaldan judajuda malol kelardi", "doimo harakatda bo'lib yashash avval-azaldan judajuda malol kelardi", "sukut saqlab, gapirmasdan yashash avval-azaldan judajuda malol kelardi"] },
+  { q: "atrofdan qanday ovoz keldi va bir necha bor takrorlandi", correct: "Kuching yetmasa, kuchanma!.. \"Bu ahvolda unnamay qo'ya qol\"", wrongs: ["Sabring yetmasa, umidingni uzma!.. \"Bu ahvolda taslim bo'lma\"", "Chidaying yetmasa, to'xtama!.. \"Bu ahvolda davom et\"", "Kuching bo'lmasa, so'rama!.. \"Bu ahvolda yolg'iz qol\""] },
+  { q: "Chala odamning nimalari ham to'kis bo'lmaydi. Ha, xuddi shunday – men odamlar boshqacha odam bo'lishlari kerak deb hisoblayman! Boshqacha odam!..", correct: "shodumonligi, qayg'ulari ham", wrongs: ["sabri, matonati ham", "kuchi, qudrati ham", "aqli, idroki ham"] },
+  { q: "arzimas uch so'zni shuurida bir joyga to'play olmayotgandi Sizif qaysi so'zlarni", correct: "Menga nima bo'ldi", wrongs: ["Bu qanday jazo", "Nega aynan men", "Bundan qutulaman"] },
+  { q: "Sizif Qayiqchi cholga qarab nima deb chaqiradi", correct: "Asop", wrongs: ["Korinf", "Og'ayni", "Dengizchi"] },
+  { q: "Men Korinf shahrini xarsanglardan tiklab, unga mangulik baxsh etdim, evaziga qanday jazoga mahkum etildim, – dedi Sizif a'yonlik zamonlaridagi ohangda, salobat bilan.", correct: "xarsangtosh bilan yuzma-yuz qolish jazosiga", wrongs: ["abadiy yolg'izlikka mahkum etilish jazosiga", "cho'qqidan pastga tushish jazosiga", "sukunatga mahkum etilish jazosiga"] },
+  { q: "Suvlar va daryolar ilohi bo'lmish Asop sho'rlikka esa... ko'ryapsan, qanday jazo tayinlangan!..", correct: "bepoyon dengiz uzra maqsadsiz sarson kezish", wrongs: ["cho'qqiga tosh olib chiqish", "abadiy yolg'izlikda qolish", "quruqlikda suvsiz sarson bo'lish"] },
+  { q: "Uchovlon – Kimlar diydor ko'rishsalar bormi, naq mo'jiza yuz beradi-ku, bu", correct: "Sizif, Asop, Sisif", wrongs: ["Sizif, Korinf, Asop", "Sizif, Xudo, Asop", "Sizif, Tanatos, Asop"] },
+  { q: "binobarin, shu onlarda Sisifga qadrdon, birdek aziz edilar uning uchun.", correct: "Asop ham, Sisif ham", wrongs: ["Korinf ham, Xudo ham", "Xarsang ham, Cho'qqi ham", "Dengiz ham, Qayiq ham"] },
+  { q: "Toshga Sizif nima deb ism qo'ygan edi, avval kim deb murojaat qilar edi", correct: "Sisif", wrongs: ["Korinf", "Og'ayni", "Asop"] },
+  { q: "Sizifning hatto nima esidan chiqqan edi va ko'pchilik o'ngaqay bo'larmidi chapaqaymi deb eslashga urunardi", correct: "O'ngaqay yoki chapaqayligi", wrongs: ["Ismi qanday edi", "Yoshi nechada edi", "Qaysi yildan beri jazoda ekani"] },
+  { q: "U o'ngaqaymi chapaqaymi", correct: "O'ng qo'limga suyanaman degani esida", wrongs: ["Chap qo'limga suyanaman degani esida", "Ikkala qo'limga suyanaman degani esida", "Aniq esiga tushmadi"] },
+  { q: "Xarsang har qulagada dumaloqligi yo'qolib yengillashsa ham sizifda ham qanday o'zgarish sodir bo'layotgan edi", correct: "O'ng qo'l, o'ng oyoq va chap ko'zi pand bera boshlagan edi", wrongs: ["Ikkala oyog'i ham pand bera boshlagan edi", "Chap qo'l va o'ng ko'zi pand bera boshlagan edi", "Butun tanasi zaiflasha boshlagan edi"] },
+  { q: "Sizifning ayni qaysi tana a'zosi ishdan chiqqan edi", correct: "Chap qulog'i", wrongs: ["O'ng qulog'i", "Chap ko'zi", "O'ng oyog'i"] },
+  { q: "Xarsangning ichi tosh emas, ichi to'la yilt etgan, milt etgan nima!", correct: "nur", wrongs: ["olov", "suv", "kumush"] },
+  { q: "Toqqa chiqishdan ko'ra nima mushkulroq ekanligini bilardi.", correct: "undan tushish", wrongs: ["u yerda qolish", "uni ko'tarib yurish", "u yerdan qaytmaslik"] },
+  { q: "Xarsangtosh biror marta yuqoriga ko'tarilish chog'ida emas, faqat va faqat pastga tushayotgandagina, pastga qarab dumalash chog'idagina sinishga, parchalanishga yuz tutdi.", correct: "Xarsangtosh cho'qqiga chiqish uqubatlariga emas, tepadan pastga tushish mashaqqatlariga dosh bermadi.", wrongs: ["Xarsangtosh cho'qqiga chiqish uqubatlariga dosh berdi, lekin tepadan tushishda parchalanmadi.", "Xarsangtosh ham chiqishda, ham tushishda bab-baravar parchalanishga yuz tutdi.", "Xarsangtosh na chiqishda, na tushishda parchalanmadi, faqat vaqt bilan yemirildi."] },
+  { q: "Sizif ko'pdan buyon bulut oqimiga qarabgina chamalayotgan – keyinroq esa bulut oqimi bilan nimaning orasida pinhona yaqinlik, o'zaro xufiya \"bitim\" borligini payqab qoldi.", correct: "dengiz suvining mavjlanishlari", wrongs: ["cho'qqidagi shabadaning esishi", "quyoshning botish vaqti", "xarsangtoshning dumalash tezligi"] },
+  { q: "baliqchi chol mingan qayiq esa odatda qachon paydo bo'lardi", correct: "salqin shabada esgan damlarda", wrongs: ["quyosh botayotgan damlarda", "tun cho'kkanda", "bulutlar to'planganda"] },
+  { q: "Shunga erishsa bas, har qanday mashaqqatga dosh berishi va mo'ljallagan muddaosiga yetishmog'i oson bo'ladi. Nima qilsa", correct: "Irodasi harakatga, harakati irodaga aylanib ketsa", wrongs: ["Sabri kuchga, kuchi sabrga aylanib ketsa", "Umidi ishonchga, ishonchi umidga aylanib ketsa", "Aqli kuchga, kuchi aqlga aylanib ketsa"] },
+  { q: "Odam yengilmadi – nima yengildi, ungaga qo'shilib tog' yengildi, cho'qqi yengildi. Ma'budlarning ma'budi yengildi", correct: "Tosh", wrongs: ["Taqdir", "Vaqt", "Xudo"] },
+  { q: "Yo'q, yozuvlari o'chib ketishi mumkin emas, ularni topadi, zero, odamlar, zamon-u davronlar o'tadi, bulut-u osmonlar, tog'u dengizlar o'tadi, lekin nima qoladi, nima!..", correct: "Yozuv", wrongs: ["Xotira", "Nom", "Tosh"] },
+  { q: "Bu damlarda u o'zini kurrayi zaminning eng erkin va ozod bandasi deb bilar, uning erkinligi va ozodligi mana shu nimaning orasida edi...", correct: "ikki kishan uzunligi", wrongs: ["ikki tog' orasi", "ikki dengiz sohili", "ikki soya orasi"] },
+  { q: "xayolining bir chekkasida qanday naqlning naqadar to'g'ri ekanligiga imon keltirar, o'ziga o'zi tasannolar yog'dirishdan tortinmas", correct: "ko'z – qo'rqoq, qo'l – botir degan", wrongs: ["sabr – kalit, umid – dalda degan", "kuch – zo'r, aql – ustun degan", "vaqt – dori, sabr – shifo degan"] },
+  { q: "Nimaga ham iqror bo'ldi u.", correct: "Mehnat mashaqqatidan odam o'lib qolmasligiga", wrongs: ["Taqdirdan qochib bo'lmasligiga", "Yolg'izlikdan qutulib bo'lmasligiga", "Xudoga qarshi chiqib bo'lmasligiga"] },
+  { q: "Qanday odam yashaydi, yuzga chiqish ham gapmi, mingga kiradi.", correct: "Mehnat qilgan", wrongs: ["Sabr qilgan", "Toqat qilgan", "Ibodat qilgan"] },
+  { q: "Baxt – kimniki", correct: "Baxt zo'rniki. Baxt – xarsangtoshni yumalata olganniki! Mehnatsevarniki, mehnat mashaqqatlaridan qo'rqmaganniki!", wrongs: ["Baxt sabrliniki. Baxt – kutishni bilganniki! Umidvorniki, hech qachon tushkunlikka tushmaganniki!", "Baxt aqllininiki. Baxt – hammani yengib chiqqanniki! Zukkoniki, hech kimga tobe bo'lmaganniki!", "Baxt yolg'izniki. Baxt – hech kimga muhtoj bo'lmaganniki! Erkinniki, hech kimga bog'liq bo'lmaganniki!"] },
+  { q: "Sizif kutilmaganda nimadan voz kechdi.", correct: "Sizif ne-ne zamonlardan buyon ko'ngliga tugib, necha qaytalab takror-takror mashqlar qilib qo'yganidek shu taxlit olamga jar solish niyatidan", wrongs: ["Sizif ne-ne zamonlardan buyon ko'ngliga tugib, xarsangtoshdan qutulish niyatidan", "Sizif ne-ne zamonlardan buyon ko'ngliga tugib, Korinfga qaytish niyatidan", "Sizif ne-ne zamonlardan buyon ko'ngliga tugib, sukut saqlash niyatidan"] },
+  { q: "Qaydandir gup etgan shovqin eshitildi, Sizif dengizga yaqin tomonda nima alanga olib yona boshlaganini ko'rdi", correct: "zaqqum daraxti", wrongs: ["qop-qora qayiq", "quruq shoxli daraxt", "xarsangtosh"] },
+  { q: "Sizifning qulog'iga qanday sas chalindi", correct: "musiqiy", wrongs: ["xirillagan", "vahimali", "shivirlagan"] }
+];
+
+const ayats = [
+    { text: "Robbing seni tark qilmadi va g'azab ham qilmadi.", meta: "Zuho 93:3" },
+    { text: "Albatta bir qiyinchilik bilan osonchilik bordir.", meta: "Sharh 94:5" },
+    { text: "Yaratgan Robbing nomi bilan o'qi!", meta: "Alaq 96:1" },
+    { text: "O'qi, Robbing karamlilar karamlisidir.", meta: "Alaq 96:3" },
+    { text: "Va tezda Robbing senga ato qilur va sen rozi bo'lursan.", meta: "Zuho 93:5" },
+    { text: "Ammo kimki ato bersa va taqvo qilsa, va yaxshiliklarni tasdiq qilsa, bas, Biz uni osonga muyassar etamiz.", meta: "Layl 92:5-7" },
+    { text: "Albatta hidoyatga boshlash Bizning zimmamizdadir.", meta: "Layl 92:12" },
+    { text: "Va albatta tezda rozi bo'ladir.", meta: "Layl 92:21" },
+    { text: "Seni oson yo'lga muyassar etamiz.", meta: "A'lo 87:8" },
+    { text: "Bas, kim xohlasa Parvardigori tomon qaytadigan yo'lni tutar.", meta: "Naba 78:39" },
+    { text: "Albatta Biz senga ochiq g'alaba berdik.", meta: "Fath 48:1" }
+];
+
+let activeQuiz = [];
+let currentQ = 0, score = 0, answered = 0;
+
+function shuffle(array) {
+    return array.sort(() => Math.random() - 0.5);
+}
+
+function buildStars() {
+    const container = document.getElementById('stars');
+    container.innerHTML = '';
+    const count = 100; // Yulduzlar zichligi oshirildi
+    for (let i = 0; i < count; i++) {
+        const s = document.createElement('div');
+        s.className = 'star';
+        s.style.left = Math.random() * 100 + '%';
+        s.style.top = Math.random() * 100 + '%';
+        const size = (Math.random() * 2 + 1).toFixed(1);
+        s.style.width = size + 'px';
+        s.style.height = size + 'px';
+        s.style.animationDelay = (Math.random() * 2.5).toFixed(2) + 's';
+        s.style.animationDuration = (1.5 + Math.random() * 2).toFixed(2) + 's';
+        container.appendChild(s);
+    }
+}
+
+let rangeStart = null;
+let numButtons = [];
+
+window.onload = function() {
+    const grid = document.getElementById('numberGrid');
+    for (let i = 1; i <= quizData.length; i++) {
+        const btn = document.createElement('button');
+        btn.className = 'num-btn';
+        btn.innerText = i;
+        btn.onclick = () => pickNumber(i, btn);
+        grid.appendChild(btn);
+        numButtons.push(btn);
+    }
+    buildStars();
+    
+    const randomIdx = Math.floor(Math.random() * ayats.length);
+    const selectedAyat = ayats[randomIdx];
+    document.getElementById('random-ayat').innerHTML = `
+        <div class="quran-box">
+            <span class="quran-ayat-text">"${selectedAyat.text}"</span>
+            <span class="quran-meta">${selectedAyat.meta}</span>
+        </div>
+    `;
+};
+
+function pickNumber(num, btnEl) {
+    const info = document.getElementById('range-info');
+
+    if (rangeStart === null) {
+        rangeStart = num;
+        btnEl.classList.add('picked');
+        info.innerText = `Boshlang'ich: ${num}. Endi oxirgi raqamni tanlang`;
+    } else {
+        let start = rangeStart;
+        let end = num;
+        if (end < start) { const t = start; start = end; end = t; }
+        btnEl.classList.add('picked');
+        info.innerText = `Tanlandi: ${start} - ${end}`;
+        setTimeout(() => startWithRange(start, end), 400);
+    }
+}
+
+function startWithRange(start, end) {
+    activeQuiz = quizData.slice(start - 1, end);
+    document.getElementById('select-screen').style.display = 'none';
+    document.getElementById('mode-screen').style.display = 'flex';
+}
+
+let quizMode = 'quiz';
+
+function chooseMode(mode) {
+    quizMode = mode;
+    if (mode === 'quiz-aralash' || mode === 'yopiq-aralash') {
+        activeQuiz = shuffle([...activeQuiz]);
+    }
+    document.getElementById('mode-screen').style.display = 'none';
+    document.getElementById('intro-screen').style.display = 'flex';
+    document.getElementById('intro-screen').style.opacity = '1';
+    startTimer();
+}
+
+function startTimer() {
+    let count = 3;
+    let disp = document.getElementById("countdown");
+    disp.innerText = count;
+    let timer = setInterval(() => {
+        count--;
+        if (count > 0) {
+            disp.innerText = count;
+        } else if (count === 0) {
+            disp.innerText = "Boshladik!";
+        } else {
+            clearInterval(timer);
+            document.getElementById("intro-screen").style.opacity = "0";
+            setTimeout(() => {
+                document.getElementById("intro-screen").style.display = "none";
+                document.getElementById("quiz").style.display = "block";
+                loadQ();
+            }, 800);
+        }
+    }, 1000);
+}
+
+function getOptionsFor(qData) {
+    return shuffle([qData.correct, ...qData.wrongs]);
+}
+
+function loadQ() {
+    const qData = activeQuiz[currentQ];
+    document.getElementById('question').innerText = `${currentQ + 1}/${activeQuiz.length}. ${qData.q}`;
+    const optDiv = document.getElementById('options');
+    optDiv.innerHTML = '';
+
+    if (quizMode === 'yopiq' || quizMode === 'yopiq-aralash') {
+        loadClosedQ(qData, optDiv);
+    } else {
+        loadMultipleChoiceQ(qData, optDiv);
+    }
+}
+
+function loadMultipleChoiceQ(qData, optDiv) {
+    let shuffledOptions = getOptionsFor(qData);
+
+    shuffledOptions.forEach((opt) => {
+        const btn = document.createElement('div');
+        btn.className = 'option';
+        btn.innerText = opt;
+        btn.onclick = () => check(opt, btn, qData.correct);
+        optDiv.appendChild(btn);
+    });
+}
+
+function loadClosedQ(qData, optDiv) {
+    const input = document.createElement('input');
+    input.type = 'text';
+    input.className = 'closed-input';
+    input.id = 'closed-answer';
+    input.placeholder = 'Javob yozing...';
+    input.onkeypress = (e) => { if (e.key === 'Enter') checkClosed(qData); };
+
+    const checkBtn = document.createElement('button');
+    checkBtn.className = 'btn-check';
+    checkBtn.innerText = 'Tekshirish';
+    checkBtn.onclick = () => checkClosed(qData);
+
+    const resultDiv = document.createElement('div');
+    resultDiv.id = 'closed-result';
+
+    optDiv.appendChild(input);
+    optDiv.appendChild(checkBtn);
+    optDiv.appendChild(resultDiv);
+
+    input.focus();
+}
+
+function checkClosed(qData) {
+    const inputEl = document.getElementById('closed-answer');
+    const resultDiv = document.getElementById('closed-result');
+    const user = inputEl.value.toLowerCase().trim();
+    const correct = qData.correct.toLowerCase().trim();
+
+    answered++;
+    inputEl.disabled = true;
+    document.querySelector('.btn-check').disabled = true;
+
+    if (user === correct) {
+        resultDiv.innerHTML = '<b style="color:#00ff99;">✅ To\'g\'ri</b>';
+        score++;
+    } else {
+        resultDiv.innerHTML = '<b style="color:#ff4444;">❌ Noto\'g\'ri.</b><br> Javob: ' + qData.correct;
+    }
+
+    setTimeout(() => {
+        currentQ++;
+        if (currentQ < activeQuiz.length) loadQ();
+        else finishQuiz();
+    }, 2000);
+}
+
+function check(selected, element, correct) {
+    const options = element.parentElement.querySelectorAll('.option');
+    options.forEach(opt => opt.style.pointerEvents = 'none');
+    answered++;
+
+    if (selected === correct) {
+        element.classList.add('correct');
+        score++;
+    } else {
+        element.classList.add('wrong');
+        options.forEach(opt => {
+            if (opt.innerText === correct) opt.classList.add('correct');
+        });
+    }
+    setTimeout(() => {
+        currentQ++;
+        if (currentQ < activeQuiz.length) loadQ();
+        else finishQuiz();
+    }, 1000);
+}
+
+function finishQuiz() {
+    let wrong = answered - score;
+    document.getElementById('quiz').innerHTML = `
+        <h2>Natijalar</h2>
+        <div style="line-height: 2.2; font-size: 19px;">
+            Jami savollar: <b>${activeQuiz.length} ta</b><br>
+            To'g'ri javoblar: <span style="color:#00ff99;">${score} ta</span><br>
+            Xato javoblar: <span style="color:#ff4d4d;">${wrong} ta</span>
+        </div>
+        <button class="btn-finish" onclick="location.reload()">Qaytadan boshlash</button>
+    `;
+}
+</script>
+</body>
+</html>
