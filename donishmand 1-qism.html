@@ -1,0 +1,692 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Xurshid Do'stmuhmmad.Donishmand Sizif</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            font-family: 'Arial', sans-serif; 
+            background: linear-gradient(135deg, #050505, #121212, #1d1d1d); 
+            color: white; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            padding: 20px; 
+            min-height: 100vh; 
+        }
+
+        /* ===== Raqam tanlash ekrani ===== */
+        #select-screen {
+            width: 100%; max-width: 700px;
+            display: flex; flex-direction: column; align-items: center;
+            gap: 25px; padding: 20px 0;
+        }
+        #select-screen h1 {
+            font-size: 26px; color: #00ff99; text-align: center;
+        }
+        #select-screen p { color: #999; font-size: 14px; text-align: center; }
+        .number-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(55px, 1fr));
+            gap: 10px;
+            width: 100%;
+            max-height: 60vh;
+            overflow-y: auto;
+            padding: 10px;
+            background: #111;
+            border-radius: 20px;
+            box-shadow: 0 0 25px rgba(0,255,150,0.15);
+        }
+        .number-grid::-webkit-scrollbar { width: 8px; }
+        .number-grid::-webkit-scrollbar-thumb { background: #00ff99; border-radius: 10px; }
+        .num-btn {
+            background: #1b1b1b;
+            border: 2px solid #00ff99;
+            color: #00ff99;
+            border-radius: 12px;
+            padding: 12px 0;
+            font-size: 15px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.25s;
+            text-shadow: 0 0 8px rgba(0,255,153,0.6);
+        }
+        .num-btn:hover {
+            background: #00ff99;
+            color: #050505;
+            box-shadow: 0 0 20px rgba(0,255,150,0.8);
+            transform: scale(1.08);
+        }
+        .num-btn.picked {
+            background: #ff9900;
+            border-color: #ff9900;
+            color: #050505;
+            box-shadow: 0 0 20px rgba(255,153,0,0.8);
+        }
+        #range-info {
+            color: #ff9900; font-size: 15px; font-weight: bold; min-height: 22px;
+        }
+
+        /* ===== Funksiya tanlash ekrani ===== */
+            #mode-screen {
+            display: none;
+            width: 100%; max-width: 700px;
+            flex-direction: column; align-items: center;
+            gap: 25px; padding: 20px 0;
+        }
+
+    .mode-icon-top {
+    width: 100%;
+    max-width: 450px;
+    aspect-ratio: 4 / 3;
+    position: relative;
+    background: rgba(5, 5, 5, 0.4);
+    border-radius: 20px;
+    padding: 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.mode-icon-top img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 10px;
+}
+
+        #mode-screen h1 {
+            font-size: 24px; color: #00ff99; text-align: center;
+            margin: 5px 0;
+        }
+
+        .mode-wrapper {
+            width: 100%;
+            background: rgba(5, 5, 5, 0.4);
+            border-radius: 20px;
+            padding: 25px;
+       
+        }
+        .mode-grid {
+            width: 100%;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+        .mode-card {
+            background: rgba(27, 27, 27, 0.85);
+            border-radius: 20px;
+            padding: 30px 15px;
+            text-align: center;
+            transition: 0.4s;
+            color: white;
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            backdrop-filter: blur(3px);
+        }
+        .mode-card::before {
+            content: ""; position: absolute; width: 200%; height: 200%;
+            background: linear-gradient(45deg,transparent,#00ff99,transparent);
+            top: -150%; left: -150%; transform: rotate(25deg); transition: 0.7s;
+        }
+        .mode-card:hover::before { top: 100%; left: 100%; }
+        .mode-card:hover { transform: translateY(-5px) scale(1.02); border-color: #ffd700; box-shadow: 0 0 15px rgba(255,215,0,0.2); }
+@media(max-width:600px){ 
+    .mode-grid{ grid-template-columns: repeat(2, 1fr); } 
+    .mode-icon-top{ display: flex; justify-content: center; }
+    .mode-icon-top img{ width: 85%; max-width: 220px; }
+}
+
+        /* ===== Intro (countdown) ekran ===== */
+        #intro-screen {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: #050505; display: none; flex-direction: column;
+            justify-content: center; align-items: center; z-index: 5;
+            transition: opacity 0.8s ease;
+        }
+        #stars {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none; z-index: 0; overflow: hidden;
+        }
+        #select-screen, #mode-screen, .quiz-box, #intro-screen .content-box, #intro-screen #countdown {
+            position: relative; z-index: 2;
+        }
+        .star {
+            position: absolute;
+            width: 2px; height: 2px;
+            background: #fff;
+            border-radius: 50%;
+            animation: twinkle 2.5s infinite ease-in-out;
+        }
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.15; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.6); }
+        }
+        .content-box { text-align: center; margin-bottom: 50px; z-index: 1; position: relative; padding: 0 20px; }
+        #countdown { 
+            position: absolute; bottom: 50px;
+            font-size: 80px; color: #00ff99; font-weight: bold;
+            animation: pulse 1s infinite;
+            z-index: 1;
+        }
+        @keyframes pulse {
+            0% { transform: scale(0.9); opacity: 0.5; }
+            50% { transform: scale(1); opacity: 1; }
+            100% { transform: scale(0.9); opacity: 0.5; }
+        }
+
+        /* Qur'on sarlavhalari uslubidagi tilla naqshinkor to'rtburchak hoshiya */
+        .quran-box {
+            display: block;
+            margin: 25px auto 0 auto;
+            padding: 20px 30px;
+            max-width: 550px;
+            border: 4px double #ffd700; 
+            background: rgba(20, 16, 5, 0.6);
+            text-align: center;
+        }
+        .quran-ayat-text {
+            font-size: 18px;
+            line-height: 1.6;
+            color: #f0f0f0;
+            margin-bottom: 15px;
+            display: block;
+        }
+        .quran-meta {
+            display: inline-block;
+            font-size: 15px;
+            font-weight: bold;
+            color: #ffd700;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            border-top: 1px solid rgba(255, 215, 0, 0.3);
+            padding-top: 8px;
+            width: 100%;
+        }
+
+        /* ===== Quiz ekrani ===== */
+        .quiz-box { 
+            display: none;
+            width: 100%; max-width: 600px; background: #1b1b1b; padding: 30px; 
+            border-radius: 25px; box-shadow: 0 0 35px rgba(0, 255, 150, 0.1); 
+            text-align: center; margin-top: 50px;
+        }
+        h2 { color: #00ff99; margin-bottom: 20px; font-size: 22px; }
+        .option { 
+            display: block; width: 100%; padding: 15px; margin: 10px 0; 
+            background: #2a2a2a; border: 2px solid #333; border-radius: 15px; 
+            cursor: pointer; transition: 0.3s; text-align: left;
+        }
+        .option:hover { border-color: #00ff99; }
+        .correct { 
+            background: #00ff99 !important; color: black; font-weight: bold; 
+            animation: bubbleEffect 0.5s ease-out;
+        }
+        @keyframes bubbleEffect {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.03); }
+            100% { transform: scale(1); }
+        }
+        .wrong { background: #ff4d4d !important; color: white; }
+        .btn-finish { 
+            width: 100%; padding: 15px; background: transparent; border: 2px solid #00ff99; 
+            color: #00ff99; border-radius: 15px; cursor: pointer; margin-top: 20px; 
+            font-weight: bold; transition: 0.3s; 
+        }
+        .btn-finish:hover { background: #00ff99; color: black; }
+        
+        .closed-input {
+            width: 100%; padding: 15px; margin-top: 10px; border: 2px solid #333;
+            border-radius: 12px; font-size: 17px; outline: none; background: #2a2a2a;
+            color: white;
+        }
+        .closed-input:focus { border-color: #00ff99; }
+        .btn-check {
+            width: 100%; padding: 15px; margin-top: 15px; border: 2px solid #00ff99; border-radius: 15px;
+            background: transparent; color: #00ff99; font-weight: bold; cursor: pointer; font-size: 17px;
+            transition: 0.3s;
+        }
+        .btn-check:hover { background: #00ff99; color: black; }
+        #closed-result { margin-top: 15px; font-size: 18px; min-height: 30px; text-align: center; }
+    </style>
+</head>
+<body>
+
+<div id="stars"></div>
+
+<div id="select-screen">
+    <h1>🌙 1-Qism</h1>
+    <p>Savollar sonini belgilang</p>
+    <div id="range-info">Boshlang'ich raqamni tanlang</div>
+    <div class="number-grid" id="numberGrid"></div>
+</div>
+
+<div id="mode-screen">
+    <div class="mode-icon-top">
+        <img src="https://cdn.asaxiy.uz/asaxiy-content/product/items/desktop/5e15bf58d6833.jpg.web" alt="rasm">
+    </div>
+    <h1>Qaysi funksiyani xohlaysiz?</h1>
+    <div class="mode-wrapper">
+        <div class="mode-grid">
+            <div class="mode-card" onclick="chooseMode('quiz')">Quiz testlar</div>
+            <div class="mode-card" onclick="chooseMode('quiz-aralash')">Quiz aralash</div>
+            <div class="mode-card" onclick="chooseMode('yopiq')">Yopiq savol-javob</div>
+            <div class="mode-card" onclick="chooseMode('yopiq-aralash')">Yopiq savol-javob aralash</div>
+        </div>
+    </div>
+</div>
+
+<div id="intro-screen">
+    <div class="content-box">
+        <h1 style="color:#00ff99; font-size: 32px;">1-Qism</h1>
+        <div id="random-ayat"></div>
+    </div>
+    <div id="countdown">3</div>
+</div>
+
+<div class="quiz-box" id="quiz">
+    <h2 id="question">Yuklanmoqda...</h2>
+    <div id="options"></div>
+    <button class="btn-finish" onclick="finishQuiz()">Testni yakunlash</button>
+</div>
+
+<script>
+const quizData = [
+{ q: "Asli u novcha-darozgina edi, lekin uzluksiz og‘ir va qora mehnat oqibatida tarashadek qotib ketgan qadqomati xiyla bukilib qolganidan oldinga osilib turgan uzun-uzun qo‘llari tizzasiga tegay-tegay der, nafaqat qadqomati, balki diydasi ham qotib ketgan, uncha-muncha gap-so‘zga ta’sirlanavermas ham edi ta'rif kim haqida", correct: "Sizif haqida", wrongs: ["Tanatos haqida", "Zevs haqida", "Kronos haqida"] },
+{ q: "butkul qismatim mujassam bu hikmatda deb hayratlanar Sizif qaysi hikmatda", correct: "Qalb tubidan chiqqan yoxud astoydil hayqirib aytilgan gap beta’sir qolmas", wrongs: ["Sukut saqlagan odamning kuchi cheksiz bo'ladi", "Har bir xarsangtoshning o'z taqdiri bor", "Yolg'iz odam hech qachon yengilmaydi"] },
+{ q: "ba’zan ro‘parasida qad rostlagan tog‘-\nu toshning, ayniqsa, yonginasida qo‘qqayib turgan kimning qulog‘iga yetib borarmikan degan umidda uni ba’zan baralla –\novozining boricha baqirib-hayqirib, ba’zan esa shivirlab aytardi.", correct: "xarsangtoshning", wrongs: ["cho‘qqining", "sangtaroshning", "qayiqchi cholning"] },
+{ q: "Hoy, Sizi-if, yalqovlikni bas qil, qara, kim intizor senga,", correct: "xarsangtosh!...", wrongs: ["cho‘qqi!...", "tog‘!...", "yalanglik!..."] },
+{ q: "Sizifning sha’niga istalgan malomat toshini otsinlar, chidaydi, illo qanaqa degan ta’na tavqi la’natdek eshitildi qulog‘iga,", correct: "yalqov", wrongs: ["qo‘rqoq", "gunohkor", "xabardor"] },
+{ q: "bu jazo oshyonining har lahza-har soniyasi nimadan yaratilgan bo‘lsa!", correct: "mehnatdan, mashaqqatdan, uqubatdan", wrongs: ["g‘am-g‘ussadan, hasratdan, armondan", "sukunatdan, yolg‘izlikdan, sog‘inchdan", "kutish, umid va sabrdan"] },
+{ q: "yaqin-yaqindan u tilga kiradigan odat chiqardi va Sizifga qadrdon allakimning juda-juda tanish tovushida to‘satdan sassado taratadigan bo‘lib qoldi.kim", correct: "Xarsangtosh", wrongs: ["Tanatos", "Qayiqchi chol", "Sangtarosh"] },
+{ q: "“Ha-a yumaloq, ha-a dumaloq, ha-a baqaloq kimga qarata aytilgan", correct: "Xarsangtoshga", wrongs: ["Eginaga", "Sizifga", "Briareyga"] },
+{ q: "Sizif odatda xarsangga tarmashgan damlarda nimaga harakat qiladi, chunki jismoniy quvvatimni so‘rib oladi deb xavotirlanadi,", correct: "o‘ylamaslikka", wrongs: ["shoshilmaslikka", "orqaga qaramaslikka", "gapirmaslikka"] },
+{ q: "uning uchun nima muqaddasroq, muhimroq, savobliroq burch, maqsad-vazifa qolmaydi.", correct: "xarsangtoshni tepalik sari dumalatishdan", wrongs: ["Korinf qal’asini mustahkamlashdan", "Zevsga qarshi turishdan", "o‘z irodasini sinashdan"] },
+{ q: "xarsangtoshdan ko‘ra qop-qora bulutga to‘yingan nimalari yuz, ming karra og‘irroq, zalvorliroq tuyuladi Sizifga", correct: "o‘y-xayollari", wrongs: ["gunohlari", "kechagi kunlari", "orzu-armonlari"] },
+{ q: "Sizifga –\nxarsang va nima qadrdonlashib olsa bormi, Sizif yolg‘iz, nochor va abgor bir holatga tushar, halizamon ular ikkov jipslashib men tanhoni naq majaqlab ta", correct: "xayol", wrongs: ["sukunat", "qorong‘ulik", "taqdir"] },
+{ q: "Nima uning yagona maqsad-maslagiga, umrining ma’no-mazmuniga aylanib ketganini biron lahza unutmaydi", correct: "xarsangtoshni ho-ov anavi cho‘qqiga olib chiqish", wrongs: ["Korinf devorlarini mustahkamlash", "Zevsdan o‘ch olish", "Eginani qidirib topish"] },
+{ q: "xotinini nomahram nazardan qizg‘angan erkakdek xarsangtoshning metin vujudi bilan apoq-chapoqlashib ketgan nimalarini amallab undan ayiradi.", correct: "xayollarini", wrongs: ["dog‘-dug‘larini", "izlarini", "sirlarini"] },
+{ q: "Xarsangtoshning yerga qadalib turgan joyidan osongina harakatga tushishi, qarichbaqarich yuqoriga qarab o‘rmalashini ham nimaning ajri deb biladi Sizif.", correct: "o‘sha taqdir va o‘sha qismatga sog‘lom va sadoqatli munosabatining", wrongs: ["o‘zining jismoniy kuch-qudratining", "xarsangtoshning yumaloq shaklining", "Zevsning marhamatining"] },
+{ q: "Aslida esa nima sabab bir turtki kifoya xarsangtoshni oson yumalashi uchun", correct: "cho‘qqi ostonasidagi yalanglik bir qadar ravon, sathi bir qadar nishab ekanligi bois", wrongs: ["xarsangtoshning tagi silliq yo‘nilganligi bois", "Sizifning kuchi ortib borayotgani bois", "yo‘lning qisqarib qolgani bois"] },
+{ q: "xarsangtoshni oson yumalashini sizifga qanday tuyuladi", correct: "qir bag‘rida sirpanchiq uchayotgan bolakayning chanasi yanglig‘ silliqqina, beozorgina sirpanib ko‘tariladigandek", wrongs: ["shamolda uchayotgan qushdek yengil va erkin", "suv yuzida suzayotgan qayiqdek ravon", "tog‘dan pastga qarab yumalayotgan qordek tez"] },
+{ q: "Sizif qarsak chalib yubordi va nimaji quchoqlab oldi, barakalla, deya uning yelkasiga shapatilab qo‘ydi, uni silabsiypaladi, yumaloqqinam, dumaloqqinam, baqaloqqinam deya, duch kelgan joyiga betini bosib onasining momiq bag‘riga singib ketayotgan mushukcha\nerkalandi", correct: "Xarsangtoshni", wrongs: ["Cho‘qqini", "Eginani", "Sangtaroshni"] },
+{ q: "Vaholanki, og‘ir, mashaqqatu uqubatlar so‘qmog‘i boshlanajak mana shu kaftekkina nishab yalanglik ko‘ndalangiga, nari borsa, qancha odimdan oshmas,", correct: "olti-yetti", wrongs: ["uch-to‘rt", "sakkiz-o‘n", "o‘n-o‘n ikki"] },
+{ q: "nima ko‘nikmaga yoinki ko‘nikma nimaga aylandimi, vassalom, uning zarracha og‘irligi sezilmaydi odamga", correct: "Odat", wrongs: ["Iroda", "Sabr", "Mehnat"] },
+{ q: "binobarin, hech bir nima o‘ziga ixlos qo‘ygan qavm imkoniyatlari bilan hisoblashmaydi. Aksincha, uning hatto mashaqqatu uqubatlari ushbu qavm kishilariga rohat, adoqsiz rohat-farog‘at bag‘ishlaydi! Oh-ho-o, odatlanish nimalarga qodir emas, yaxshilar!..", correct: "urf-odat", wrongs: ["taqdir", "iroda", "e’tiqod"] },
+{ q: "xarsangtoshni yana uch-to‘rt, ba’zan qancha odimlar masofaga olib chiqishda qiyinchilik nima ekanini deyarli bilmaydi.", correct: "8-10", wrongs: ["4-5", "12-15", "20-25"] },
+{ q: "Sizif nimani xarsangtoshning tagiga pona o‘rnida suqib turadi, to‘satdan u muvozanatini yo‘qotib, pastga qarab sho‘ng‘ib qolmasligi uchun", correct: "Oyog'ining uchini", wrongs: ["Kaftini", "Tayog‘ini", "Tirsagini"] },
+{ q: "Nima toshning pastga qarab quyunday otilishi bilan yakun topdi 1 necha daf'a", correct: "nafas rostlash istagidagi bir lahzalik parishonlik", wrongs: ["oyoq tagining sirpanib ketishi", "kuchning birdan qurishi", "orqaga bir nafas o‘girilib qarash"] },
+{ q: "Tosh qancha chimdim ortga siljidimi, tamom, uni tutib qolish, oldinga harakatlantirish uchun chiranishlari zoe ketar, bunga bandasining qudrati ojizlik", correct: "1", wrongs: ["2", "3", "yarim"] },
+{ q: "Xarsangtosh qanday shaklda edi", correct: "Yum-yumaloq", wrongs: ["Cho‘zinchoq", "Uchburchak", "Notekis-g‘adir-budur"] },
+{ q: "o‘zlarini qanday his qilib bilmagan erkaknusxalar qanchalar oliftalik qilmasinlar muqarrar nafratga loyiqdirlar,", correct: "erkin his qila bilmagan", wrongs: ["baxtli his qila bilmagan", "botir his qila bilmagan", "sofdil his qila bilmagan"] },
+{ q: "bunaqangi nozikmizojlar ikki dunyoda ham jasoratga qodir emaslar deb hisoblar, uning nazdida nima ham borib turgan tavqi la’nat, shu qadar shafqa\nu noyob deb bilardi.", correct: "qo‘rqoqlik", wrongs: ["yalqovlik", "xushomadgo‘ylik", "nodonlik"] },
+{ q: "Axir qachon qaramang, qanday kishilar vijdonsizlar, so‘qimtabiatlar, qo‘rqoq va yelpatak xushomadgo‘ylarga qaraganda xiyla tushunarsizroq, g‘alatiro", correct: "sofdil va beg‘ubor", wrongs: ["mag‘rur va qaysar", "sinchkov va xabardor", "sabrli va matonatli"] },
+{ q: "U haqda qanday ovozalar shamolday tarqalganini, rivoyatlar, ertaklar-u dostonlar to‘qib-bichilganini tushunolmadi,kulgiga qolib yurishadi", correct: "uchchiga chiqqan tamagir-muttaham, afsungar-tovlamachi", wrongs: ["dunyodagi eng baxtsiz banda", "ma’budlarning suyukli farzandi", "eng jasur va sofdil qahramon"] },
+{ q: "Vaholanki, hayotda juda ko‘p sarqitlarga qarshi kurashishda qanaqa usul qo'l keladi", correct: "sopini o‘zidan chiqarish usuli qo‘l keladi,", wrongs: ["sukut saqlash usuli qo‘l keladi,", "chetdan kuzatish usuli qo‘l keladi,", "ochiqdan-ochiq bahslashish usuli qo‘l keladi,"] },
+{ q: "sopini o‘zidan chiqarish usuliga qanday misol keltirilgan", correct: "xushomadgo‘ylarni o‘ldirsa bo‘lur edi xushomad bilan... ko‘pirtirib maqtasa bas edi alar nuqsonlarini!", wrongs: ["qo‘rqoqlarni jasorat bilan yengish kerakligi", "yolg‘onchilarni haqiqat bilan fosh etish kerakligi", "gunohkorlarni jazo bilan tuzatish kerakligi"] },
+{ q: "Xushomadgo'ylarga atab aytilgan maqol nima", correct: "– haqiqatni so‘zlasalar, toqatlari toq, ammo-lekin xushomadga jon deb solishar quloq!..", wrongs: ["– yolg‘onning umri qisqa, oxiri sharmandalik!..", "– og‘iz ochsa gap, yumsa gina!..", "– minг o‘lchab, bir kes, deydilar bekorga emas!.."] },
+{ q: "u borib turgan og‘ir-vazmin, hatto haddan ziyod ehtiyotkor, zinhor elyurt orasida yomonotliq bo‘lib qolishni istamaydigan odam edi ta'rif kim haqida", correct: "Sizif", wrongs: ["Tanatos", "Zevs", "Sangtarosh ustoboshi"] },
+{ q: "Sizif o‘rni kelganda, fe’lidagi mana shu qaysi tabiati o‘ziga ko‘pda yoqavermas, nafi bo‘larmikan, degan o‘yda boshqalarga eshittirmay o‘zini o‘zi yanishga tushib ketardi. Qo‘rqoq, lapashang deb ozmuncha so‘kkanmi", correct: "yumshoqsupurgi", wrongs: ["injiqlik", "shoshqaloqlik", "kaltabinlik"] },
+{ q: "Kimlardagi aqliy evrilish xalqning evrilishiga – fikran-shuuran ulg‘ayishiga qanot bag‘ishlaydi,", correct: "ulug‘ zotlardagi", wrongs: ["oddiy fuqarolardagi", "shohu shahanshohlardagi", "sangtaroshlardagi"] },
+{ q: "nechun oyog‘iga kishan urishdi uning? Oyoqlarida ne gunoh? Bosh gunohkor uning nimasi edi-ku!", correct: "tili-zaboni", wrongs: ["ko‘z-qarashi", "qo‘l-mehnati", "yurak-vijdoni"] },
+{ q: "Oyoqlarida ne gunoh? Bosh gunohkor uning tili-zaboni edi-ku tili gung edi tilini tishlagani tishlagan edi. Nimasida edi bari, nimasining qa’rida", correct: "Dilida", wrongs: ["Ko‘zida", "Qo‘lida", "Xotirasida"] },
+{ q: "U allaqachonlar nimani hadisini o‘zlashtirgan", correct: "toshni dumalatish", wrongs: ["tosh yo‘nish", "cho‘qqiga chiqish", "yolg‘iz yashash"] },
+{ q: "U allaqachonlar toshni dumalatish hadisini o‘zlashtirgan, bu mashg‘ulot uning kundalik hunariga, o‘zi esa\nQanday hunarmandga aylanib ketgan,", correct: "xarsangtosh dumalatuvchi", wrongs: ["sangtarosh usta", "tog‘ kezuvchi", "cho‘qqiga chiqar"] },
+{ q: "Sizif o‘zini zo‘r deb biladi, shunga kuchi yetmay mag‘lub bo‘lishini tasavvuriga sig‘dirolmaydi, zinhorbazinhor sig‘dirmaydi! Shu baqaloqqa kuchim yetmasa, insonligim qayda qoladi, degan gapni takrorlayverganidan tili necha bor tanglayiga yopishib, nec", correct: "Xarsangtoshni", wrongs: ["Taqdirni", "Zevsni", "O‘limni"] },
+{ q: "Izidan, maqsad-maslagidan qaytadigan qo‘rqoq, lapashang emas!Kim", correct: "Sizif", wrongs: ["Tanatos", "Bellerofonta", "Glavk"] },
+{ q: "Bir zumgina – bu dunyoda bir odam kamaydi nima-yu, ko‘paydi nima!Yoxud nimaning ustiga osmon qulab tusharmidi Sizif qatl etilsa?! Nimaning", correct: "Korinfning", wrongs: ["Olimpning", "Yunonistonning", "Dunyoning"] },
+{ q: "Xarsangning biqin tomonida ola-chalpoq qanday dog‘-dug‘lar ko‘rind", correct: "qizil", wrongs: ["qora", "yashil", "sarg‘ish"] },
+{ q: "Olma emas, anor ham emas – naq nimaning tarhidan olingani muqarrar yum-yumaloq xarsangtosh?", correct: "tarvuzning", wrongs: ["qovunning", "shaftolining", "uzumning"] },
+{ q: "Sizif Xarsangdoshga ism laqab qo'yib ulgurdi qanaqa", correct: "Yumaloq\nDumaloq\nBaqaloq", wrongs: ["Sinchkov\nXabardor\nBotir", "Yalqov\nQo‘rqoq\nLapashang", "Sadoqatli\nVafodor\nQadrdon"] },
+{ q: "Nachora, osiy banda, necha aylansin-necha o‘rgilsin, boshini duch kelgan tog‘-u toshga ursinurmasin, qanday bo‘lib chiqaveradi. Hamma va har kimsa bir-biroving oldida qanday?", correct: "gunohkor", wrongs: ["begunoh", "notavon", "bebaxt"] },
+{ q: "osiy banda, necha aylansin-necha o‘rgilsin, boshini duch kelgan tog‘-u toshga ursin-urmasin, gunohkor bo‘lib chiqaveradi. Hamma va har kimsa birbiroving oldida gunohkor. Shunday ekan... naqadar go‘zaldir\n... odam, deganlariga o‘lasanmi! Qani, ko‘rsatsinlar, o‘shal go‘zalni! Go'zal kim", correct: "begunoh odam", wrongs: ["xabardor odam", "botir odam", "sabrli odam"] },
+{ q: "Qani edi, lom-mim deb og‘iz ocholsang, sening “lom”ingdan ham, “mim”ingdan ham nimaning qoldirgan izi qadrliroq bo‘lib turgan bir zamonda", correct: "cho‘loq qumursqaning undek momiq tuproq yuzida qoldirgan izi", wrongs: ["xarsangtoshning tog‘ bag‘rida qoldirgan izi", "qayiqchi cholning suv yuzida qoldirgan izi", "shamolning qumda qoldirgan izi"] },
+{ q: "Xit bo‘lish nima ekanini bilasanmi o‘zi?.. Seni dunyoga keltirgan volidayi muhtaramang ham badbashara kim bo‘lib ko‘rinadi ko‘zingga...", correct: "yalmog‘iz", wrongs: ["ajina", "devqiyofa", "arvoh"] },
+{ q: "Xit bo‘lish nima ekanini bilasanmi o‘zi?.Belanchakka belangan nevarachangning ma’sum qiqirlashi ham nimning qah-qahasidek botadi qulog‘ingga.", correct: "iblisning", wrongs: ["yalmog‘izning", "ajdahoning", "arvohning"] },
+{ q: "har bir tirik jon peshonasiga qazoyi haq tamg‘asi yanglig‘ muqarrar kimlik tamg‘asi urib qo‘yilgan, osiy banda.", correct: "gunohkorlik", wrongs: ["xabardorlik", "notavonlik", "bebaxtlik"] },
+{ q: "Tovoningga zirapcha kirgani ham besabab emas, binobarin, yuz bergan voqea-hodisa ro‘y berdi, tamom-vassalom emas, aslo, u hali davom etadi –\nqanday ma’nolarda. Aqli bor odamning ko‘zi moshday ochiladi.", correct: "ibrat ma’nosida, ogoh ma’nosida, da’vat va hokazo ma'nolarda", wrongs: ["jazo ma’nosida, la’nat ma’nosida, qasos ma’nosida", "tasodif ma’nosida, bepisandlik ma’nosida", "shukrona ma’nosida, minnatdorlik ma’nosida"] },
+{ q: "Nima bu qadar qo‘rqinchli, hatto ko‘ngilga qutqu soladigan darajada dahshatli tus olishi mumkinligini tasavvuriga sig‘dirolmasdi Sizif!", correct: "sukunat", wrongs: ["qorong‘ulik", "yolg‘izlik", "o‘lim"] },
+{ q: "Xarsangtoshning bo'yi qancha edi", correct: "Sizif bilan teng", wrongs: ["Sizifdan ancha baland", "Sizifning yarmicha", "Sizifdan bir bosh past"] },
+{ q: "Korinf nima", correct: "Qal'a", wrongs: ["Tog‘", "Dengiz", "Qishloq"] },
+{ q: "Sizif tosh-u xarsangtoshning farqiga borar, shaxsan o‘zi bosh-qosh bo‘lgan, nimaga", correct: "Korinf qalasini devor bilan o‘rashda, ayniqsa, bosh qo‘rg‘on devorlari uchun keltirilgan xarsangtoshlarning sangtaroshlar tomonidan yo‘nish ishlariga", wrongs: ["Korinf bozorida tosh sotish savdosiga", "tog‘lardan tosh qazib olish ishlariga", "yo‘l qurilishi uchun tosh yotqizish ishlariga"] },
+{ q: "— Har bir xarsangtoshning joni bor, — degan edi kim", correct: "mo‘ysafid sangtarosh ustoboshi", wrongs: ["qayiqchi chol", "Sizifning otasi Eol", "Korinf hukmdori"] },
+{ q: "Kim – tik yuruvchi jondor", correct: "Odam", wrongs: ["Tanatos", "Xarsangtosh", "Chivin"] },
+{ q: "Ba’zan tog‘ cho‘qqisi nimani eslatib yuborardi", correct: "Ko‘ksini yalang‘ochlab osmonga qarab yotgan navrasta qizning hali uch berib ulgurmagan mammasini", wrongs: ["Yum-yumaloq xarsangtoshning shaklini", "Osmonga bo‘y cho‘zgan devning boshini", "Dengizda suzayotgan qayiqning yelkanini"] },
+{ q: "Sizif uchun o‘z nimasidan bo‘lak madadkor, xaloskor yo‘q edi.", correct: "irodasidan", wrongs: ["kuchidan", "aqlidan", "sabridan"] },
+{ q: "Dunyoning turgan-bitgani nimadan iborat deyishgan..", correct: "irodadan", wrongs: ["taqdirdan", "mehnatdan", "hikmatdan"] },
+{ q: "Darhaqiqat, insonni nima tark etsa yer-u osmon ham, quyosh-u yulduzlar ham behuda-befoyda.", correct: "iroda", wrongs: ["umid", "sabr", "aql"] },
+{ q: "Men esa yangi... o‘rgataman odamlarni!.. Ha, mutlaqo yangi... Ga, demak, boshqacha hayot kechirishga o‘rgataman! Ana o‘shanda boshqacha yashay\nuqubatdan iborat bo‘lgan hayot barham topadi. Yangi nimaga o'rgatmoqchi", correct: "irodaga", wrongs: ["sabrga", "mehnatga", "bardoshga"] },
+{ q: "menkim shahanshoh kimning o'g'li", correct: "Eol", wrongs: ["Kronos", "Asop", "Glavk"] },
+{ q: "menkim shahanshoh Eol va malika kimning suyukli o‘g‘loni,", correct: "Enaretning", wrongs: ["Reyaning", "Metidaning", "Eginaning"] },
+{ q: "menkim shahanshoh Eol va malika Enaretning suyukli o‘g‘loni, kimlar sulolasining arzanda kuyovto‘rasi", correct: "Meroplar", wrongs: ["Olimplilar", "Titanlar", "Korinfliklar"] },
+{ q: "menkim shahanshoh Eol va malika Enaretning suyukli o‘g‘loni, Meroplar sulolasining arzanda kuyovto‘rasi, kimning padari,", correct: "Glavkaning", wrongs: ["Bellerofontaning", "Tanatosning", "Eginaning"] },
+{ q: "menkim shahanshoh Eol va malika Enaretning suyukli o‘g‘loni, Meroplar sulolasining arzanda kuyovto‘rasi, Glavkaning padari, kimning g‘amxo‘r bobo", correct: "Bellerofontaning", wrongs: ["Glavkaning", "Eolning", "Asopning"] },
+{ q: "Dimog‘i chog‘ bo‘lgan Sizif xarsang atrofida aylana yasab yugurishga tushganini o‘zi ham sezmadi.Va nima derdi aylanganda", correct: "— Lakalum lak-lakalum!", wrongs: ["— Yumaloq, dumaloq, baqaloq!", "— Yashasin, yashasin, yashasin!", "— Ko‘tarilaman, ko‘tarilaman!"] },
+{ q: "umuman, hayotda juda kamdan-kam, ahyon-ahyonda raqsga tushgan, ixlosmandlarining qo‘yardaqo‘ymay urinishlarini rad etishning iloji topilmagan hollarda esa qo‘lini nomigagina ko‘tarib qo‘yar, harakatlari boshqalar tugul o‘ziga ham beo‘xshov ko‘r", correct: "Sizif", wrongs: ["Tanatos", "Glavk", "Eol"] },
+{ q: "o‘zi esa butun boshli odam-chidamga, odam-bardoshga, odam-irodaga aylanib ketdi.kim", correct: "Sizif", wrongs: ["Tanatos", "Bellerofonta", "Asop"] },
+{ q: "Basharti mo‘jiza yuz berib, undan kimdir kelib isming nima deb so‘rasa, hech ikkilanmay, ismim nima deb, javob qaytarishdan orlanmagan bo‘lur edi.", correct: "matonat yoki bardosh", wrongs: ["qismat yoki taqdir", "gunoh yoki jazo", "sabr yoki umid"] },
+{ q: "Odamning turish-turmushi doimo bema’ni deya jirtakilik qilganlar bekor aytibdilar! Turishturmushning bema’nilikka aylanishi ham, uni bama’ni qilish ham kimda qolgan! Men isbotlagayman, men!", correct: "bandaning o‘zida", wrongs: ["taqdirning o‘zida", "ma’budlarning o‘zida", "vaqtning o‘zida"] },
+{ q: "Sizif Xarsangtoshdan nari ketolmas, go‘yo u xarsangga ko‘rinmas ip bilan bog‘lab qo‘yilgandek nechchi odim uzoqlashdi deguncha xarsang uni yoniga", correct: "5", wrongs: ["2", "10", "15"] },
+{ q: "Sizif sevinsa nimani hirgoyi qiladi", correct: "Lakalum - laka", wrongs: ["Yumaloq-dumaloq", "Baqaloqqinam", "Lakalum-baqaloq"] },
+{ q: "Ko‘zini ochdi deguncha unga o‘qrayib qarar, nigohlari bilan teshib yuboraman degandidda tirg‘alar, parchalab tashlayman, mayda- maydangni chiqarib, kulingni ko‘kka sovuraman degan po‘pisa, dag‘dag‘a bilan yeng shimarar,edi kimga qarab", correct: "Xarsangtoshag", wrongs: ["Tanatosga", "Zevsga", "Cho‘qqiga"] },
+{ q: "korinfilik a’yonlarning a’yoni, omilkorlikda misli kamyob odam-kim", correct: "Sizif", wrongs: ["Glavk", "Bellerofonta", "Eol"] },
+{ q: "Uning qon-qoniga, vujud-vujudiga singib ketgandi-ya, bu aqida qaysi aqid", correct: "Sen xarsangni tepaga, anavi tep-paga-a olib chiqmaguncha qo‘ymayman-n! Qo‘ymayman!..", wrongs: ["Har qanday og‘irlik – irodaga sinovdir!", "O‘lim – eng katta dushman!", "Taqdirga tan berish – zaiflik alomati!"] },
+{ q: "Negadir mana shu jumla o‘qtin-o‘qtin Sizifning tili uchida aylanishadigan bo‘lib qoldi.qaysi jumla", correct: "Aksari xarsangtoshlarning joni bo‘ladi\"...", wrongs: ["Aksari odamlarning taqdiri bo‘ladi\"...", "Aksari gunohlarning jazosi bo‘ladi\"...", "Aksari harakatlarning ma’nosi bo‘ladi\"..."] },
+{ q: "Jahli chiqsa sizif nima xarsangtoshni mushtlar tepar va bazida yerni mushtlardi nima bo'lgandan keyingina xovuridan tushar edi", correct: "Oyoq qo'llari qip-qizil qonga belanganda", wrongs: ["Nafasi bo‘g‘zida tiqilib qolganda", "Kuchi butunlay tugab, holdan toyganda", "Xarsangtosh qimirlab, joyidan siljiganda"] },
+{ q: "Xarsangtoshning nimasi bo'ladimi deb usta sangtaroshdan so‘rasam tilim uzilib tusharmidi, deb peshonasiga shapatiladi.nima haqida gap ketyapdi", correct: "Xarsangtoshning erkak-urg‘ochisi bo‘ladimi?\" deb", wrongs: ["Xarsangtoshning yoshi nechada?\" deb", "Xarsangtoshning jonini olib bo‘ladimi?\" deb", "Xarsangtoshning narxi qancha?\" deb"] },
+{ q: "Atrof da bunday kuch bo'lmasdi qanday kuch", correct: "Toshni dumalashdan to'xtatadigan\nKo'tarilgan joyida asrab qoladigan", wrongs: ["Sizifga yordam beradigan\nOg‘irligini yengillashtiradigan", "Yo‘lni yaqinlashtiradigan\nMasofani qisqartiradigan", "Yomg‘irni to‘xtatadigan\nQurg‘oqchilikni yo‘qotadigan"] },
+{ q: "Sizif toshni qayergacha obordi va baribr oh voh ey deydi", correct: "Yarmigacha va yuqoriag marraga ozgina qoladigan miqdoragcha", wrongs: ["Cho‘qqining o‘ziga, deyarli marraga yetganida", "Yo‘lning boshlanish nuqtasidayoq", "Yalanglikning o‘rtasidan ozgina o‘tgandayoq"] },
+{ q: "Tosh dumalab orqaga ketishining qanday sababi bo'lishidan qat'iy nazar\nQansay vaziyatda sizif esa hushini yigishga ulgurmas hushyor tortib ulgurmas chapdastlik qilishga ulgurmas alay balay deganicha harsang o'zidan shidd", correct: "Lahzaning 100 dan 1 soniyasinafasida hamma urinishlari zoye ketar edi", wrongs: ["Bir necha daqiqa davomida kuch-quvvati qaytmas edi", "Butun kun davomida holdan toygancha yotardi", "Uzoq vaqt o‘ziga kelolmay qolar edi"] },
+{ q: "Siziv nimani ko'rishdan mosuvo edi", correct: "Oftob va oy shulasini", wrongs: ["Yulduzlar chirog‘ini", "Dengiz to‘lqinlarini", "Tog‘ cho‘qqilarini"] },
+{ q: "Oftob va oyshulasini sizif bevosita ko'ra olmas nima orqali ko'rar edi", correct: "Dengiz sathi orqali", wrongs: ["Xarsangtosh yuzasidagi aks orqali", "Cho‘qqi tepasidagi bulutlar orqali", "Qayiqchi cholning ko‘zlari orqali"] },
+{ q: "Sizifni jini nimani suymas va toqati yo'q edi", correct: "Tongi oftob yog'dusiga", wrongs: ["Kechki shabadaga", "Yomg‘irli havoga", "Tun zulmatiga"] },
+{ q: "Dengizda qayiqda kim suzib o'tayotgan edi", correct: "Chol", wrongs: ["Sangtarosh", "Egina qiz", "Tanatos"] },
+{ q: "Sizif o'zi qaysi qal'ani barpo qilgan edi", correct: "Korinf", wrongs: ["Olimp", "Troya", "Sparta"] },
+{ q: "Ko'rinf aholisini nima yomon qaqshatdi", correct: "Qurg'oqchilik", wrongs: ["Toshqin", "Vabo kasalligi", "Urush"] },
+{ q: "Har qanday dardning nimasida davosi pusib yotadi", correct: "Soyasida", wrongs: ["Ildizida", "Manbaida", "Tagida"] },
+{ q: "Davo nimaligi Sizifni hayoliga ham kelnagan edi", correct: "Egina qiz", wrongs: ["Tanatosning zindonga tashlanishi", "Zevsning marhamati", "Qayiqchi cholning duosi"] },
+{ q: "Go'zalliksa tengi yo'q sohibjamol kim", correct: "Egina qiz", wrongs: ["Metida", "Reya", "Enaret"] },
+{ q: "Suv tangrisi kim", correct: "Asop", wrongs: ["Tanatos", "Kronos", "Glavk"] },
+{ q: "Suv tangirisi Asopning arzandasi kim", correct: "Egina qiz", wrongs: ["Metida", "Reya", "Enaret"] },
+{ q: "Bokira Eginaga Ilohlar ilohi kimning nazar-nigohi tushgan edi", correct: "Zevsning", wrongs: ["Kronosning", "Asopning", "Tanatosning"] },
+{ q: "Malaksiymo bokira sohibjamol kim", correct: "Egina qiz", wrongs: ["Metida", "Reya", "Enaret"] },
+{ q: "Nima bo'lmaganda Sizifning boshiga bu kunlar tushmasdi", correct: "Eguna sohibjamol bo'lmaganda\nSuv tangrisi Asopning arzandasi Egina qiz bo'lmaganda\nZevsning nasari Egina qizga tushmaganda", wrongs: ["Sizif Korinfni barpo qilmaganda\nSangtaroshlar bilan ishlamaganda\nXarsangtoshni sevib qolmaganda", "Tanatos zindonga tashlanmaganda\nO‘lim to‘xtab qolmaganda\nZevs g‘azablanmaganda", "Sizif boxabar bo‘lmaganda\nGap-so‘zga aralashmaganda\nSir saqlay olganda"] },
+{ q: "Kimning qahriga uchramasligi oson edi Sizifning", correct: "Zevsning", wrongs: ["Kronosning", "Tanatosning", "Asopning"] },
+{ q: "Yelkador qaddi hiyla bukik, qoq yelka suyaklari turtib chiqqan ta'rif kim haqida", correct: "Dengizdagi qayiqchi chol", wrongs: ["Mo‘ysafid sangtarosh ustoboshi", "Sizifning o‘zi", "Tanatos"] },
+{ q: "Hammasi nimadan boshlandi", correct: "Egina qizning fojeasidan", wrongs: ["Xarsangtoshning yumalashidan", "Korinf qurilishidan", "Tanatosning zindonga tashlanishidan"] },
+{ q: "Sizifning bor yo'q gunohi nima edi", correct: "Boxabarligi", wrongs: ["Yalqovligi", "Qo‘rqoqligi", "Xushomadgo‘yligi"] },
+{ q: "Sizif nimadan boxabar edi", correct: "Egina qizning Zevs tomonidan o'g'irlab ketilganidan", wrongs: ["Tanatosning zindondan qochib qutulganidan", "Kronosning farzandlarini yeganidan", "Asopning suv tangrisi ekanidan"] },
+{ q: "Abadul abad o'zgarmas aqida shu Ma'budlar nazar-nazdida kimdan xafliroq kimsa yo'q", correct: "xabardor", wrongs: ["gunohkor", "qo‘rqoq", "yalqov"] },
+{ q: "Kim She'rdan Arslondan Sirtlon-u Ajdahodan ham xatarli", correct: "Xabardor odam", wrongs: ["Gunohkor odam", "Qo‘rqoq odam", "Xushomadgo‘y odam"] },
+{ q: "Dunyoning Xatari kim", correct: "Xabardor", wrongs: ["Gunohkor", "Qo‘rqoq", "Xushomadgo‘y"] },
+{ q: "U sinagri haqparast, adolatpesha va betgachopar xabardorlarning turgan-bitgani tirik ziyon. Undaylarning boridan ko‘ra yo‘g‘i avlo!.. Kim singari", correct: "Sizif", wrongs: ["Tanatos", "Glavk", "Bellerofonta"] },
+{ q: "qanday odam gapirmasdan iloji yo‘q", correct: "Fikr odami", wrongs: ["Iroda odami", "Sabr odami", "Mehnat odami"] },
+{ q: "qanday odamning ahvoli esa... dahshat!.. Ofat!.. Falokat!..", correct: "ichini bo‘shatmaslikka hukm etilgan", wrongs: ["har doim yolg‘iz qolishga mahkum bo‘lgan", "tinimsiz mehnat qilishga majbur bo‘lgan", "hech kim bilan gaplashmaydigan"] },
+{ q: "odamni qanday hayvon, jondor deb bilardi u Sizif", correct: "gapiruvchi", wrongs: ["o‘ylovchi", "yig‘lovchi", "kuluvchi"] },
+{ q: "Olampanoh Zevs o‘z sha’n-shavkatiga yarashmagan qilmishga qo‘l urdi. U suv va daryolar ma’budi Asopning bokira farzandiarjumandi Egina qizga ko‘z tikdi – uni o‘g‘irlab, qayeriga yashirdi-i!..", correct: "haramiga", wrongs: ["zindoniga", "saroyiga", "cho‘qqisiga"] },
+{ q: "Kimdan shafqat tilanma aslo, zero...", correct: "Shafqatsizdan", wrongs: ["Xudbindan", "Gunohkordan", "Ma’buddan"] },
+{ q: "Sizif qaysi bozorga borgan edi", correct: "Chorsu", wrongs: ["Registon", "Siyob", "Qumtepa"] },
+{ q: "Qanday odamning har bosgan qadami, har tashlagan nazari bir hikmat ekanligini o‘zi ham anglamagan...", correct: "boxabar", wrongs: ["gunohkor", "qo‘rqoq", "sabrli"] },
+{ q: "Nima tentaklik, telbalik – davomi esa xatar-tahlika.", correct: "Ma’budlar ustidan g‘alaba qozonish", wrongs: ["Xarsangtoshni tepaga olib chiqish", "Boxabar bo‘lib yurish", "Yolg‘izlikka chidash"] },
+{ q: "Illo, Sizif qilmishidan afsuslanmadi, aksincha, nima meni haddimdan oshirdi, deya oqladi o‘zini.", correct: "ma’budlar ma’budining haddidan oshgani", wrongs: ["o‘z taqdirining nohaqligi", "xalqning noshukurligi", "Tanatosning xiyonati"] },
+{ q: "O, idrokim, qonlarga to‘l, qonga to‘l chanqoq,... yoki yashama mutloq!.. Ha, shundoq: arslon – izidan, erkak – so‘zidan!..nuqtalar o'rnini to'ldiring", correct: "dahshat solib yasha", wrongs: ["sukut saqlab yasha", "tiz cho‘kib yasha", "sabr qilib yasha"] },
+{ q: "Tanatos kim", correct: "Qadimgi Yunonistonda o'lim ma'budi", wrongs: ["Qadimgi Yunonistonda uyqu ma'budi", "Qadimgi Yunonistonda urush ma'budi", "Qadimgi Yunonistonda suv ma'budi"] },
+{ q: "Kinga bo‘ysunish o‘lim bilan teng, ya’ni jallod tig‘iga gardanini tutishning o‘zginasi edi.", correct: "Tanatosga", wrongs: ["Zevsga", "Kronosga", "Asopga"] },
+{ q: "u kimni qulluq ila qarshi oldi, unga ojiz va notavon qiyofada ro‘baro‘ bo‘ldi. Biroq u mazlumning yovuzlikka qarshi isyoni –\nhiyla degan aqidani qo‘llayotganini hech zog‘ payqamadi.", correct: "o‘lim ma’budini", wrongs: ["suv ma’budini", "shohlar shohini", "sangtarosh ustoboshini"] },
+{ q: "Kim g‘aflatda qolganini anglab yetishga ulgurmay, Sizif uni zanjirband etib, zindonga tashladi, zindonga!", correct: "Tanatos", wrongs: ["Asop", "Glavk", "Kronos"] },
+{ q: "Sizif qayer ulusi ichmog‘i uchun suv so‘ragandi – kechagina qultum suvga zor aholi necha kunnecha oy tinimsiz yoqqan jala ostida g‘arq bo‘ldi, g‘arq!..", correct: "Korinf", wrongs: ["Olimp", "Troya", "Sparta"] },
+{ q: "Biroq Zevs niyatiga yetolmadi, yer yuzida o‘lim to‘xtagandi nima sababdan", correct: "o‘lim ma’budi Tanatos zindonband ekanligi bois", wrongs: ["Zevsning g‘azabi qaytgani bois", "Sizifning tavba qilgani bois", "Korinf aholisining duosi bois"] },
+{ q: "Kim o‘liklarni ham, undan battar tiriklarni ham ko‘rgani ko‘zi yo‘q edi.", correct: "Zevs", wrongs: ["Kronos", "Tanatos", "Asop"] },
+{ q: "Endi o‘ylab ko‘rsa, shu xabardorligi, ya’ni nimadan xabardorligi Sizif ustidan o‘qilajak hukmning shafqatsizligini belgilab bergan edi.", correct: "Zevsning nasl-nasabini besh qo‘lday bilish", wrongs: ["Eginaning qayerdaligini bilish", "Tanatosning zaif tomonlarini bilish", "Korinfning taqdirini oldindan bilish"] },
+{ q: "Zevning onasini ismi kim", correct: "Reya", wrongs: ["Metida", "Enaret", "Egina"] },
+{ q: "Zevsning otasini ismi kim", correct: "Kronos", wrongs: ["Eol", "Asop", "Tanatos"] },
+{ q: "Kronos barcha tugulgan farzandlarini qanday ahvolga soladi", correct: "Yeydi", wrongs: ["Zindonga tashlaydi", "Dengizga cho‘ktiradi", "Tog‘ga surgun qiladi"] },
+{ q: "Kronos nega Farzandlarini yeydi", correct: "Bashorat sabab", wrongs: ["G‘azab sabab", "Ochlik sabab", "Rashk sabab"] },
+{ q: "Kronos va farzandlari orasida qanday bashorat bor edi", correct: "Kronos farzandi tomonidan mahv etilishi haqida", wrongs: ["Kronosning abadiy hukmronlik qilishi haqida", "Kronosning dengizga cho‘kishi haqida", "Kronosning insonga aylanishi haqida"] },
+{ q: "Reya Zevs tugulganda uni yashirub choyshabga nima o'rab Kronosga yem qiladi", correct: "Tosh parchasi", wrongs: ["Yog‘och bo‘lagi", "Loy bo‘lagi", "Metall parchasi"] },
+{ q: "Zevs o'z padari lanatiga duchor bo'ladi qanday", correct: "Bachajish chaqaloqxo'r", wrongs: ["Xotinini o‘ldirgan zolim", "Ukalarini zindonga tashlagan johil", "O‘z farzandini taxtdan mahrum etgan shafqatsiz"] },
+{ q: "Zevsning Xotinининг imsi nima", correct: "Metida", wrongs: ["Reya", "Enaret", "Egina"] },
+{ q: "Zevs Taqdir lavhiga bitilgan qismatidan omon qolish niyyatida nima qiladi", correct: "Metidani yeydi", wrongs: ["Metidani zindonga tashlaydi", "Metidani dengizga cho‘ktiradi", "Metidani surgun qiladi"] },
+{ q: "Zevs Metidani qanday holda yeydi", correct: "Tiriklayin", wrongs: ["O‘lgandan keyin", "Uyquda yotgan holda", "Bexabar holda"] },
+{ q: "Onaning vujudida jon saqlagan homila esa rivojlanishdan to‘xtamaydi, balki nimadan oziqlanish hisobiga rivoj topadi va vaqtsoati yetgach, dunyoga keladi...", correct: "ota miyasidan ozuqalanish", wrongs: ["ota qonidan ozuqalanish", "ota nafasidan ozuqalanish", "ota ko‘z yoshidan ozuqalanish"] },
+{ q: "Shunday bir zamonlar keladiki, shoh kim. kibr-u havoda o‘zini osmon ustuni deb e’lon qiladi.", correct: "Shox Ibn K", wrongs: ["Kronos", "Zevs", "Eol"] },
+{ q: "Shox ibn K ning burniga behosdan nima kirih ketadi", correct: "Chivin", wrongs: ["Pashsha", "Chumoli", "Ari"] },
+{ q: "Chivin miyyani yeb kun soati yetib kattalashib qanday bo'p qoladi", correct: "Sichqonday", wrongs: ["Mushukday", "Quyonday", "Kaltakesakday"] },
+{ q: "Kim o‘lmay turib jahannam azobini ko‘radi...¹", correct: "Shoh Ibn K.", wrongs: ["Tanatos", "Kronos", "Sizif"] },
+{ q: "Sizif Shox ibn K hikoyasini so‘zlab yuborishdan o‘zini bazo‘r tiydi. Lekin kim ikkovi asli xudosiz badbin ekanliklarini aytdi. Ochiqchasiga aytdi, donadona qilib aytdi:", correct: "Kronos va Zevs", wrongs: ["Tanatos va Asop", "Eol va Enaret", "Glavk va Bellerofonta"] },
+{ q: "Kronos va uning zurriyoti Zevs – ota va o‘g‘il xudosiz bo‘lganlari uchun ham nimani dahshat deb bilardilar", correct: "o‘limni", wrongs: ["gunohni", "yolg‘izlikni", "xiyonatni"] },
+{ q: "Kronos va uning zurriyoti Zevs –\nota va o‘g‘il xudosiz bo‘lganlari uchun ham o‘limni dahshat deb bilardilar, zotan o‘lim kimlar nazdidagina dahshat va ayanch manbaidir!..", correct: "gunohkorlar", wrongs: ["xabardorlar", "qo‘rqoqlar", "yolg‘izlar"] },
+{ q: "Shox ibn K kim edi", correct: "Namrud Baqara surasi 02:58 oyat", wrongs: ["Fir'avn A'rof surasi 07 boblar", "Shaddod Fajr surasi 89 oyat", "Qorun Qasas surasi 28 oyat"] },
+{ q: "Nimada ham ruh bir deganlar", correct: "Toshda ham", wrongs: ["Suvda ham", "Shamolda ham", "Tuproqda ham"] },
+{ q: "jigarporasi hajrida adoyi tamom bo‘lgan padar – kimning dom-daraksiz g‘oyib bo‘lgan", correct: "Asopning", wrongs: ["Eolning", "Kronosning", "Glavkning"] },
+{ q: "Sizif xarsang loaqal qilt etsachi, deb xunobi oshar, achchiqlanar, ayyuhannos ko‘tarar, nor tuyadek o‘kirib yuborar, tuya emas, ayni achchigi chiqqan damlarda nimaga aylanib qolsayu, qudrati ila xarsangni dast ko‘tarib!.. Tashsa", correct: "filga", wrongs: ["arslonga", "ajdahoga", "devga"] },
+{ q: "Yo‘q, fildan ham biror ish chiqishiga ko‘zi yetmaydi, yaxshisi, nimaga¹ aylanadi! Mushkuli osonlashadi shunda", correct: "Briareyga", wrongs: ["Tanatosga", "Kronosga", "Zevsga"] },
+{ q: "Miflarda tasvirlangan yuz qo‘lli va ellik boshli maxluq – dev.", correct: "Briareya", wrongs: ["Tanatos", "Kronos", "Argus"] },
+{ q: "Nimaning qadam olishidan tortib Yer va Quyoshning ikki sevishgan qalb sohiblari yanglig‘ bir-birining atrofida aylanishigacha –\nhikmat, hikmat, hikmat!", correct: "Qumursqaning", wrongs: ["Chumolining", "Ari-yaning", "Kapalakning"] },
+{ q: "Yer Quyoshning atrofida aylanadimi yoxud aksinchami –\nnima farqi bor deya befarq bo‘lish nahot qanday odamga yarashsa?! Omilik, betavfiqlik emasmi bunday fikrlash! Bunday nusxalar yeru quyosh harakatdan to‘xtagan taqdirda ham pinagini buzmas! Sizif uchun esa...xarsangtosh tepasidan qum zarralarining uchibto‘kilib tushganidayoq olamcha hikmat mavjud.", correct: "aqli raso", wrongs: ["xabardor", "gunohkor", "sabrli"] },
+{ q: "Nima mavjud joyda ma’no-mazmun, mohiyat mavjud.", correct: "harakat", wrongs: ["iroda", "sabr", "umid"] },
+{ q: "Najot quruq irodada emas, yo‘q, qanday irodada!", correct: "harakatga aylangan", wrongs: ["so‘zga aylangan", "duoga aylangan", "orzuga aylangan"] },
+{ q: "Ma’no-mazmun va mohiyat mavjud ekan, hech bir nima behuda-bema’ni ketmaydi", correct: "irodali xatti-harakat", wrongs: ["quruq so‘z-gap", "bekorchi orzu-havas", "bema’ni tashvish"] },
+{ q: "qanday odamlarning o‘zlari, so‘zlari bekor-bema’ni-besamar!..", correct: "Adoqsiz harakat bekor, boqiy harakat besamar-bema’ni degan odamlarning", wrongs: ["Har qanday og‘irlikdan qochgan odamlarning", "Taqdirga tan bergan odamlarning", "Yolg‘izlikdan qo‘rqqan odamlarning"] },
+{ q: "Yaxshi yashamasa-da, mayli, azob-uqubat cheksa-da, rozi, illo, qanday bo‘lmasin nima hikmatdir-hikmat!", correct: "uzoq, uzoq, judayam uzo-oq yashamog‘i", wrongs: ["baxtli, baxtli, judayam baxtli yashamog‘i", "erkin, erkin, judayam erkin yashamog‘i", "osoyishta, osoyishta yashamog‘i"] },
+{ q: "Sizif! Chir aylanib aytdi: yaxshi yashashni emas, nima avlo!", correct: "uzoq yashash", wrongs: ["erkin yashash", "boy yashash", "osoyishta yashash"] }
+];
+
+const ayats = [
+    { text: "Robbing seni tark qilmadi va g'azab ham qilmadi.", meta: "Zuho 93:3" },
+    { text: "Albatta bir qiyinchilik bilan osonchilik bordir.", meta: "Sharh 94:5" },
+    { text: "Yaratgan Robbing nomi bilan o'qi!", meta: "Alaq 96:1" },
+    { text: "O'qi, Robbing karamlilar karamlisidir.", meta: "Alaq 96:3" },
+    { text: "Va tezda Robbing senga ato qilur va sen rozi bo'lursan.", meta: "Zuho 93:5" },
+    { text: "Ammo kimki ato bersa va taqvo qilsa, va yaxshiliklarni tasdiq qilsa, bas, Biz uni osonga muyassar etamiz.", meta: "Layl 92:5-7" },
+    { text: "Albatta hidoyatga boshlash Bizning zimmamizdadir.", meta: "Layl 92:12" },
+    { text: "Va albatta tezda rozi bo'ladir.", meta: "Layl 92:21" },
+    { text: "Seni oson yo'lga muyassar etamiz.", meta: "A'lo 87:8" },
+    { text: "Bas, kim xohlasa Parvardigori tomon qaytadigan yo'lni tutar.", meta: "Naba 78:39" },
+    { text: "Albatta Biz senga ochiq g'alaba berdik.", meta: "Fath 48:1" }
+];
+
+let activeQuiz = [];
+let currentQ = 0, score = 0, answered = 0;
+
+function shuffle(array) {
+    return array.sort(() => Math.random() - 0.5);
+}
+
+function buildStars() {
+    const container = document.getElementById('stars');
+    container.innerHTML = '';
+    const count = 100; // Yulduzlar zichligi oshirildi
+    for (let i = 0; i < count; i++) {
+        const s = document.createElement('div');
+        s.className = 'star';
+        s.style.left = Math.random() * 100 + '%';
+        s.style.top = Math.random() * 100 + '%';
+        const size = (Math.random() * 2 + 1).toFixed(1);
+        s.style.width = size + 'px';
+        s.style.height = size + 'px';
+        s.style.animationDelay = (Math.random() * 2.5).toFixed(2) + 's';
+        s.style.animationDuration = (1.5 + Math.random() * 2).toFixed(2) + 's';
+        container.appendChild(s);
+    }
+}
+
+let rangeStart = null;
+let numButtons = [];
+
+window.onload = function() {
+    const grid = document.getElementById('numberGrid');
+    for (let i = 1; i <= quizData.length; i++) {
+        const btn = document.createElement('button');
+        btn.className = 'num-btn';
+        btn.innerText = i;
+        btn.onclick = () => pickNumber(i, btn);
+        grid.appendChild(btn);
+        numButtons.push(btn);
+    }
+    buildStars();
+    
+    const randomIdx = Math.floor(Math.random() * ayats.length);
+    const selectedAyat = ayats[randomIdx];
+    document.getElementById('random-ayat').innerHTML = `
+        <div class="quran-box">
+            <span class="quran-ayat-text">"${selectedAyat.text}"</span>
+            <span class="quran-meta">${selectedAyat.meta}</span>
+        </div>
+    `;
+};
+
+function pickNumber(num, btnEl) {
+    const info = document.getElementById('range-info');
+
+    if (rangeStart === null) {
+        rangeStart = num;
+        btnEl.classList.add('picked');
+        info.innerText = `Boshlang'ich: ${num}. Endi oxirgi raqamni tanlang`;
+    } else {
+        let start = rangeStart;
+        let end = num;
+        if (end < start) { const t = start; start = end; end = t; }
+        btnEl.classList.add('picked');
+        info.innerText = `Tanlandi: ${start} - ${end}`;
+        setTimeout(() => startWithRange(start, end), 400);
+    }
+}
+
+function startWithRange(start, end) {
+    activeQuiz = quizData.slice(start - 1, end);
+    document.getElementById('select-screen').style.display = 'none';
+    document.getElementById('mode-screen').style.display = 'flex';
+}
+
+let quizMode = 'quiz';
+
+function chooseMode(mode) {
+    quizMode = mode;
+    if (mode === 'quiz-aralash' || mode === 'yopiq-aralash') {
+        activeQuiz = shuffle([...activeQuiz]);
+    }
+    document.getElementById('mode-screen').style.display = 'none';
+    document.getElementById('intro-screen').style.display = 'flex';
+    document.getElementById('intro-screen').style.opacity = '1';
+    startTimer();
+}
+
+function startTimer() {
+    let count = 3;
+    let disp = document.getElementById("countdown");
+    disp.innerText = count;
+    let timer = setInterval(() => {
+        count--;
+        if (count > 0) {
+            disp.innerText = count;
+        } else if (count === 0) {
+            disp.innerText = "Boshladik!";
+        } else {
+            clearInterval(timer);
+            document.getElementById("intro-screen").style.opacity = "0";
+            setTimeout(() => {
+                document.getElementById("intro-screen").style.display = "none";
+                document.getElementById("quiz").style.display = "block";
+                loadQ();
+            }, 800);
+        }
+    }, 1000);
+}
+
+function getOptionsFor(qData) {
+    return shuffle([qData.correct, ...qData.wrongs]);
+}
+
+function loadQ() {
+    const qData = activeQuiz[currentQ];
+    document.getElementById('question').innerText = `${currentQ + 1}/${activeQuiz.length}. ${qData.q}`;
+    const optDiv = document.getElementById('options');
+    optDiv.innerHTML = '';
+
+    if (quizMode === 'yopiq' || quizMode === 'yopiq-aralash') {
+        loadClosedQ(qData, optDiv);
+    } else {
+        loadMultipleChoiceQ(qData, optDiv);
+    }
+}
+
+function loadMultipleChoiceQ(qData, optDiv) {
+    let shuffledOptions = getOptionsFor(qData);
+
+    shuffledOptions.forEach((opt) => {
+        const btn = document.createElement('div');
+        btn.className = 'option';
+        btn.innerText = opt;
+        btn.onclick = () => check(opt, btn, qData.correct);
+        optDiv.appendChild(btn);
+    });
+}
+
+function loadClosedQ(qData, optDiv) {
+    const input = document.createElement('input');
+    input.type = 'text';
+    input.className = 'closed-input';
+    input.id = 'closed-answer';
+    input.placeholder = 'Javob yozing...';
+    input.onkeypress = (e) => { if (e.key === 'Enter') checkClosed(qData); };
+
+    const checkBtn = document.createElement('button');
+    checkBtn.className = 'btn-check';
+    checkBtn.innerText = 'Tekshirish';
+    checkBtn.onclick = () => checkClosed(qData);
+
+    const resultDiv = document.createElement('div');
+    resultDiv.id = 'closed-result';
+
+    optDiv.appendChild(input);
+    optDiv.appendChild(checkBtn);
+    optDiv.appendChild(resultDiv);
+
+    input.focus();
+}
+
+function checkClosed(qData) {
+    const inputEl = document.getElementById('closed-answer');
+    const resultDiv = document.getElementById('closed-result');
+    const user = inputEl.value.toLowerCase().trim();
+    const correct = qData.correct.toLowerCase().trim();
+
+    answered++;
+    inputEl.disabled = true;
+    document.querySelector('.btn-check').disabled = true;
+
+    if (user === correct) {
+        resultDiv.innerHTML = '<b style="color:#00ff99;">✅ To\'g\'ri</b>';
+        score++;
+    } else {
+        resultDiv.innerHTML = '<b style="color:#ff4444;">❌ Noto\'g\'ri.</b><br> Javob: ' + qData.correct;
+    }
+
+    setTimeout(() => {
+        currentQ++;
+        if (currentQ < activeQuiz.length) loadQ();
+        else finishQuiz();
+    }, 2000);
+}
+
+function check(selected, element, correct) {
+    const options = element.parentElement.querySelectorAll('.option');
+    options.forEach(opt => opt.style.pointerEvents = 'none');
+    answered++;
+
+    if (selected === correct) {
+        element.classList.add('correct');
+        score++;
+    } else {
+        element.classList.add('wrong');
+        options.forEach(opt => {
+            if (opt.innerText === correct) opt.classList.add('correct');
+        });
+    }
+    setTimeout(() => {
+        currentQ++;
+        if (currentQ < activeQuiz.length) loadQ();
+        else finishQuiz();
+    }, 1000);
+}
+
+function finishQuiz() {
+    let wrong = answered - score;
+    document.getElementById('quiz').innerHTML = `
+        <h2>Natijalar</h2>
+        <div style="line-height: 2.2; font-size: 19px;">
+            Jami savollar: <b>${activeQuiz.length} ta</b><br>
+            To'g'ri javoblar: <span style="color:#00ff99;">${score} ta</span><br>
+            Xato javoblar: <span style="color:#ff4d4d;">${wrong} ta</span>
+        </div>
+        <button class="btn-finish" onclick="location.reload()">Qaytadan boshlash</button>
+    `;
+}
+</script>
+</body>
+</html>
