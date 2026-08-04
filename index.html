@@ -52,7 +52,7 @@
             justify-content: center;
             align-items: center;
             z-index: 998;
-            animation: fadeOutPetals 0.8s cubic-bezier(0.7, 0, 0.3, 1) forwards 7.5s;
+            animation: fadeOutPetals 0.8s cubic-bezier(0.7, 0, 0.3, 1) forwards 6.5s;
         }
 
         @keyframes fadeOutPetals {
@@ -218,6 +218,33 @@
             animation-iteration-count: infinite;
         }
 
+        /* ===== ADMINGA MUROJAAT LINKLARI ===== */
+        .admin-links {
+            display: inline-flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .admin-links a {
+            display: inline-block;
+            background: #1e1e1e;
+            color: #00ff99;
+            border: 2px solid #00ff99;
+            padding: 6px 14px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 14px;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .admin-links a:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 15px rgba(0,255,153,0.4);
+        }
+
         /* Kitoblar Gridi */
         .grid { 
             display: grid; 
@@ -318,6 +345,11 @@
                 font-size: 18px;
             }
 
+            .admin-links a {
+                font-size: 12px;
+                padding: 5px 12px;
+            }
+
             .intro-text {
                 font-size: 28px;
                 white-space: normal;
@@ -350,6 +382,10 @@
             <span class="cally-badge cally-badge-left" id="cally-left">✦Yaratgan Robbing</span>
             📚 Yosh Kitobxon 2026-2027 (20-30)
             <span class="cally-badge cally-badge-right" id="cally-right">nomi bilan o'qi ✦</span>
+            <span class="admin-links">
+                <a href="https://t.me/admin1" target="_blank">Adminga murojaat qilish</a>
+                <a href="https://t.me/admin2" target="_blank">Adminga murojaat qilish</a>
+            </span>
         </header>
 
         <div class="container">
@@ -445,25 +481,25 @@
         const mainContent = document.getElementById('main-content');
         const bookCards = document.querySelectorAll('.book');
 
-        // 1) Gullar bo'roni tugagach (~7.5s), matn paydo bo'ladi va to'liq ko'rinadi
+        // 1) Gullar bo'roni tugagach (~6.5s), matn paydo bo'ladi va to'liq ko'rinadi
         setTimeout(function () {
             petalScreen.style.display = 'none';
             introText.classList.add('intro-show');
-        }, 7600);
+        }, 6600);
 
         // 2) Matn to'liq ko'rinib tursin, so'ng sekin kichrayib o'z joyiga (headerga) boradi
         setTimeout(function () {
             introText.classList.remove('intro-show');
             introText.classList.add('intro-travel');
             introScreen.classList.add('fade-bg');
-        }, 10600);
+        }, 9600);
 
         // 3) Intro matni "joyiga borib joylashgach" - asosiy kontent (header) ko'rinadi
         setTimeout(function () {
             introScreen.style.display = 'none';
             mainContent.style.opacity = '1';
             mainContent.classList.add('reveal');
-        }, 11700);
+        }, 10700);
 
         // 4) Qolgan joylar (kitob kartalari) birma-bir sekin ko'rina boshlaydi
         setTimeout(function () {
@@ -471,7 +507,7 @@
                 card.style.animationDelay = (index * 0.25) + 's';
                 card.classList.add('book-appear');
             });
-        }, 11900);
+        }, 10900);
     </script>
 </body>
 </html>
