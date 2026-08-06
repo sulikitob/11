@@ -150,7 +150,7 @@
     <div class="container">
         <h2 class="section-title">1-qism</h2>
         <div class="menu-grid">
-           <a href="" class="card card-green"><h2>1***</h2></a>
+           <a href="" class="card card-green" onclick="checkInProgress(event)"><h2>1***</h2></a>
            <a href="Bu yerda hamma narsa bo'lishi mumkin 1-qism 2.html" target="_blank" class="card card-green"><h2>2***</h2></a>
            <a href="Bu yerda hamma narsa bo'lishi mumkin 1-qism 3.html" target="_blank" class="card card-green"><h2>3***</h2></a>
            <a href="Bu yerda hamma narsa bo'lishi mumkin 1-qism 4.html" target="_blank" class="card card-green"><h2>4***</h2></a>
@@ -203,6 +203,11 @@
 function checkPremium(e) {
     e.preventDefault();
     alert("Bu bo'lim premium obunachilar uchun mo'ljallangan 🔒 Murojat uchun anonimkitobxon2026 telegram kanali adminiga murojat qiling");
+}
+
+function checkInProgress(e) {
+    e.preventDefault();
+    alert("Bu bo'lim hozircha jarayonda ⏳");
 }
 
 // Oltin kartalarga uzluksiz porillovchi yulduzchalar qo'shish
