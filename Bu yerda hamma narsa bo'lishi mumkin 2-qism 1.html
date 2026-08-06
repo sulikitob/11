@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Bu yerda hamma narsa bo'lishi mumkin </title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            font-family: 'Arial', sans-serif; 
+            background: linear-gradient(135deg, #050505, #121212, #1d1d1d); 
+            color: white; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            padding: 20px; 
+            min-height: 100vh; 
+        }
+
+        /* ===== Raqam tanlash ekrani ===== */
+        #select-screen {
+            width: 100%; max-width: 700px;
+            display: flex; flex-direction: column; align-items: center;
+            gap: 25px; padding: 20px 0;
+        }
+        #select-screen h1 {
+            font-size: 26px; color: #00ff99; text-align: center;
+        }
+        #select-screen p { color: #999; font-size: 14px; text-align: center; }
+        .number-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(55px, 1fr));
+            gap: 10px;
+            width: 100%;
+            max-height: 60vh;
+            overflow-y: auto;
+            padding: 10px;
+            background: #111;
+            border-radius: 20px;
+            box-shadow: 0 0 25px rgba(0,255,150,0.15);
+        }
+        .number-grid::-webkit-scrollbar { width: 8px; }
+        .number-grid::-webkit-scrollbar-thumb { background: #00ff99; border-radius: 10px; }
+        .num-btn {
+            background: #1b1b1b;
+            border: 2px solid #00ff99;
+            color: #00ff99;
+            border-radius: 12px;
+            padding: 12px 0;
+            font-size: 15px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.25s;
+            text-shadow: 0 0 8px rgba(0,255,153,0.6);
+        }
+        .num-btn:hover {
+            background: #00ff99;
+            color: #050505;
+            box-shadow: 0 0 20px rgba(0,255,150,0.8);
+            transform: scale(1.08);
+        }
+        .num-btn.picked {
+            background: #ff9900;
+            border-color: #ff9900;
+            color: #050505;
+            box-shadow: 0 0 20px rgba(255,153,0,0.8);
+        }
+        #range-info {
+            color: #ff9900; font-size: 15px; font-weight: bold; min-height: 22px;
+        }
+
+        /* ===== Funksiya tanlash ekrani ===== */
+            #mode-screen {
+            display: none;
+            width: 100%; max-width: 700px;
+            flex-direction: column; align-items: center;
+            gap: 25px; padding: 20px 0;
+        }
+
+    .mode-icon-top {
+    width: 100%;
+    max-width: 450px;
+    aspect-ratio: 4 / 3;
+    position: relative;
+    background: rgba(5, 5, 5, 0.4);
+    border-radius: 20px;
+    padding: 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.mode-icon-top img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 10px;
+}
+
+        #mode-screen h1 {
+            font-size: 24px; color: #00ff99; text-align: center;
+            margin: 5px 0;
+        }
+
+        .mode-wrapper {
+            width: 100%;
+            background: rgba(5, 5, 5, 0.4);
+            border-radius: 20px;
+            padding: 25px;
+       
+        }
+        .mode-grid {
+            width: 100%;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+        .mode-card {
+            background: rgba(27, 27, 27, 0.85);
+            border-radius: 20px;
+            padding: 30px 15px;
+            text-align: center;
+            transition: 0.4s;
+            color: white;
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            backdrop-filter: blur(3px);
+        }
+        .mode-card::before {
+            content: ""; position: absolute; width: 200%; height: 200%;
+            background: linear-gradient(45deg,transparent,#00ff99,transparent);
+            top: -150%; left: -150%; transform: rotate(25deg); transition: 0.7s;
+        }
+        .mode-card:hover::before { top: 100%; left: 100%; }
+        .mode-card:hover { transform: translateY(-5px) scale(1.02); border-color: #ffd700; box-shadow: 0 0 15px rgba(255,215,0,0.2); }
+@media(max-width:600px){ 
+    .mode-grid{ grid-template-columns: repeat(2, 1fr); } 
+    .mode-icon-top{ display: flex; justify-content: center; }
+    .mode-icon-top img{ width: 85%; max-width: 220px; }
+}
+
+        /* ===== Intro (countdown) ekran ===== */
+        #intro-screen {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: #050505; display: none; flex-direction: column;
+            justify-content: center; align-items: center; z-index: 5;
+            transition: opacity 0.8s ease;
+        }
+        #stars {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none; z-index: 0; overflow: hidden;
+        }
+        #select-screen, #mode-screen, .quiz-box, #intro-screen .content-box, #intro-screen #countdown {
+            position: relative; z-index: 2;
+        }
+        .star {
+            position: absolute;
+            width: 2px; height: 2px;
+            background: #fff;
+            border-radius: 50%;
+            animation: twinkle 2.5s infinite ease-in-out;
+        }
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.15; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.6); }
+        }
+        .content-box { text-align: center; margin-bottom: 50px; z-index: 1; position: relative; padding: 0 20px; }
+        #countdown { 
+            position: absolute; bottom: 50px;
+            font-size: 80px; color: #00ff99; font-weight: bold;
+            animation: pulse 1s infinite;
+            z-index: 1;
+        }
+        @keyframes pulse {
+            0% { transform: scale(0.9); opacity: 0.5; }
+            50% { transform: scale(1); opacity: 1; }
+            100% { transform: scale(0.9); opacity: 0.5; }
+        }
+
+        /* Qur'on sarlavhalari uslubidagi tilla naqshinkor to'rtburchak hoshiya */
+        .quran-box {
+            display: block;
+            margin: 25px auto 0 auto;
+            padding: 20px 30px;
+            max-width: 550px;
+            border: 4px double #ffd700; 
+            background: rgba(20, 16, 5, 0.6);
+            text-align: center;
+        }
+        .quran-ayat-text {
+            font-size: 18px;
+            line-height: 1.6;
+            color: #f0f0f0;
+            margin-bottom: 15px;
+            display: block;
+        }
+        .quran-meta {
+            display: inline-block;
+            font-size: 15px;
+            font-weight: bold;
+            color: #ffd700;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            border-top: 1px solid rgba(255, 215, 0, 0.3);
+            padding-top: 8px;
+            width: 100%;
+        }
+
+        /* ===== Quiz ekrani ===== */
+        .quiz-box { 
+            display: none;
+            width: 100%; max-width: 600px; background: #1b1b1b; padding: 30px; 
+            border-radius: 25px; box-shadow: 0 0 35px rgba(0, 255, 150, 0.1); 
+            text-align: center; margin-top: 50px;
+        }
+        h2 { color: #00ff99; margin-bottom: 20px; font-size: 22px; }
+        .option { 
+            display: block; width: 100%; padding: 15px; margin: 10px 0; 
+            background: #2a2a2a; border: 2px solid #333; border-radius: 15px; 
+            cursor: pointer; transition: 0.3s; text-align: left;
+        }
+        .option:hover { border-color: #00ff99; }
+        .correct { 
+            background: #00ff99 !important; color: black; font-weight: bold; 
+            animation: bubbleEffect 0.5s ease-out;
+        }
+        @keyframes bubbleEffect {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.03); }
+            100% { transform: scale(1); }
+        }
+        .wrong { background: #ff4d4d !important; color: white; }
+        .btn-finish { 
+            width: 100%; padding: 15px; background: transparent; border: 2px solid #00ff99; 
+            color: #00ff99; border-radius: 15px; cursor: pointer; margin-top: 20px; 
+            font-weight: bold; transition: 0.3s; 
+        }
+        .btn-finish:hover { background: #00ff99; color: black; }
+        
+        .closed-input {
+            width: 100%; padding: 15px; margin-top: 10px; border: 2px solid #333;
+            border-radius: 12px; font-size: 17px; outline: none; background: #2a2a2a;
+            color: white;
+        }
+        .closed-input:focus { border-color: #00ff99; }
+        .btn-check {
+            width: 100%; padding: 15px; margin-top: 15px; border: 2px solid #00ff99; border-radius: 15px;
+            background: transparent; color: #00ff99; font-weight: bold; cursor: pointer; font-size: 17px;
+            transition: 0.3s;
+        }
+        .btn-check:hover { background: #00ff99; color: black; }
+        #closed-result { margin-top: 15px; font-size: 18px; min-height: 30px; text-align: center; }
+    </style>
+</head>
+<body>
+
+<div id="stars"></div>
+
+<div id="select-screen">
+    <h1>🌙 2-qism</h1>
+    <p>Savollar sonini belgilang</p>
+    <div id="range-info">Boshlang'ich raqamni tanlang</div>
+    <div class="number-grid" id="numberGrid"></div>
+</div>
+
+<div id="mode-screen">
+    <div class="mode-icon-top">
+        <img src="Bu.jpg">
+    </div>
+    <h1>Qaysi funksiyani xohlaysiz?</h1>
+    <div class="mode-wrapper">
+        <div class="mode-grid">
+            <div class="mode-card" onclick="chooseMode('quiz')">Quiz testlar</div>
+            <div class="mode-card" onclick="chooseMode('quiz-aralash')">Quiz aralash</div>
+            <div class="mode-card" onclick="chooseMode('yopiq')">Yopiq savol-javob</div>
+            <div class="mode-card" onclick="chooseMode('yopiq-aralash')">Yopiq savol-javob aralash</div>
+        </div>
+    </div>
+</div>
+
+<div id="intro-screen">
+    <div class="content-box">
+        <h1 style="color:#00ff99; font-size: 32px;">1-Qism</h1>
+        <div id="random-ayat"></div>
+    </div>
+    <div id="countdown">3</div>
+</div>
+
+<div class="quiz-box" id="quiz">
+    <h2 id="question">Yuklanmoqda...</h2>
+    <div id="options"></div>
+    <button class="btn-finish" onclick="finishQuiz()">Testni yakunlash</button>
+</div>
+
+<script>
+const quizData = [
+{ q: "Choxni qazayotganda nimaga ko'zim tushib qoldi?", correct: "Sopol parchasiga", wrongs: ["Metall bo'lakka", "Suyak parchasiga", "Shisha siniqqa"] },
+{ q: "Sopol bo'lagi qanday rangda edi?", correct: "Qizg'ish jigarrang", wrongs: ["Kulrang", "Sarg'ish", "Qora"] },
+{ q: "Oshpaz fabrikaning kuni bitganini hammadan oldin kimga aytib ketgan edi?", correct: "Beatris", wrongs: ["Kars", "Klemens", "Erika"] },
+{ q: "1 oy oldin ishdan kim ketar edi?", correct: "Kars", wrongs: ["Beatris", "Loze", "Klemens"] },
+{ q: "Kars bu yerda kim bo'lib ishlar edi?", correct: "Qadoq ishlab chiqarar edi", wrongs: ["Shofyorlik qilar edi", "Oshpazlik qilar edi", "Qorovullik qilar edi"] },
+{ q: "Kars bu yerdan ishdan ketib qaysi fabrikada ish boshlagan edi?", correct: "Shag'al fabrikasida", wrongs: ["Qadoq fabrikasida", "To'qimachilik fabrikasida", "Metall fabrikasida"] },
+{ q: "Bu yerda doim nimaga ehtiyoj bor?", correct: "Shag'alga", wrongs: ["Suvga", "Yog'ochga", "Metallga"] },
+{ q: "Bugun ishni tark etadi, hammasi unga omad tilaydi — kim?", correct: "Loze", wrongs: ["Kars", "Klemens", "Erika"] },
+{ q: "Qo'llari qadoq — bu ta'rif kim haqida?", correct: "Loze", wrongs: ["Kars", "Klemens", "Klaus"] },
+{ q: "Loze aeroportdan qanday ish topgan edi?", correct: "Yo'lovchilarni tashish va yer xizmati", wrongs: ["Aviamexanik", "Bojxona xodimi", "Dispetcher"] },
+{ q: "Loze nimani 'mening qo'limga tuttirib, bu endi menga kerak emas' deydi?", correct: "Osmondan tushgan odam haqidagi jildni", wrongs: ["Eski fotosuratlarni", "Aviatsiya ensiklopediyasini", "Bort jurnalini"] },
+{ q: "Bo'rining o'limini qayerdan topib olishadi?", correct: "Shahar yaqinidagi temir yo'l ustidan", wrongs: ["Fabrika hovlisidan", "O'rmon ichidan", "Daryo bo'yidan"] },
+{ q: "Oshpaz bugundan boshlab qanaqa taomlar bo'ladi deb aytadi?", correct: "Eritilgan taomlar", wrongs: ["Qovurilgan taomlar", "Muzlatilgan taomlar", "Dudlangan taomlar"] },
+{ q: "Loze bilan ikkimizni oramizda nechta panjara bor?", correct: "2 ta", wrongs: ["1 ta", "3 ta", "4 ta"] },
+{ q: "2 ta panjara qaysi joylar panjaralari?", correct: "Fabrika va aeroport panjaralari", wrongs: ["Bog' va uy panjaralari", "Qishloq va shahar panjaralari", "Ombor va omborxona panjaralari"] },
+{ q: "Bo'rilar qachon qattiq uvillashadi?", correct: "Galasini tark etayotganda", wrongs: ["Ov qilayotganda", "Uxlayotganda", "Yomg'ir yog'ayotganda"] },
+{ q: "Bo'rilar mehrini qanday ifodalashadi?", correct: "Uvillab", wrongs: ["Ho'rillab", "Tishlab", "Sakrab"] },
+{ q: "Bizlar ham bir galamiz — kimlar?", correct: "Fabrika, Oshpaz, Boshliq, Klemens, Men", wrongs: ["Faqat fabrika ishchilari", "Faqat oila a'zolari", "Faqat qorovullar"] },
+{ q: "Klemens fabrikadan ketsa, kim qattiqroq uvillasa kerak?", correct: "Men", wrongs: ["Loze", "Oshpaz", "Boshliq"] },
+{ q: "Men uchun nima maroqli edi?", correct: "Chox yonida Klemens bilan o'tirib qadrdonlardek suhbatlashish", wrongs: ["Yolg'iz sayr qilish", "Aeroportda ishlash", "Kitob o'qish"] },
+{ q: "Klemens panjaradagi teshiklarni nima bilan yamab chiqdi?", correct: "Ip bilan", wrongs: ["Simchoyi bilan", "Yelim bilan", "Metall plastinka bilan"] },
+{ q: "Klemens panjara teshiklaridan nimani payqadi va topib oldi?", correct: "Yung tuk", wrongs: ["Qon izini", "Suyak bo'lagini", "Tirnoq izini"] },
+{ q: "Fabrika vaqtinchalik qancha vaqtga yopiladi?", correct: "2 haftaga", wrongs: ["1 haftaga", "1 oyga", "3 kunga"] },
+{ q: "Boshliqqa uyda dam olish o'rniga sayohat qiling desa, u qanday javob qaytaradi?", correct: "Uchishdan qo'rqaman", wrongs: ["Vaqtim yo'q", "Pulim yo'q", "Yoqtirmayman"] },
+{ q: "Men bo'sh vaqtimni qanday o'tkazaman?", correct: "Aeroportga Lozeni ko'rgani boraman", wrongs: ["Uyda kitob o'qiyman", "Klemens bilan sayr qilaman", "Fabrikada ishlayman"] },
+{ q: "Klemens sayohat qilishga taklif qilganda men nima uchun yo'q dedim?", correct: "Lozeni kutaman, kelganimda u bo'lmasa yaxshi ish bo'lmaydi deb", wrongs: ["Pulim yo'qligi uchun", "Sayohatni yoqtirmasligim uchun", "Ishga borishim kerakligi uchun"] },
+{ q: "Aeroport nechi metr balandlikda joylashgan?", correct: "467 m", wrongs: ["350 m", "600 m", "250 m"] },
+{ q: "Aeroportda nechta ro'yxatga olish darchasi bor?", correct: "4", wrongs: ["2", "6", "3"] },
+{ q: "Aeroportda nechta zona bor?", correct: "2 ta kutish zonasi va odamlarni saralash zonasi", wrongs: ["3 ta zona", "1 ta zona", "5 ta zona"] },
+{ q: "4 ta ro'yxatga olish darchasi, 2 ta zona va yana nimadan iborat?", correct: "Bojxonadan", wrongs: ["Do'kondan", "Kafedan", "Mehmonxonadan"] },
+{ q: "Uchish-qo'nish maydoni qattiq qoplamali va nechi metr?", correct: "500 metr", wrongs: ["400 metr", "700 metr", "300 metr"] },
+{ q: "Uzunligi 680 metr bo'lgan yana nima bor aeroportda?", correct: "Maysazor", wrongs: ["Yo'lak", "Ombor", "Avtoturargoh"] },
+{ q: "Qo'llariga 2 ta neon bog'lam taqib olgan ayol kim?", correct: "Erika", wrongs: ["Beatris", "Loze", "Kars"] },
+{ q: "Erika kim bo'lib ishlar edi?", correct: "Harbiy mexanik", wrongs: ["Uchuvchi", "Bojxona xodimi", "Dispetcher"] },
+{ q: "Kombinezoni va qo'llari qop-qora kim?", correct: "Erika", wrongs: ["Beatris", "Klaus", "Loze"] },
+{ q: "Nimani o'ylayverishdan charchagan edim?", correct: "Bo'ri qopqonga tushgandan keyin qanday holat yuz berishini o'ylashdan", wrongs: ["Fabrikaning yopilishini o'ylashdan", "Lozening ketishini o'ylashdan", "Ishdan ketishni o'ylashdan"] },
+{ q: "Lozening nimasi menga yoqadi?", correct: "Yuziga umuman mos kelmagan jilmayishi", wrongs: ["Kulgisi", "Ovozi", "Gapirish uslubi"] },
+{ q: "Loze bilan qayerga uchib ketayotgan samolyot oldiga boramiz?", correct: "Korsikaga", wrongs: ["Lansaroteга", "Kamerunga", "Namibiyaga"] },
+{ q: "Loze nima ovqat tanlaydi yeyishga?", correct: "Sandvich", wrongs: ["Lazaniya", "Makaron", "Qovurilgan sasiska"] },
+{ q: "Men nima yeyman?", correct: "Sous aralashtirilgan makaron", wrongs: ["Sandvich", "Salat", "Lazaniya"] },
+{ q: "Loze yeyayotgan sandvich ushoqlarini nimalar yeydi?", correct: "Kaptarlar", wrongs: ["Chumchuqlar", "Chumolilar", "Mushuklar"] },
+{ q: "Loze nimalarni bakteriya tarqatuvchi deb, mashina ichiga kirib qolsa mashina qulab tushadi deydi?", correct: "Kaptarlarni", wrongs: ["Chumchuqlarni", "Hasharotlarni", "Kalamushlarni"] },
+{ q: "Aviatsiya ensiklopediyasining so'ngi varag'i nimaga atalgan edi?", correct: "Aviatsiya alifbosiga", wrongs: ["Samolyot turlariga", "Aeroport tarixiga", "Uchish qoidalariga"] },
+{ q: "Men fabrikada o'tirganimda ko'pincha kimni va nimani sog'inaman?", correct: "Klemensni velosipedda ko'rinishini", wrongs: ["Erikani ishda ko'rinishini", "Lozeni aeroportda ko'rinishini", "Karsni qadoqda ko'rinishini"] },
+{ q: "Bitta orol bor, unda nechta mayoq bor?", correct: "1", wrongs: ["2", "3", "0"] },
+{ q: "Bitta orol va unda 1 ta mayoq bor, u orolda nechta odam bor?", correct: "1", wrongs: ["2", "3", "0"] },
+{ q: "Bojxona xodimining yoshi qanday?", correct: "Keksa", wrongs: ["Yosh", "O'rta yoshli", "Nomalum"] },
+{ q: "Formasi tanasiga quyib qo'ygandek mos, sochlari oqargan, mo'ylovi bor — kim?", correct: "Katta bojxona xodimi", wrongs: ["Kichkina bojxona xodimi", "Klaus", "Boshliq"] },
+{ q: "Formasi kattaligidan yengini shimarib olgan, bo'ynida tatuirovkasi bor — kim haqida gap?", correct: "Kichkina bojxona xodimi", wrongs: ["Katta bojxona xodimi", "Klaus", "Loze"] },
+{ q: "Kichkina bojxona xodimining bo'ynidagi tatuirovkasida nima deb yozilgan edi?", correct: "B. O", wrongs: ["L. Z", "K. R", "E. M"] },
+{ q: "Dvigatellar ishga tushishi bilan sovuq havoni tortib, katta tezlik va bosim ostida issiq havoni orqaga haydash — bu hodisa nima deyiladi?", correct: "Jet Blast", wrongs: ["Turbulentsiya", "Vortex", "Downdraft"] },
+{ q: "Jet blast shu darajada kuchli bo'lishi mumkinki, u hatto nimani ham uchurib yuborishi mumkin?", correct: "Avtobusni", wrongs: ["Yengil mashinani", "Odamni", "Bagajni"] },
+{ q: "Aeroportga oddiy odamlar kirishi taqiqlanadi, Loze nimalarni olib kiradi?", correct: "Ruxsatnoma, avtobus kalitlari, sariq nimcha", wrongs: ["Faqat pasport", "Faqat ish guvohnomasi", "Faqat kalitlar"] },
+{ q: "Nimalarni o'zi bilan olib yurish mumkin emas?", correct: "O'qotar qurollar, kamon, nayzalar, elektroshok, dinamit va h.k.", wrongs: ["Faqat pichoqlar", "Faqat sprey", "Faqat o'yinchiq qurollar"] },
+{ q: "Qaysi yo'lovchi avtobusi Alfa chiqish yo'lagidan Echo 1 chiqish yo'lagiga borishga tayyor deydi?", correct: "45 23", wrongs: ["32 17", "56 12", "21 09"] },
+{ q: "Erika asboblarni qayerda tozalar edi?", correct: "Chekuvchilar uchun ajratilgan xonada", wrongs: ["Ombordan", "Yuvish xonasida", "Kutish zalida"] },
+{ q: "Yuzlarini va qo'llarini sepkil qoplagan kim?", correct: "Bojxonaning kichkina xodimi", wrongs: ["Katta bojxona xodimi", "Erika", "Klaus"] },
+{ q: "B.O tatuirovkasi nima deganda kichkina bojxona xodimi qanday javob berdi?", correct: "Bo'yin", wrongs: ["Ism va familiyasi", "Sevgilisining ismi", "Tug'ilgan shahri"] },
+{ q: "Egasi qoldirib ketilgan, qalbaki, litsenziyasiz narsalar joyida nechta quti bor edi?", correct: "3 ta", wrongs: ["2 ta", "4 ta", "5 ta"] },
+{ q: "3 ta qutining nomlari nima edi?", correct: "Sigareta, tamaki, hayvon tana a'zolari, dori-darmon", wrongs: ["Faqat sigareta va tamaki", "Faqat dori-darmon", "Faqat oziq-ovqat"] },
+{ q: "Hayvon tana a'zolari degan quti ichida nima bor edi?", correct: "Toshbaqa kosasi", wrongs: ["Ilon terisi", "Fil suyagi", "Kaptar pati"] },
+{ q: "Aviatsiya alifbosida 'osmondan tushgan odam' qanday yozilgan edi?", correct: "Oscar Sierra Mike Oscar November Delta Alfa November Tango Uniform Sierra Hotel Golf Alfa November Oscar Delta Alfa Mike", wrongs: ["Boeing 737 alifbosida", "Kamerun alifbosida", "Bo'ri alifbosida"] },
+{ q: "Burga o'z vaznidan qancha barobar og'irroq yukni ko'tara oladi?", correct: "20 000", wrongs: ["10 000", "50 000", "5 000"] },
+{ q: "Burganing vazni taxminan qanchaga teng?", correct: "0.6 mg", wrongs: ["1.2 mg", "0.2 mg", "2 mg"] },
+{ q: "Boeing 737-700 samolyotlarning vazni qancha?", correct: "37 648 kg", wrongs: ["45 000 kg", "30 000 kg", "50 500 kg"] },
+{ q: "Bo'sh Boeing 737-700 samolyotini joyidan jildirish uchun qancha burga kerak?", correct: "3 mln 137 334 ta", wrongs: ["2 mln 500 000 ta", "4 mln 200 000 ta", "1 mln 800 000 ta"] },
+{ q: "Loze va men avtobusda qayerga ketayotgan yo'lovchilarni olib ketayotgan edik?", correct: "Lansaroteга", wrongs: ["Korsikaga", "Kamerunga", "Namibiyaga"] },
+{ q: "Bir ayol Lozeга nima deb savol beradi?", correct: "Lansaroteda bo'lganmisiz", wrongs: ["Kamerundan kelganmisiz", "Aviator emasmisiz", "Meni tanidingizmi"] },
+{ q: "Bir ayol Lozeдан qaysi kasb egasimasmisiz deb savol beradi?", correct: "Rassom", wrongs: ["Uchuvchi", "Shifokor", "Muhandis"] },
+{ q: "Lansarotelik ayol nega bunday savol berayotgan edi?", correct: "Ko'chasida Lozega o'xshash ovozi va rassom yashaganini aytadi", wrongs: ["Fotosuratda ko'rgan edi", "Televizorda ko'rgan edi", "Do'stlaridan eshitgan edi"] },
+{ q: "Bugun sen bilan smenada qolsam maylimi deb kimdan so'rayman?", correct: "Erikadan", wrongs: ["Klausdan", "Boshliqdan", "Lozeдан"] },
+{ q: "Erikadan nima uchun qolsam maylimi deb so'rayman?", correct: "Shasse va uning balonlarini ko'rishni хohlaganim uchun", wrongs: ["Ishni o'rganish uchun", "Yolg'iz qolmaslik uchun", "Klemens haqida so'rash uchun"] },
+{ q: "Aeroportda o'rta va yon chiziqlardagi oq yer osti chiroqlari nimani bildiradi?", correct: "Start yo'lagini", wrongs: ["Qo'nish nuqtasini", "Xavfli zonani", "Kutish zonasini"] },
+{ q: "Yashil chiroqlar hududning qaysi qismini bildiradi?", correct: "Boshlang'ich qismini", wrongs: ["So'ngi qismini", "O'rta qismini", "Yon qismini"] },
+{ q: "Qizil chiziqlar hududning qaysi qismini bildiradi?", correct: "So'ngi qismini", wrongs: ["Boshlang'ich qismini", "O'rta qismini", "Chetki qismini"] },
+{ q: "Shasse chetidagi chiroqlar qanday rangda?", correct: "Ko'k", wrongs: ["Qizil", "Sariq", "Yashil"] },
+{ q: "Shasselarning o'rtasidagi chiroqlari qanday tusda?", correct: "Qizil", wrongs: ["Ko'k", "Sariq", "Yashil"] },
+{ q: "Oldindagi maydonni nechta projektor yoritib turar edi?", correct: "2", wrongs: ["4", "1", "3"] },
+{ q: "Mendan necha metr narida kulrang kombinezon kiygan nechta erkak va nechta ayol darvozaga suyanib turar edi?", correct: "6 erkak 1 qiz", wrongs: ["4 erkak 2 qiz", "5 erkak 1 qiz", "3 erkak 3 qiz"] },
+{ q: "6 erkak va 1 qizni bilaklarida qanday bog'lamlar bor edi?", correct: "Neon bog'lam", wrongs: ["Qizil lenta", "Metall bilaguzuk", "Oq bog'lam"] },
+{ q: "Qizg'ich sochli ayol Erikaga nima deb baqirar edi?", correct: "Yana kech qolding deb", wrongs: ["Tez bo'l deb", "Nega bu yerdasan deb", "Yordam ber deb"] },
+{ q: "O'zimni hayvonot bog'ida qayerga kirmoqchi bo'lib qistalang qilayotgan odamday turar edim?", correct: "Filxonaga", wrongs: ["Sherlar xonasiga", "Maymunlar xonasiga", "Qushlar xonasiga"] },
+{ q: "Smena boshlig'i kim edi?", correct: "Qizil sochli ayol", wrongs: ["Erika", "Klaus", "Katta bojxona xodimi"] },
+{ q: "Yerga qo'ngan har bir samolyot uchishga yaroqli emas, biz nima qilamiz?", correct: "Tekshiramiz va parvoz uchun ruxsat beramiz yoki chetlatamiz", wrongs: ["Darhol ta'mirlaymiz", "Bekor qilamiz", "Boshqa samolyot bilan almashtiramiz"] },
+{ q: "Jurnaldagi nosozliklarni Erika qaysi jurnalga yozadi?", correct: "Bort jurnaliga", wrongs: ["Ish jurnaliga", "Texnik hisobotga", "Kundalik daftarga"] },
+{ q: "Erika asosan samolyotdagi nimalarni tekshiradi?", correct: "Qanotlar qopqoqlarining yopiqligiga", wrongs: ["Dvigatel haroratiga", "Yoqilg'i miqdoriga", "G'ildiraklar bosimiga"] },
+{ q: "Samolyot g'ildiraklari qayeriga kelib turadi?", correct: "Belimgacha", wrongs: ["Tizzamgacha", "Bo'yimgacha", "Yelkamgacha"] },
+{ q: "Dvigatel parragini almashtirish lozim bo'lsa, vaqt bo'lmasa kimni chaqiraman?", correct: "Injenerni", wrongs: ["Boshliqni", "Klausni", "Mexanikni yordamchisini"] },
+{ q: "Samolyotni tekshirib bo'lgach, Erika nimalarni tekshiradi?", correct: "Asboblarni", wrongs: ["Yoqilg'ini", "Bagajni", "Yo'lovchilarni"] },
+{ q: "Samolyotning oyoqlarida nechta g'ildirak bo'ladi?", correct: "4", wrongs: ["2", "6", "3"] },
+{ q: "Erika kulrang kombinezon kiygan yigit bilan tushadi, u yigitning ismi kim?", correct: "Klaus", wrongs: ["Kars", "Rolf", "Hans"] },
+{ q: "Klaus necha yil ishlagan bo'lsa ham 1 marta ham hato qilmagan?", correct: "25 yil", wrongs: ["15 yil", "20 yil", "30 yil"] },
+{ q: "Erika nimanidir bilmasa nimaga qarash imkoniyati mavjud?", correct: "Qo'llanmaga", wrongs: ["Kitobga", "Internetga", "Boshliqqa"] },
+{ q: "Men kimga o'xshashga havas qilaman?", correct: "Erikaga", wrongs: ["Lozeга", "Klemensга", "Klausga"] },
+{ q: "Ko'zga ko'rinmas va o'zimni yo'qotib qo'yishimga sabab nima?", correct: "Bo'ri", wrongs: ["Zulmat", "Qo'rquv", "Yolg'izlik"] },
+{ q: "Men nimani Erikaning qo'llanmasi bilan taqqoslayman va solishtiraman?", correct: "Ensiklopediyamni", wrongs: ["Bort jurnalimni", "Kundaligimni", "Xaritamni"] },
+{ q: "Universal ham, umumiy ham emas, unda bo'shliqlar yo'q va noma'lum narsalar ko'p — bu nima?", correct: "Ensiklopediyada", wrongs: ["Bort jurnalida", "Qo'llanmada", "Kundalikda"] },
+{ q: "Ensiklopediyada samolyotlar haqida hech narsa yo'q, ammo nimalar haqida bor?", correct: "Chox, gofrokarton, bo'ri haqida", wrongs: ["Aeroport haqida", "Bojxona haqida", "Fabrika haqida"] },
+{ q: "Kuzatuvchilar kuzatuv zalidan ko'ra panjara ortida ko'p to'planishadi, nega?", correct: "Chunki u yerda samolyotlar yaxshi ko'rinadi", wrongs: ["Chunki u yerda soya bor", "Chunki u yerda joy tekin", "Chunki u yerda shovqin kam"] },
+{ q: "Kuzatuvchilarning bosh kiyimlari bor, egnilarida asosan qanaqa rangli shamolni to'sadigan jaketlar bor?", correct: "Sariq rangli", wrongs: ["Ko'k rangli", "Qizil rangli", "Yashil rangli"] },
+{ q: "Kuzatuvchilar bu yerga nimalari bilan kelishadi?", correct: "Narvon yoki yig'iluvchi kursi bilan", wrongs: ["Durbin va soyabon bilan", "Xarita va kompas bilan", "Palatka bilan"] },
+{ q: "Kuzatuvchilar ko'pincha nimani ko'tarib olishadi?", correct: "Fotoapparat va binokl", wrongs: ["Kitob va daftar", "Radio va telefon", "Xarita va qalam"] },
+{ q: "Osmondan tushgan odamni qayerdan deb taxmin qilinadi, lekin aniq gap yo'q?", correct: "Kamerun", wrongs: ["Namibiya", "Lansarote", "Korsika"] },
+{ q: "Yo'lovchilar Lozeni nima uchun samolyotni behatar qo'ndirgan yo'lovchiday kutib olishadi?", correct: "Avtobus oldidagi kaptarni uchirib yuborgani uchun", wrongs: ["Yo'lni to'g'ri topgani uchun", "Bagajlarni topshirgani uchun", "Kechikmagani uchun"] },
+{ q: "Kaptarlarga qarshi nimani qo'llayotgan edilar?", correct: "Robot qushlarni", wrongs: ["Tovushli signalni", "To'rlarni", "Elektr to'siqlarni"] },
+{ q: "Kaptarlarga qarshi robot qushlarni qancha vaqtdan beri qo'llashar edi?", correct: "1 haftadan beri", wrongs: ["1 oydan beri", "1 kundan beri", "2 haftadan beri"] },
+{ q: "Qazilgan chuqurni suv bilan to'ldirib nima qilishim mumkinligini o'ylar edim?", correct: "Zog'ora baliq boqishim va nilufar gul o'stirishim mumkin", wrongs: ["Hovuz qurishim mumkin", "Suv omborga aylantirishim mumkin", "Faqat suv to'plashim mumkin"] },
+{ q: "Men ko'pincha kimlar bilan vaqt o'tkazar edim?", correct: "Klemens va Loze bilan", wrongs: ["Erika va Klaus bilan", "Boshliq va oshpaz bilan", "Kars va Beatris bilan"] },
+{ q: "Klemens qayerni sayyohlar uchun diqqat markaziga aylantirayotgan edi?", correct: "Fabrikani", wrongs: ["Aeroportni", "Qishloqni", "Orolni"] },
+{ q: "Katta bo'riga nima deb nom qo'ygan edi?", correct: "Maxluq", wrongs: ["Bahodir", "Yovuz", "Yirtqich"] },
+{ q: "Sayyohlarga bo'ri haqida aytib berilganda, ular qo'rqqanidan bir-birini quchoqlab olishadi, keyin biz ularni kuzatish xonasida nima bilan mehmon qilamiz?", correct: "Qahva bilan", wrongs: ["Choy bilan", "Suv bilan", "Shirinlik bilan"] },
+{ q: "Kuzatuv xonasida stul ustida boshliqning kitob holida chop etilgan nimalari yotar edi?", correct: "Kitoblari xotiralari", wrongs: ["Ish hujjatlari", "Fotosuratlari", "Xaritalari"] },
+{ q: "Hamma Lozeдан avval kim bo'lmaganmisiz deb savol berishadi?", correct: "Rassom yoki kosmonavt", wrongs: ["Uchuvchi yoki shifokor", "Muhandis yoki o'qituvchi", "Aktyor yoki musiqachi"] },
+
+];
+
+const ayats = [
+    { text: "Robbing seni tark qilmadi va g'azab ham qilmadi.", meta: "Zuho 93:3" },
+    { text: "Albatta bir qiyinchilik bilan osonchilik bordir.", meta: "Sharh 94:5" },
+    { text: "Yaratgan Robbing nomi bilan o'qi!", meta: "Alaq 96:1" },
+    { text: "O'qi, Robbing karamlilar karamlisidir.", meta: "Alaq 96:3" },
+    { text: "Va tezda Robbing senga ato qilur va sen rozi bo'lursan.", meta: "Zuho 93:5" },
+    { text: "Ammo kimki ato bersa va taqvo qilsa, va yaxshiliklarni tasdiq qilsa, bas, Biz uni osonga muyassar etamiz.", meta: "Layl 92:5-7" },
+    { text: "Albatta hidoyatga boshlash Bizning zimmamizdadir.", meta: "Layl 92:12" },
+    { text: "Va albatta tezda rozi bo'ladir.", meta: "Layl 92:21" },
+    { text: "Seni oson yo'lga muyassar etamiz.", meta: "A'lo 87:8" },
+    { text: "Bas, kim xohlasa Parvardigori tomon qaytadigan yo'lni tutar.", meta: "Naba 78:39" },
+    { text: "Albatta Biz senga ochiq g'alaba berdik.", meta: "Fath 48:1" }
+];
+
+let activeQuiz = [];
+let currentQ = 0, score = 0, answered = 0;
+
+function shuffle(array) {
+    return array.sort(() => Math.random() - 0.5);
+}
+
+function buildStars() {
+    const container = document.getElementById('stars');
+    container.innerHTML = '';
+    const count = 100; // Yulduzlar zichligi oshirildi
+    for (let i = 0; i < count; i++) {
+        const s = document.createElement('div');
+        s.className = 'star';
+        s.style.left = Math.random() * 100 + '%';
+        s.style.top = Math.random() * 100 + '%';
+        const size = (Math.random() * 2 + 1).toFixed(1);
+        s.style.width = size + 'px';
+        s.style.height = size + 'px';
+        s.style.animationDelay = (Math.random() * 2.5).toFixed(2) + 's';
+        s.style.animationDuration = (1.5 + Math.random() * 2).toFixed(2) + 's';
+        container.appendChild(s);
+    }
+}
+
+let rangeStart = null;
+let numButtons = [];
+
+window.onload = function() {
+    const grid = document.getElementById('numberGrid');
+    for (let i = 1; i <= quizData.length; i++) {
+        const btn = document.createElement('button');
+        btn.className = 'num-btn';
+        btn.innerText = i;
+        btn.onclick = () => pickNumber(i, btn);
+        grid.appendChild(btn);
+        numButtons.push(btn);
+    }
+    buildStars();
+    
+    const randomIdx = Math.floor(Math.random() * ayats.length);
+    const selectedAyat = ayats[randomIdx];
+    document.getElementById('random-ayat').innerHTML = `
+        <div class="quran-box">
+            <span class="quran-ayat-text">"${selectedAyat.text}"</span>
+            <span class="quran-meta">${selectedAyat.meta}</span>
+        </div>
+    `;
+};
+
+function pickNumber(num, btnEl) {
+    const info = document.getElementById('range-info');
+
+    if (rangeStart === null) {
+        rangeStart = num;
+        btnEl.classList.add('picked');
+        info.innerText = `Boshlang'ich: ${num}. Endi oxirgi raqamni tanlang`;
+    } else {
+        let start = rangeStart;
+        let end = num;
+        if (end < start) { const t = start; start = end; end = t; }
+        btnEl.classList.add('picked');
+        info.innerText = `Tanlandi: ${start} - ${end}`;
+        setTimeout(() => startWithRange(start, end), 400);
+    }
+}
+
+function startWithRange(start, end) {
+    activeQuiz = quizData.slice(start - 1, end);
+    document.getElementById('select-screen').style.display = 'none';
+    document.getElementById('mode-screen').style.display = 'flex';
+}
+
+let quizMode = 'quiz';
+
+function chooseMode(mode) {
+    quizMode = mode;
+    if (mode === 'quiz-aralash' || mode === 'yopiq-aralash') {
+        activeQuiz = shuffle([...activeQuiz]);
+    }
+    document.getElementById('mode-screen').style.display = 'none';
+    document.getElementById('intro-screen').style.display = 'flex';
+    document.getElementById('intro-screen').style.opacity = '1';
+    startTimer();
+}
+
+function startTimer() {
+    let count = 3;
+    let disp = document.getElementById("countdown");
+    disp.innerText = count;
+    let timer = setInterval(() => {
+        count--;
+        if (count > 0) {
+            disp.innerText = count;
+        } else if (count === 0) {
+            disp.innerText = "Boshladik!";
+        } else {
+            clearInterval(timer);
+            document.getElementById("intro-screen").style.opacity = "0";
+            setTimeout(() => {
+                document.getElementById("intro-screen").style.display = "none";
+                document.getElementById("quiz").style.display = "block";
+                loadQ();
+            }, 800);
+        }
+    }, 1000);
+}
+
+function getOptionsFor(qData) {
+    return shuffle([qData.correct, ...qData.wrongs]);
+}
+
+function loadQ() {
+    const qData = activeQuiz[currentQ];
+    document.getElementById('question').innerText = `${currentQ + 1}/${activeQuiz.length}. ${qData.q}`;
+    const optDiv = document.getElementById('options');
+    optDiv.innerHTML = '';
+
+    if (quizMode === 'yopiq' || quizMode === 'yopiq-aralash') {
+        loadClosedQ(qData, optDiv);
+    } else {
+        loadMultipleChoiceQ(qData, optDiv);
+    }
+}
+
+function loadMultipleChoiceQ(qData, optDiv) {
+    let shuffledOptions = getOptionsFor(qData);
+
+    shuffledOptions.forEach((opt) => {
+        const btn = document.createElement('div');
+        btn.className = 'option';
+        btn.innerText = opt;
+        btn.onclick = () => check(opt, btn, qData.correct);
+        optDiv.appendChild(btn);
+    });
+}
+
+function loadClosedQ(qData, optDiv) {
+    const input = document.createElement('input');
+    input.type = 'text';
+    input.className = 'closed-input';
+    input.id = 'closed-answer';
+    input.placeholder = 'Javob yozing...';
+    input.onkeypress = (e) => { if (e.key === 'Enter') checkClosed(qData); };
+
+    const checkBtn = document.createElement('button');
+    checkBtn.className = 'btn-check';
+    checkBtn.innerText = 'Tekshirish';
+    checkBtn.onclick = () => checkClosed(qData);
+
+    const resultDiv = document.createElement('div');
+    resultDiv.id = 'closed-result';
+
+    optDiv.appendChild(input);
+    optDiv.appendChild(checkBtn);
+    optDiv.appendChild(resultDiv);
+
+    input.focus();
+}
+
+function checkClosed(qData) {
+    const inputEl = document.getElementById('closed-answer');
+    const resultDiv = document.getElementById('closed-result');
+    const user = inputEl.value.toLowerCase().trim();
+    const correct = qData.correct.toLowerCase().trim();
+
+    answered++;
+    inputEl.disabled = true;
+    document.querySelector('.btn-check').disabled = true;
+
+    if (user === correct) {
+        resultDiv.innerHTML = '<b style="color:#00ff99;">✅ To\'g\'ri</b>';
+        score++;
+    } else {
+        resultDiv.innerHTML = '<b style="color:#ff4444;">❌ Noto\'g\'ri.</b><br> Javob: ' + qData.correct;
+    }
+
+    setTimeout(() => {
+        currentQ++;
+        if (currentQ < activeQuiz.length) loadQ();
+        else finishQuiz();
+    }, 2000);
+}
+
+function check(selected, element, correct) {
+    const options = element.parentElement.querySelectorAll('.option');
+    options.forEach(opt => opt.style.pointerEvents = 'none');
+    answered++;
+
+    if (selected === correct) {
+        element.classList.add('correct');
+        score++;
+    } else {
+        element.classList.add('wrong');
+        options.forEach(opt => {
+            if (opt.innerText === correct) opt.classList.add('correct');
+        });
+    }
+    setTimeout(() => {
+        currentQ++;
+        if (currentQ < activeQuiz.length) loadQ();
+        else finishQuiz();
+    }, 1000);
+}
+
+function finishQuiz() {
+    let wrong = answered - score;
+    document.getElementById('quiz').innerHTML = `
+        <h2>Natijalar</h2>
+        <div style="line-height: 2.2; font-size: 19px;">
+            Jami savollar: <b>${activeQuiz.length} ta</b><br>
+            To'g'ri javoblar: <span style="color:#00ff99;">${score} ta</span><br>
+            Xato javoblar: <span style="color:#ff4d4d;">${wrong} ta</span>
+        </div>
+        <button class="btn-finish" onclick="location.reload()">Qaytadan boshlash</button>
+    `;
+}
+</script>
+</body>
+</html>
