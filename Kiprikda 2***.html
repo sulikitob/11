@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>2***</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        html, body {
+            width: 100%;
+            height: 100%;
+            overflow-x: hidden;
+        }
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #050505, #121212, #1d1d1d);
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            min-height: 100vh;
+            min-height: 100dvh;
+        }
+
+        /* ===== Raqam tanlash ekrani ===== */
+        #select-screen {
+            width: 100%; max-width: 700px;
+            display: flex; flex-direction: column; align-items: center;
+            gap: 25px; padding: 20px 0;
+        }
+        #select-screen h1 {
+            font-size: 26px; color: #00ff99; text-align: center;
+        }
+        #select-screen p { color: #999; font-size: 14px; text-align: center; }
+        .number-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(55px, 1fr));
+            gap: 10px;
+            width: 100%;
+            max-height: 60vh;
+            overflow-y: auto;
+            padding: 10px;
+            background: #111;
+            border-radius: 20px;
+            box-shadow: 0 0 25px rgba(0,255,150,0.15);
+        }
+        .number-grid::-webkit-scrollbar { width: 8px; }
+        .number-grid::-webkit-scrollbar-thumb { background: #00ff99; border-radius: 10px; }
+        .num-btn {
+            background: #1b1b1b;
+            border: 2px solid #00ff99;
+            color: #00ff99;
+            border-radius: 12px;
+            padding: 12px 0;
+            font-size: 15px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.25s;
+            text-shadow: 0 0 8px rgba(0,255,153,0.6);
+        }
+        .num-btn:hover {
+            background: #00ff99;
+            color: #050505;
+            box-shadow: 0 0 20px rgba(0,255,150,0.8);
+            transform: scale(1.08);
+        }
+        .num-btn.picked {
+            background: #ff9900;
+            border-color: #ff9900;
+            color: #050505;
+            box-shadow: 0 0 20px rgba(255,153,0,0.8);
+        }
+        #range-info {
+            color: #ff9900; font-size: 15px; font-weight: bold; min-height: 22px;
+        }
+
+        /* ===== Funksiya tanlash ekrani ===== */
+            #mode-screen {
+            display: none;
+            width: 100%; max-width: 700px;
+            flex-direction: column; align-items: center;
+            gap: 25px; padding: 20px 0;
+        }
+
+        #mode-screen h1 {
+            font-size: 24px; color: #00ff99; text-align: center;
+            margin: 5px 0;
+        }
+
+        .mode-wrapper {
+            width: 100%;
+            background: rgba(5, 5, 5, 0.4);
+            border-radius: 20px;
+            padding: 25px;
+
+        }
+        .mode-grid {
+            width: 100%;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+        .mode-card {
+            background: rgba(27, 27, 27, 0.85);
+            border-radius: 20px;
+            padding: 30px 15px;
+            text-align: center;
+            transition: 0.4s;
+            color: white;
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            backdrop-filter: blur(3px);
+        }
+        .mode-card::before {
+            content: ""; position: absolute; width: 200%; height: 200%;
+            background: linear-gradient(45deg,transparent,#00ff99,transparent);
+            top: -150%; left: -150%; transform: rotate(25deg); transition: 0.7s;
+        }
+        .mode-card:hover::before { top: 100%; left: 100%; }
+        .mode-card:hover { transform: translateY(-5px) scale(1.02); border-color: #ffd700; box-shadow: 0 0 15px rgba(255,215,0,0.2); }
+@media(max-width:600px){
+    .mode-grid{ grid-template-columns: repeat(2, 1fr); }
+    .mode-icon-top{ display: flex; justify-content: center; }
+    .mode-icon-top img{ width: 85%; max-width: 220px; }
+}
+        /* ===== Intro (countdown) ekran ===== */
+        #intro-screen {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            height: 100dvh;
+            background: #050505; display: none; flex-direction: column;
+            justify-content: center; align-items: center; z-index: 5;
+            transition: opacity 0.8s ease;
+        }
+        #stars {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none; z-index: 0; overflow: hidden;
+        }
+        #select-screen, #mode-screen, .quiz-box, #intro-screen .content-box, #intro-screen #countdown {
+            position: relative; z-index: 2;
+        }
+        .star {
+            position: absolute;
+            width: 2px; height: 2px;
+            background: #fff;
+            border-radius: 50%;
+            animation: twinkle 2.5s infinite ease-in-out;
+        }
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.15; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.6); }
+        }
+        .content-box { text-align: center; margin-bottom: 50px; z-index: 1; position: relative; padding: 0 20px; }
+        #countdown {
+            position: absolute; bottom: 50px;
+            font-size: 80px; color: #00ff99; font-weight: bold;
+            animation: pulse 1s infinite;
+            z-index: 1;
+        }
+        @keyframes pulse {
+            0% { transform: scale(0.9); opacity: 0.5; }
+            50% { transform: scale(1); opacity: 1; }
+            100% { transform: scale(0.9); opacity: 0.5; }
+        }
+
+        .quran-box {
+            display: block;
+            margin: 25px auto 0 auto;
+            padding: 20px 30px;
+            max-width: 550px;
+            border: 4px double #ffd700;
+            background: rgba(20, 16, 5, 0.6);
+            text-align: center;
+        }
+        .quran-ayat-text {
+            font-size: 18px;
+            line-height: 1.6;
+            color: #f0f0f0;
+            margin-bottom: 15px;
+            display: block;
+        }
+        .quran-meta {
+            display: inline-block;
+            font-size: 15px;
+            font-weight: bold;
+            color: #ffd700;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            border-top: 1px solid rgba(255, 215, 0, 0.3);
+            padding-top: 8px;
+            width: 100%;
+        }
+
+        /* ===== Quiz ekrani ===== */
+        .quiz-box {
+            display: none;
+            width: 100%; max-width: 600px; background: #1b1b1b; padding: 30px;
+            border-radius: 25px; box-shadow: 0 0 35px rgba(0, 255, 150, 0.1);
+            text-align: center; margin-top: 50px;
+        }
+        h2 { color: #00ff99; margin-bottom: 20px; font-size: 22px; }
+        .option {
+            display: block; width: 100%; padding: 15px; margin: 10px 0;
+            background: #2a2a2a; border: 2px solid #333; border-radius: 15px;
+            cursor: pointer; transition: 0.3s; text-align: left;
+        }
+        .option:hover { border-color: #00ff99; }
+        .correct {
+            background: #00ff99 !important; color: black; font-weight: bold;
+            animation: bubbleEffect 0.5s ease-out;
+        }
+        @keyframes bubbleEffect {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.03); }
+            100% { transform: scale(1); }
+        }
+        .wrong { background: #ff4d4d !important; color: white; }
+        .btn-finish {
+            width: 100%; padding: 15px; background: transparent; border: 2px solid #00ff99;
+            color: #00ff99; border-radius: 15px; cursor: pointer; margin-top: 20px;
+            font-weight: bold; transition: 0.3s;
+        }
+        .btn-finish:hover { background: #00ff99; color: black; }
+
+        .closed-input {
+            width: 100%; padding: 15px; margin-top: 10px; border: 2px solid #333;
+            border-radius: 12px; font-size: 17px; outline: none; background: #2a2a2a;
+            color: white;
+        }
+        .closed-input:focus { border-color: #00ff99; }
+        .btn-check {
+            width: 100%; padding: 15px; margin-top: 15px; border: 2px solid #00ff99; border-radius: 15px;
+            background: transparent; color: #00ff99; font-weight: bold; cursor: pointer; font-size: 17px;
+            transition: 0.3s;
+        }
+        .btn-check:hover { background: #00ff99; color: black; }
+        #closed-result { margin-top: 15px; font-size: 18px; min-height: 30px; text-align: center; }
+
+        /* ===== Mobil to'liq ekran tuzatishlari ===== */
+        @media (max-width: 480px) {
+            body { padding: 12px; }
+            #select-screen h1 { font-size: 21px; }
+            #mode-screen h1 { font-size: 19px; }
+            .mode-card { padding: 22px 10px; font-size: 14px; }
+            .quiz-box { padding: 20px 16px; margin-top: 30px; }
+            h2 { font-size: 18px; }
+            .content-box h1 { font-size: 24px !important; }
+            .quran-ayat-text { font-size: 15px; }
+            #countdown { font-size: 60px; bottom: 35px; }
+            .number-grid { grid-template-columns: repeat(auto-fill, minmax(48px, 1fr)); }
+        }
+    </style>
+</head>
+<body>
+
+<div id="stars"></div>
+
+<div id="select-screen">
+    <h1>🌙 2***</h1>
+    <p>Savollar sonini belgilang</p>
+    <div id="range-info">Boshlang'ich raqamni tanlang</div>
+    <div class="number-grid" id="numberGrid"></div>
+</div>
+
+<div id="mode-screen">
+    <h1>Qaysi funksiyani xohlaysiz?</h1>
+    <div class="mode-wrapper">
+        <div class="mode-grid">
+            <div class="mode-card" onclick="chooseMode('quiz')">Quiz testlar</div>
+            <div class="mode-card" onclick="chooseMode('quiz-aralash')">Quiz aralash</div>
+            <div class="mode-card" onclick="chooseMode('yopiq')">Yopiq savol-javob</div>
+            <div class="mode-card" onclick="chooseMode('yopiq-aralash')">Yopiq savol-javob aralash</div>
+        </div>
+    </div>
+</div>
+
+<div id="intro-screen">
+    <div class="content-box">
+        <h1 style="color:#00ff99; font-size: 32px;">🌙 2***</h1>
+        <div id="random-ayat"></div>
+    </div>
+    <div id="countdown">3</div>
+</div>
+
+<div class="quiz-box" id="quiz">
+    <h2 id="question">Yuklanmoqda...</h2>
+    <div id="options"></div>
+    <button class="btn-finish" onclick="finishQuiz()">Testni yakunlash</button>
+</div>
+
+<script>
+
+   const quizData = [
+
+  {q: "Rayon kotibi. Oʻtgan yili Qahramonlik unvoniga sazovor boʻlib, \"Oltin yulduz\" taqqan fargʻonaliklarning biri kim edi?", a: ["Xorunboy Ermatov", "Anvar Eshonov", "Abdulla Qahhor", "Umarali"], correct: "Xorunboy Ermatov"},
+
+  {q: "Oʻzi juda shinavanda odam. Sanʼat-adabiyot ahllarini boshiga koʻtaradi. Kelganimizni eshitib Adhamga, mehnatkashlarimiz bilan bir uchrashuv qilsak, qandoq boʻlarkin, degan ekan. Bu kim edi?", a: ["Xorun Ermatov", "Umarali", "G'upra", "Anvar Eshonov"], correct: "Xorun Ermatov"},
+
+  {q: "Oʻlmas bilan ikkovimiz Anvarjon yetovida katta yoʻl yoqasidagi hovlilardan bir-ikkitasini koʻrgani yoʻlga chiqdik. Kim yozmoqchi boʻlgan qissa ishtirokchilaridan ikkitasiga hovli koʻrishimiz kerak edi?", a: ["Oʻlmas", "Umarali", "G'upra", "Anvar"], correct: "Oʻlmas"},
+
+  {q: "Ketma-ket sakkizta hovli koʻrdik, kimlar plan qilgani kelishgan deb oʻylab, xotin-xalaj orqamizdan ergashib yuribdi. Bizni kim deb oʻylashgan edi?", a: ["Gazchilar", "Militsiyachilar", "Sartaroshlar", "Amaldorlar"], correct: "Gazchilar"},
+
+  {q: "Koʻrganlarimizdan nechtasi xuddi biz qidirgan hovli edi?", a: ["2", "3", "4", "5"], correct: "2"},
+
+  {q: "U saranjom-sarishta, fayzligina, ozoda edi. Uzum novdalari baland valishga chiroyli qilib taralgan. Gʻoʻra tugib qolgan \"poshshoyi\" oʻrigi shoxida ikkita bedana qovoq osilgan bu hovli kimniki edi?", a: ["Gulchehraning", "Umaralining", "Rononing", "G'upraning"], correct: "Gulchehraning"},
+
+  {q: "Ikkita hovlidan keyin yana bitta shunaqa fayzli, ozoda, saranjom-sarishta hovliga kirdik. Oshxona devorida quyonni quvlab ketayotgan boʻri suratiga koʻzimiz tushdi. Surat tagiga nima deb yozib qoʻyilgan edi?", a: ["Ну, погоди!", "Tom va Jerri", "Qo'y va bo'ri", "Bo'rining ovi"], correct: "Ну, погоди!"},
+
+  {q: "Hovli etagida pushtasiga sarimsoq-piyoz qadalgan qulupnay arigʻiga galife shim kiygan oʻrta yashar bir kishi suv ochyapti. U kim, dedi Oʻlmas?", a: ["Abdullaning tog'asi", "Umaralining akasi", "G'upraning otasi", "Rayon kotibi"], correct: "Abdullaning tog'asi"},
+
+  {q: "Ayvon oʻrtasidagi kattakon stol ustida orqa qopqogʻi ochilgan qanaqa nomli televizor turardi?", a: ["Rekord", "Elektronika", "Horizont", "Sokol"], correct: "Rekord"},
+
+  {q: "– Isitmangiz ancha baland, tinchroq joyda yotib, ukol olib, bir kungina davolansangiz otdek boʻlib ketasiz, – dedi keksa feldsher. U aytgan \"tinchroq joy\" qayer edi?", a: ["atlas kombinatining sihatgohi", "rayon kasalxonasi", "qishloq shifoxonasi", "farg'ona sanatoriysi"], correct: "atlas kombinatining sihatgohi"},
+
+  {q: "Qancha uxlaganimni bilmayman. Koʻzimni ochsam, tepamda kim turibdi?", a: ["Umarali", "O'lmas", "G'upra", "Anvar"], correct: "Umarali"},
+
+  {q: "Ochiqkoʻngil, birovga tirnoqcha ham ozor bermaydigan, ogʻzidan biron nojoʻya soʻz chiqmagan, oʻta odobli, madaniyatli bu olim yigitni qattiq hurmat qilardim, issiq gaplar boʻlsa, mendan oldin u sevinib ketardi. Ta'rif kim haqida?", a: ["Umarali", "O'lmas", "G'upra", "Abdulla Qahhor"], correct: "Umarali"},
+
+  {q: "Uni koʻrib chehram yorishgandek boʻldi. \"Odam taftini odam oladi\" deganlari shu boʻlsa kerak-da. Kimni koʻrib shunday boʻlgan edi?", a: ["Umaralini", "O'lmasni", "G'upraning", "Anvarni"], correct: "Umaralini"},
+
+  {q: "Sizlar ketdingizlaru men bechora yetim boladek mungʻayib qolaverdim. Sirtqi talabalarimga, hordiq kuni ham imtihon olmoqchiman, deganimda sevinib ketishdi. Toshkentga oʻtirib borgan moshina rusumi nima edi?", a: ["Jiguli", "Moskvich", "Volga", "Zaporojets"], correct: "Jiguli"},
+
+  {q: "Yuvuqsiz, irkit odam bilan koʻrishib qolsa, mehmonxonaga yugurib borib choʻmilib kelardi. Oʻpishib koʻrishadiganlardan qochib yurardi. Tirnogʻi oʻsib ketgan, boʻyni terlab, hadeb dastroʻmolini shilta qilib oʻtiradigan odam yonidan turib hovliga chiqib ketar, qaytishda boshqa odam yoniga kelib oʻtirardi. Ta'rif kim haqida?", a: ["Umarali", "O'lmas", "G'upra", "Anvar"], correct: "Umarali"},
+
+  {q: "Sizni menga xudo yetkazdi. Ertaga qayer markazida Oʻlmasning qissasi muhokamasi boʻladi?", a: ["Quva markazida", "Farg'ona markazida", "Yozyovon markazida", "Nishon markazida"], correct: "Quva markazida"},
+
+  {q: "Sizni menga xudo yetkazdi. Ertaga Quva markazida Oʻlmasning qaysi qissasi muhokamasi boʻladi?", a: ["Sevgim-sevgilim", "Ming bir jon", "Kecha va kunduz", "Oltin devor"], correct: "Sevgim-sevgilim"},
+
+  {q: "– Sizni menga xudo yetkazdi. Ertaga Quva markazida Oʻlmasning \"Sevgim-sevgilim\" qissasi muhokamasi boʻladi. Men bu ahvoldaman. Muhokamani oʻzingiz oʻtkazib berasiz, – dedim unga yalingandek. Kimga aytilgan edi bu gap?", a: ["Umaraliga", "O'lmasga", "Xorunboy akaga", "G'upraga"], correct: "Umaraliga"},
+
+  {q: "Indinga kim yozuvchi mehmonlarni bedana oviga olib chiqmoqchi? Toza havoda maza qilib bir aylanib kelasiz.", a: ["Xorunboy aka", "Umarali", "O'lmas", "Anvar"], correct: "Xorunboy aka"},
+
+  {q: "Bilaman. Kim bedana oviga bormaydi? Oʻq yeb tipirchilab jon berayotgan bedanalarni koʻrishga yuragi dosh berolmaydi.", a: ["Umarali", "O'lmas", "G'upra", "Xorunboy aka"], correct: "Umarali"},
+
+  {q: "U bolalik paytlarida uyda qoʻy soʻymoqchi boʻlsalar, uni qarindoshlarinikiga joʻnatib yuborardilar. Koʻrsa mutlaqo goʻsht yemay qoʻyadi, deb shunday qilishardi, hatto kalla-pochasigacha koʻz tushmaydigan joyga yashirib qoʻyardilar. Ta'rif kim haqida?", a: ["Umarali", "O'lmas", "G'upra", "Anvar"], correct: "Umarali"},
+
+  {q: "Shunaqa injiq odamlarning xotiniga oson tutib boʻlmaydi. Kuniga necha martalab dastroʻmol-u kiyimbosh almashtiradiganlarning xotini kir yuvishdan boʻshamaydi. Uning xotinidan, kelin, tirikchilik qalay, deb soʻrayman. – Dorilfununga qoʻshniligimiz ham boshimizga balo boʻldi. Likkalikka kirib kelaveradilar. Bitta befahm men bilan quchoqlashib koʻrishdi, deb choʻmilib kiyim almashtirib chiqib ketadilar, sal vaqt oʻtmay, qoʻli terlaydigan jurnallardan, radiodan, televizorlardan oladigan qalamhaqlarini non puli qilib oʻtiribman. Ta'rif kim haqida?", a: ["Umarali", "O'lmas", "G'upra", "Xorunboy"], correct: "Umarali"},
+
+  {q: "Kelin tagdor gapni tushunadigan qayerliklardan edi?", a: ["beshariqliklardan", "marg'ilonliklardan", "quvaliklardan", "nishonliklardan"], correct: "beshariqliklardan"},
+
+  {q: "...ham gapni topib-topib gapiradigan serhazil kishi ekan. Kim edi bu?", a: ["Bosh shifokor", "Feldsher", "Rayon kotibi", "O'qituvchi"], correct: "Bosh shifokor"},
+
+  {q: "Juda erka kasal chiqib qoldingiz. Nima yeb oʻralib yotsa tuzalib ketadigan narsaku bu. Bugun yotib bir uxlang, ertaga haydalasiz. Koʻryapsizmi, sizdan boshqa bitta ham \"bemor\" yoʻq. Bir oʻzingizga qozon-choʻmich, idish-tovoq qilib shuncha odamni ovora qilib oʻtiribmiz. Nima yesa tuzalib ketadi?", a: ["Serqalampir achchiq shoʻrva ichsa", "Issiq choy ichsa", "Asal bilan sut ichsa", "Ko'proq dam olsa"], correct: "Serqalampir achchiq shoʻrva ichsa"},
+
+  {q: "Uchrashuvda negadir kimlar kam edi? Adabiyot muallimalarining hammasi shu yerda.", a: ["erkak muallimlar", "ayol muallimlar", "o'quvchilar", "rahbarlar"], correct: "erkak muallimlar"},
+
+  {q: "Koʻrinishidan shaddodligi bilinib turgan bir qiz oʻrnidan turdi. U ogʻzidagi qoplama tilla tishni yaqinda qoʻydirgan boʻlsa kerak, boʻlar-boʻlmasga ogʻzini katta ochib kulardi. Kulib boʻlgandan keyin ham ogʻzi ochiqligicha qolardi. Uning oftob urib qoraygan yuzi, shamolda yorilib, qalinlashib ketgan edi. Bu qiz kim edi?", a: ["G'apura G'ufra", "Rono", "Gulchehra", "Mastura"], correct: "G'apura G'ufra"},
+
+  {q: "G'afura O'lmas Umarbekovga qanday savol beradi?", a: ["Toshkent ayollarining hammasi shunaqami yo bitta sizniki shunaqa chiqib qolganmi?", "Nega ayollar haqida shunday yozasiz?", "Bu qahramon rostdan ham bo'lganmi?", "Siz o'zingiz shunday odammisiz?"], correct: "Toshkent ayollarining hammasi shunaqami yo bitta sizniki shunaqa chiqib qolganmi?"},
+
+  {q: "Sevgim-sevgilim asarida qayerda Oypopuk degan qizni sevib qolganligi haqida aytiladi?", a: ["Yakkachinorda", "Marg'ilonda", "Quvada", "Nishonda"], correct: "Yakkachinorda"},
+
+  {q: "\"Oqsoqol\" qoʻlini koʻtarib gʻovurni bosdi. U kim edi? Shaddodligi uchun uni \"oqsoqol\" derdilar. Hamon ogʻzini ochib turgan qizga qaradi.", a: ["kolxoz raisining madaniy ishlar boʻyicha birinchi oʻrinbosari", "rayon kotibi", "maktab direktori", "feldsher"], correct: "kolxoz raisining madaniy ishlar boʻyicha birinchi oʻrinbosari"},
+
+  {q: "O'lmas Umarbekov kim aytganiday, \"ertaga qichishadigan joyini bugun qashlab qoʻyadiganlardan\" deb aytgan edi?", a: ["Abdulla Qahhor", "Oybek", "G'afur G'ulom", "Cho'lpon"], correct: "Abdulla Qahhor"},
+
+  {q: "G'apuraning qaysi gapidan keyin oʻtirganlar birdan unga qiziqib qaradilar?", a: ["Yozuvchilar nima uchun shafqatsiz, rahmsiz, qahri qattiq boʻladi degan gapidan", "Adabiyot nima uchun kerak degan gapidan", "Kitob o'qish foydami degan gapidan", "O'zi yozuvchi bo'lishni xohlagani haqidagi gapidan"], correct: "Yozuvchilar nima uchun shafqatsiz, rahmsiz, qahri qattiq"},
+
+  {q: "\"Oʻtkan kunlar\"dagi Kumushbibi, \"Boy ila xizmatchi\"dagi Jamilani, \"Qutlugʻ qon\"dagi Yoʻlchini, \"Sevgim-sevgilim\"dagi Oypopukni, Ufqdagi Tursunboyga nima boʻldi? Uni kim oʻldirdi? G'apura bu savolni nega berdi?", a: ["Albatta, yozuvchi oʻldirgan, shu uchun", "Ular urushda halok bo'lgan", "Taqdir shunday hukm qilgan", "Ular haqiqatda yashagan odamlar edi"], correct: "Albatta, yozuvchi oʻldirgan, shu uchun"},
+
+  {q: "G'afuraga... Asarni qayerdan olib o'qiding, deganda \"Yozyovonimizda toʻqqizta odamda bu kitobning qoʻlda koʻchirilgan nusxasi bor. Shulardan bittasini oʻqidim-da!\" deydi. Qaysi asar haqida gap ketyapdi?", a: ["Kecha va Kunduz", "O'tkan kunlar", "Sevgim-sevgilim", "Ming bir jon"], correct: "Kecha va Kunduz"},
+
+  {q: "Qaysi asarlardan bittasidayam odam o'lmaydi, \"Arshin mol olon\" kabi murod-maqsadlariga yetadi?", a: ["Oltin devor va kelinlar qozg'oloni", "Kecha va kunduz", "O'tkan kunlar", "Sevgim-sevgilim"], correct: "Oltin devor va kelinlar qozg'oloni"},
+
+  {q: "Qizgina ishlab turib kechki maktabni \"oltin medal\" bilan tugatibdi. Adabiyotning qonun-qoidalarini mutlaqo bilmaydi. Buni unga tushuntiradigan odamning oʻzi yoʻq. Oʻzicha toʻgʻri-notoʻgʻri xulosalar chiqarib yuribdi. Ta'rif kim haqida?", a: ["G'upra haqida", "Rono haqida", "Gulchehra haqida", "Mastura haqida"], correct: "G'upra haqida"},
+
+  {q: "Qaysi taraflarda unchalik koʻp oʻqiydigan kitob \"jinnisi\" yoʻq, desa boʻladi? Qani endi unga G'upraga bir rahnamo topilsa, Toshkentga oʻqishga yuborsa.", a: ["Quva taraflarda", "Beshariq taraflarda", "Nishon taraflarda", "Marg'ilon taraflarda"], correct: "Quva taraflarda"},
+
+  {q: "Umarali yonida oʻtirgan Quvaning kotibi kimga shu fikrini aytgan edi, u oʻylanib qoldi. Yuzlarini oftob qoraytirib sopolga oʻxshatib qoʻygan, qir shamoli...", a: ["Ermatovga", "O'lmasga", "Xorunboy akaga", "G'upraga"], correct: "Ermatovga"},
+
+  {q: "G'upralar oilasi Qashqadaryoning qaysi rayonidan koʻchib kelgan?", a: ["Nishon", "Qarshi", "Kitob", "Shahrisabz"], correct: "Nishon"},
+
+  {q: "Otasi traktor ketida paxtaga dori sepib yurib oʻpkasini xasta qilib qoʻygan ekan. Bu oila vodiyga toza havo istab kelib qolgan edi. Oʻsha kezlarda Mark... Kim haqida gap ketyapti?", a: ["G'upra", "Umarali", "Rono", "Gulchehra"], correct: "G'upra"},
+
+  {q: "G'upraning nechta akasi bor?", a: ["2 ta", "1 ta", "3 ta", "4 ta"], correct: "2 ta"},
+
+  {q: "Bittasi Qoʻqonga qatnaydigan avtobusda haydovchi. Bittasi maishiy xizmat kombinatida raykomlarga, ispolkomlarga zoʻr kostyumlar tikadi... Kimning akalari bular?", a: ["G'upraning", "Rononing", "Umaralining", "Gulchehraning"], correct: "G'upraning"},
+
+  {q: "G'upra kimning singlisi edi?", a: ["Ali partnoyning", "Xorunboy Ermatovning", "Umaralining", "Abdullaning"], correct: "Ali partnoyning"},
+
+  {q: "G'upra qanday maktabda o'qir edi?", a: ["Kechki", "Kunduzgi", "Internat", "Musiqa maktabida"], correct: "Kechki"},
+
+  {q: "Medalimni buvim dadam rahmatlining orden-medallari bilan sandiqda saqlardi. Noinsof akam buvimni aldab, medalimni olib, xotiniga nima yasatib beripti?", a: ["Tish", "Uzuk", "Sirg'a", "Bilaguzuk"], correct: "Tish"},
+
+  {q: "Siz, \"akang senga Toshkentda kiyishingga bosh-oyoq kiyim tikib beradi\", deyapsiz. Agar akam birovga tekinga bitta nima qilib bersa, oʻsha kuni joni chiqib ketadi?", a: ["tugma qadab bersa", "yamoq solib bersa", "ip bersa", "ignani bersa"], correct: "tugma qadab bersa"},
+
+  {q: "Buvim kelin boʻlib tushganda katta acham \"yuz ochdi\" kuni \"koʻrmana\"ga nima bergan ekan? Shuni sandiqdan olib menga berdi.", a: ["tilla toʻgʻnogʻich", "tilla uzuk", "tilla sirg'a", "kumush bilaguzuk"], correct: "tilla toʻgʻnogʻich"},
+
+  {q: "Toʻgʻnogʻichni birpas tomosha qilib, keyin uni buvimga qaytib berdim. Bu toʻgʻnogʻich buvimga qaynonasidan esdalik. Necha yildan beri uni sira unutmasdan saqlab kelgan edi?", a: ["45", "35", "50", "40"], correct: "45"},
+
+  {q: "Qayerda zoʻr tish texnigi bor, deb eshitgan edim. Oʻshanga uch kun qatnab rasmona tillodan qoplama qoʻydirib keldim.", a: ["Marg'ilonda", "Quvada", "Andijonda", "Farg'onada"], correct: "Marg'ilonda"},
+
+  {q: "Necha yildan beri topgan pullarimning yarmidan koʻpini kassaga qoʻyardim?", a: ["5", "3", "7", "10"], correct: "5"},
+
+  {q: "G'upraning bitta apachasi sartaroshga shogird tushib yurgan tojik bola bilan qayerga qochib ketgan?", a: ["Dushanbega", "Samarqandga", "Buxoroga", "Xo'jandga"], correct: "Dushanbega"},
+
+  {q: "Bitta yangacham bolalar bogʻchasida murabbiy. Yana bitta yangacham yaqinda \"jijilagan\". Yaʼni boʻshangan. Hozir eshikda jiji boqib oʻtiripti. Buvim qayerda ekanini aytdi?", a: ["parranda fermasida", "uyida", "bog'chada", "fermer xo'jaligida"], correct: "parranda fermasida"},
+
+  {q: "\"Ming bir jon\" degan asarini oʻqiganmisiz? Oʻqimagan boʻlsanglar albatta topib oʻqinglar. Ana oʻladi, mana oʻladi deb kutishayotgan bemor eshikdan olib kirilgan oʻz tobutini derazadan koʻrgan, ayvonda uning joni uzilishini kutayotgan gʻassolni koʻrgan. Bu kimning asari edi?", a: ["Mastura Aliyevaning", "Oybekning", "Abdulla Qahhorning", "O'lmas Umarbekovning"], correct: "Mastura Aliyevaning"},
+
+  {q: "Qaysi asarning ham har bir soʻzini sinchiklab oʻqish kerak? Yozuvchi soʻz tagiga soʻz yashiradi. Oʻsha soʻzni topib oʻqish kerak. Oypopuk nega oʻzini... (qaysi asar haqida gap ketyapti)", a: ["Sevgim sevgilim", "Kecha va kunduz", "O'tkan kunlar", "Ming bir jon"], correct: "Sevgim sevgilim"},
+
+  {q: "Kim bilan olishib ham boʻlmaydi, bas kelib ham boʻlmaydi? Hatto parrandalarning ham urgʻochisi jonini tikib \"qonli jangga\" kiradi.", a: ["Ayol kishi bilan", "Erkak bilan", "Bolasi bilan", "Dushman bilan"], correct: "Ayol kishi bilan"},
+
+  {q: "...ham ana shunaqa shaddod, gapni bilib-bilib aytadigan, gʻururini yerga urmaydiganlardan edi. Kim edi bu?", a: ["Oqsoqol", "Umarali", "G'upra", "Rayon kotibi"], correct: "Oqsoqol"},
+
+  {q: "Bu kitobni kechalari bolishimning tagiga qoʻyib yotaman. Har uygʻonganimda olib silab-silab joyiga qoʻyaman. Shuni yozgan yigitni bir koʻrarmikanman, deb nolalar qilganman. Mana, nolishim xudoga yetib, u bilan roʻbaroʻ qilib qoʻydi. Bu gaplarni aytgan qiz kim edi?", a: ["Oʻlmasdan koʻz uzolmay uning qoshlariga mahliyo boʻlib oʻtirgan suzikko'z qiz", "Baqaloq qiz", "G'apura", "Rono"], correct: "Oʻlmasdan koʻz uzolmay uning qoshlariga mahliyo boʻlib oʻtirgan suzikko'z qiz"},
+
+  {q: "Bir baqaloq qiz oʻrnidan turdi. – Endi uni qoʻldan chiqazma. Mahkam ushla! Toʻyananing kattasi mendan sendan nima aylansin, deydi?", a: ["Qo'y", "Ho'kiz", "Toy", "Tuya"], correct: "Qo'y"},
+
+  {q: "Suzukkoʻz qiz nozlanib kimni \"eritmoqchi\" boʻldi? Kim Toshkentda ne-ne tam-tam qizlarning \"tuzogʻi\"dan omon chiqqan, bu masalada katta malaka orttirgan yigitlardan edi. Bu qizning nozu karashmalaridan ichida kulibgina oʻtirardi. Qiz uning oldiga kitob bilan ruchka qoʻydi.", a: ["O'lmas", "Umarali", "Xorunboy aka", "Anvar"], correct: "O'lmas"},
+
+  {q: "\"Shunga dastxat yozib bering. Iltimos, singlim demang...\" Qoʻy toʻyana qilmoqchi boʻlgan qiz gap qotdi: \"nima deb\" deb yozsinmi? Dedi. Yana kulgi, yana chapak boʻldi. Nima deb yozdi?", a: ["Sevgim-sevgilim, koʻzlarimning oq-u qora", "Sevgilim, umrbod unutilmaysan", "Sizga hurmat bilan", "Eng yaxshi tilaklarim bilan"], correct: "Sevgim-sevgilim, koʻzlarimning oq-u qora"},
+
+  {q: "\"Koʻp yozing, – dedi u, – yaxshilab yozing, menga qarab turib yozing.\" Bu gapni aytgan qizning ismi kim edi?", a: ["Rono", "Gulchehra", "Mastura", "G'upra"], correct: "Rono"},
+
+  {q: "Rononing nechta opachasi bor?", a: ["3 ta", "2 ta", "4 ta", "1 ta"], correct: "3 ta"},
+
+  {q: "\"Xudo xohlasa, tilla tish qoʻydirganimdan keyin Toshkentga boraman, koʻrishib qolarmiz.\" – \"Toshkentlik bechoralar umrida tilla tish koʻrmagan. Qoʻlingdan sudrab telestudiyaga opkirib ketadi. Oʻshaqda kim boʻlib qolib ketishing ham mumkin,\" – qizlarning kalaka qilib aytgan soʻzlarini ham \"Roʻnoʻ\" yaxshilikka yoʻydi. Nima boʻlib qolishi mumkin edi?", a: ["Diktor", "Artist", "O'qituvchi", "Jurnalist"], correct: "Diktor"},
+
+  {q: "\"Boʻlishi mumkin. Hayotda nimalar boʻlmaydi,\" – deb javob qildi ularga. Dastxat yozilgan kitobni olarkan birov eshitmaydigan qilib sekingina, har qanday erkakni eritib, \"uygʻotib\" yuboradigan gʻalati gʻamza bilan nima dedi?", a: ["Ikkalamiz birga suratga tushaylik", "Meni unutmang", "Yana kelib turing", "Xat yozib turaman"], correct: "Ikkalamiz birga suratga tushaylik"}
+];
+ 
+const ayats = [
+    { text: "Robbing seni tark qilmadi va g'azab ham qilmadi.", meta: "Zuho 93:3" },
+    { text: "Albatta bir qiyinchilik bilan osonchilik bordir.", meta: "Sharh 94:5" },
+    { text: "Yaratgan Robbing nomi bilan o'qi!", meta: "Alaq 96:1" },
+    { text: "O'qi, Robbing karamlilar karamlisidir.", meta: "Alaq 96:3" },
+    { text: "Va tezda Robbing senga ato qilur va sen rozi bo'lursan.", meta: "Zuho 93:5" },
+    { text: "Ammo kimki ato bersa va taqvo qilsa, va yaxshiliklarni tasdiq qilsa, bas, Biz uni osonga muyassar etamiz.", meta: "Layl 92:5-7" },
+    { text: "Albatta hidoyatga boshlash Bizning zimmamizdadir.", meta: "Layl 92:12" },
+    { text: "Va albatta tezda rozi bo'ladir.", meta: "Layl 92:21" },
+    { text: "Seni oson yo'lga muyassar etamiz.", meta: "A'lo 87:8" },
+    { text: "Bas, kim xohlasa Parvardigori tomon qaytadigan yo'lni tutar.", meta: "Naba 78:39" },
+    { text: "Albatta Biz senga ochiq g'alaba berdik.", meta: "Fath 48:1" }
+];
+
+let activeQuiz = [];
+let currentQ = 0, score = 0, answered = 0;
+
+function shuffle(array) {
+    return array.slice().sort(() => Math.random() - 0.5);
+}
+
+function buildStars() {
+    const container = document.getElementById('stars');
+    container.innerHTML = '';
+    const count = 100;
+    for (let i = 0; i < count; i++) {
+        const s = document.createElement('div');
+        s.className = 'star';
+        s.style.left = Math.random() * 100 + '%';
+        s.style.top = Math.random() * 100 + '%';
+        const size = (Math.random() * 2 + 1).toFixed(1);
+        s.style.width = size + 'px';
+        s.style.height = size + 'px';
+        s.style.animationDelay = (Math.random() * 2.5).toFixed(2) + 's';
+        s.style.animationDuration = (1.5 + Math.random() * 2).toFixed(2) + 's';
+        container.appendChild(s);
+    }
+}
+
+let rangeStart = null;
+let numButtons = [];
+
+window.onload = function() {
+    const grid = document.getElementById('numberGrid');
+    for (let i = 1; i <= quizData.length; i++) {
+        const btn = document.createElement('button');
+        btn.className = 'num-btn';
+        btn.innerText = i;
+        btn.onclick = () => pickNumber(i, btn);
+        grid.appendChild(btn);
+        numButtons.push(btn);
+    }
+    buildStars();
+
+    const randomIdx = Math.floor(Math.random() * ayats.length);
+    const selectedAyat = ayats[randomIdx];
+    document.getElementById('random-ayat').innerHTML = `
+        <div class="quran-box">
+            <span class="quran-ayat-text">"${selectedAyat.text}"</span>
+            <span class="quran-meta">${selectedAyat.meta}</span>
+        </div>
+    `;
+};
+
+function pickNumber(num, btnEl) {
+    const info = document.getElementById('range-info');
+
+    if (rangeStart === null) {
+        rangeStart = num;
+        btnEl.classList.add('picked');
+        info.innerText = `Boshlang'ich: ${num}. Endi oxirgi raqamni tanlang`;
+    } else {
+        let start = rangeStart;
+        let end = num;
+        if (end < start) { const t = start; start = end; end = t; }
+        btnEl.classList.add('picked');
+        info.innerText = `Tanlandi: ${start} - ${end}`;
+        setTimeout(() => startWithRange(start, end), 400);
+    }
+}
+
+function startWithRange(start, end) {
+    activeQuiz = quizData.slice(start - 1, end);
+    document.getElementById('select-screen').style.display = 'none';
+    document.getElementById('mode-screen').style.display = 'flex';
+}
+
+let quizMode = 'quiz';
+
+function chooseMode(mode) {
+    quizMode = mode;
+    if (mode === 'quiz-aralash' || mode === 'yopiq-aralash') {
+        activeQuiz = shuffle(activeQuiz);
+    }
+    document.getElementById('mode-screen').style.display = 'none';
+    document.getElementById('intro-screen').style.display = 'flex';
+    document.getElementById('intro-screen').style.opacity = '1';
+    startTimer();
+}
+
+function startTimer() {
+    let count = 3;
+    let disp = document.getElementById("countdown");
+    disp.innerText = count;
+    let timer = setInterval(() => {
+        count--;
+        if (count > 0) {
+            disp.innerText = count;
+        } else if (count === 0) {
+            disp.innerText = "Boshladik!";
+        } else {
+            clearInterval(timer);
+            document.getElementById("intro-screen").style.opacity = "0";
+            setTimeout(() => {
+                document.getElementById("intro-screen").style.display = "none";
+                document.getElementById("quiz").style.display = "block";
+                loadQ();
+            }, 800);
+        }
+    }, 1000);
+}
+
+// FIX: quizData items store all 4 options in "a" (correct answer already included),
+// there is no separate "wrongs" field. Just shuffle the existing "a" array.
+function getOptionsFor(qData) {
+    return shuffle(qData.a);
+}
+
+function loadQ() {
+    const qData = activeQuiz[currentQ];
+    document.getElementById('question').innerText = `${currentQ + 1}/${activeQuiz.length}. ${qData.q}`;
+    const optDiv = document.getElementById('options');
+    optDiv.innerHTML = '';
+
+    if (quizMode === 'yopiq' || quizMode === 'yopiq-aralash') {
+        loadClosedQ(qData, optDiv);
+    } else {
+        loadMultipleChoiceQ(qData, optDiv);
+    }
+}
+
+function loadMultipleChoiceQ(qData, optDiv) {
+    let shuffledOptions = getOptionsFor(qData);
+
+    shuffledOptions.forEach((opt) => {
+        const btn = document.createElement('div');
+        btn.className = 'option';
+        btn.innerText = opt;
+        btn.onclick = () => check(opt, btn, qData.correct);
+        optDiv.appendChild(btn);
+    });
+}
+
+function loadClosedQ(qData, optDiv) {
+    const input = document.createElement('input');
+    input.type = 'text';
+    input.className = 'closed-input';
+    input.id = 'closed-answer';
+    input.placeholder = 'Javob yozing...';
+    input.onkeypress = (e) => { if (e.key === 'Enter') checkClosed(qData); };
+
+    const checkBtn = document.createElement('button');
+    checkBtn.className = 'btn-check';
+    checkBtn.innerText = 'Tekshirish';
+    checkBtn.onclick = () => checkClosed(qData);
+
+    const resultDiv = document.createElement('div');
+    resultDiv.id = 'closed-result';
+
+    optDiv.appendChild(input);
+    optDiv.appendChild(checkBtn);
+    optDiv.appendChild(resultDiv);
+
+    input.focus();
+}
+
+function checkClosed(qData) {
+    const inputEl = document.getElementById('closed-answer');
+    const resultDiv = document.getElementById('closed-result');
+    const user = inputEl.value.toLowerCase().trim();
+    const correct = qData.correct.toLowerCase().trim();
+
+    answered++;
+    inputEl.disabled = true;
+    document.querySelector('.btn-check').disabled = true;
+
+    if (user === correct) {
+        resultDiv.innerHTML = '<b style="color:#00ff99;">✅ To\'g\'ri</b>';
+        score++;
+    } else {
+        resultDiv.innerHTML = '<b style="color:#ff4444;">❌ Noto\'g\'ri.</b><br> Javob: ' + qData.correct;
+    }
+
+    setTimeout(() => {
+        currentQ++;
+        if (currentQ < activeQuiz.length) loadQ();
+        else finishQuiz();
+    }, 2000);
+}
+
+function check(selected, element, correct) {
+    const options = element.parentElement.querySelectorAll('.option');
+    options.forEach(opt => opt.style.pointerEvents = 'none');
+    answered++;
+
+    if (selected === correct) {
+        element.classList.add('correct');
+        score++;
+    } else {
+        element.classList.add('wrong');
+        options.forEach(opt => {
+            if (opt.innerText === correct) opt.classList.add('correct');
+        });
+    }
+    setTimeout(() => {
+        currentQ++;
+        if (currentQ < activeQuiz.length) loadQ();
+        else finishQuiz();
+    }, 1000);
+}
+
+function finishQuiz() {
+    let wrong = answered - score;
+    document.getElementById('quiz').innerHTML = `
+        <h2>Natijalar</h2>
+        <div style="line-height: 2.2; font-size: 19px;">
+            Jami savollar: <b>${activeQuiz.length} ta</b><br>
+            To'g'ri javoblar: <span style="color:#00ff99;">${score} ta</span><br>
+            Xato javoblar: <span style="color:#ff4d4d;">${wrong} ta</span>
+        </div>
+        <button class="btn-finish" onclick="location.reload()">Qaytadan boshlash</button>
+    `;
+}
+</script>
+</body>
+</html>
