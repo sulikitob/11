@@ -293,8 +293,7 @@
 
 <script>
 
-  const quizData3 = [
- const quizData4 = [
+  const quizData = [
   {q: "Erkin Vohidov qayer markazidagi mahallada tugʻilgan?", a: ["Oltiariq", "Marg'ilon", "Quva", "Nishon"], correct: "Oltiariq"},
 
   {q: "Qarindoshlari bilan yuz koʻrishsin, deb kim urugʻlariga xabar qilib qoʻygan ekan? Birpasda uni urugʻ-aymoqlari oʻrab olishdi.", a: ["Adham", "Turobov", "Qodirjon", "Mamatoji Ibrohimov"], correct: "Adham"},
@@ -539,8 +538,6 @@ function startTimer() {
     }, 1000);
 }
 
-// FIX: quizData items store all 4 options in "a" (correct answer already included),
-// there is no separate "wrongs" field. Just shuffle the existing "a" array.
 function getOptionsFor(qData) {
     return shuffle(qData.a);
 }
