@@ -6,50 +6,52 @@
 <title>Amir Temur </title>
 <style>
     * { margin:0; padding:0; box-sizing:border-box; }
-    
-    body { 
-        font-family: Arial; 
+
+    body {
+        font-family: Arial;
         background: url('https://i.pinimg.com/originals/3a/ac/9e/3aac9eee8ff49b3c44d7800323b74333.jpg?nii=t') no-repeat center center fixed;
         background-size: cover;
+        color:white;
+        overflow-x:hidden;
         margin: 0;
     }
 
     .wrapper {
         background: #1b1b1b;
-        max-width: 1300px; 
+        max-width: 1300px;
         margin: auto;
         min-height: 100vh;
         box-shadow: 0 0 50px rgba(0,0,0,0.8);
     }
 
-    .hero { 
-        width: 100%; 
-        padding: 40px 20px; 
-        display: flex; 
+    .hero {
+        width: 100%;
+        padding: 40px 20px;
+        display: flex;
         flex-direction: column;
-        align-items: center; 
+        align-items: center;
         justify-content: center;
         gap: 20px;
         text-align: center;
     }
-    
-    .hero img { 
-        width: 220px; 
-        height: 300px; 
-        object-fit: cover; 
+
+    .hero img {
+        width: 220px;
+        height: 300px;
+        object-fit: cover;
         border-radius: 15px;
+        box-shadow:0 20px 60px rgba(0,0,0,0.7);
     }
 
     .floating-text h1{ font-size:45px; color: white; }
 
-
-    .container{ padding:20px; }
+    .container{ max-width:1300px; margin:auto; padding:50px 20px; }
     .section-title { text-align: center; margin-top: 50px; margin-bottom: 25px; font-size: 32px; color: white; }
     .menu-grid{ display:grid; grid-template-columns:repeat(4,1fr); gap:30px; margin-bottom: 50px; }
-    
-    .card{ 
-        background:#1b1b1b; border-radius:25px; padding:30px 20px; text-align:center; 
-        transition:0.4s; text-decoration:none; color:white; position:relative; overflow:hidden; 
+
+    .card{
+        background:#1b1b1b; border-radius:25px; padding:40px 20px; text-align:center;
+        transition:0.4s; text-decoration:none; color:white; position:relative; overflow:hidden;
         display:flex; flex-direction:column; align-items:center; gap:10px;
         cursor: pointer;
     }
@@ -82,8 +84,8 @@
     .card-gold:hover{ transform:translateY(-12px) scale(1.03); box-shadow:0 0 45px rgba(255,204,0,0.6); }
     .card-gold h2 { color: #ffcc00 !important; }
 
-    .card h2{ position:relative; z-index:2; font-size:20px; color: white !important; }
-    .icon { position:relative; z-index:2; font-size: 35px; margin-bottom: 5px; }
+    .card h2{ position:relative; z-index:2; font-size:30px; color: white !important; }
+    .icon { position:relative; z-index:2; font-size: 35px; margin-bottom: 5px; display: block; }
 
     .footer{ text-align:center; padding:30px; color:#999; }
 
@@ -102,7 +104,6 @@
     z-index: 3;
    }
 
-   /* Oltin karta uchun uzluksiz yulduzcha porillashi */
    .gold-section-title{
        color: #ffcc00 !important;
        text-shadow: 0 0 12px rgba(255,204,0,0.7);
@@ -144,11 +145,10 @@
            <a href="Kiprik 3***.html" target="_blank" class="card card-green"><h2><br>3-Bob.Zafar sha'mi togri tadbir nurida yonadi <br>1</h2></a>
            <a href="Kiprikda 4***.html" target="_blank" class="card card-green"><h2><br>4-Bob.Siyosiy qalqish,bo'ronlar aro buyuk davlat barpo etish maslagi<br></h2></a>
            <a href="Kiprikda 5***.html" target="_blank" class="card card-green"><h2><br>5-Bob.Adovat emas,adolat yengadi<br></h2></a>
-           <a href="Kiprikda 5***.html" target="_blank" class="card card-green"><h2><br>6-Bob.Buyuk bunyodkor,katta qalb va saxovat sohibi <br></h2></a>
+           <a href="#" onclick="showProgress(event)" class="card card-green"><h2><br>6-Bob.Buyuk bunyodkor,katta qalb va saxovat sohibi <br></h2></a>
            <a href="Kiprikda 5***.html" target="_blank" class="card card-green"><h2><br>7-Bob.Quyoshning qadri u botgandan so'ng bilinadi <br></h2></a>
            <a href="Kiprikda 5***.html" target="_blank" class="card card-green"><h2><br>8-Bob.Munosib vorislik mas'uliyati<br></h2></a>
            <a href="Kiprikda 5***.html" target="_blank" class="card card-green"><h2><br>9-Bob.Amir Temur Hikmatlari <br></h2></a>
-        
 
 
           <a href="quiz.html" target="_blank" class="card card-red premium" onclick="checkPremium(event)"><span class="icon">📝</span><h2>Umumiy quiz testlar</h2></a>
@@ -182,11 +182,16 @@
 
     <div class="footer">zuhos.uz ©</div>
 </div>
-   
+
 <script>
 function checkPremium(e) {
     e.preventDefault();
     alert("Bu bo'lim premium obunachilar uchun mo'ljallangan 🔒 Murojat uchun anonimkitobxon2026 telegram kanali adminiga murojat qiling");
+}
+
+function showProgress(e) {
+    e.preventDefault();
+    alert("Bu bob hozircha jarayonda ⏳");
 }
 
 // Oltin kartalarga uzluksiz porillovchi yulduzchalar qo'shish
@@ -206,6 +211,6 @@ document.querySelectorAll('.card-gold').forEach(function (card) {
     addSparkles(card, 10);
 });
 </script>
-   
+
 </body>
 </html>
