@@ -272,14 +272,46 @@
             #countdown { font-size: 60px; bottom: 35px; }
             .number-grid { grid-template-columns: repeat(auto-fill, minmax(48px, 1fr)); }
         }
+
+/* ===== Premium belgisi ===== */
+.premium-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: linear-gradient(135deg, #2a1f00, #1b1b1b);
+    border: 1px solid #ffcc00;
+    color: #ffcc00;
+    font-size: 13px;
+    font-weight: bold;
+    padding: 6px 14px;
+    border-radius: 20px;
+    margin-top: 8px;
+    box-shadow: 0 0 12px rgba(255,204,0,0.4);
+    animation: premium-glow 1.6s ease-in-out infinite;
+}
+.premium-badge .star {
+    animation: premium-star-spin 2.2s linear infinite;
+    display: inline-block;
+    text-shadow: 0 0 8px #ffcc00, 0 0 16px #ffcc00;
+}
+
+@keyframes premium-glow {
+    0%, 100% { box-shadow: 0 0 10px rgba(255,204,0,0.35); border-color: #ffcc00; }
+    50% { box-shadow: 0 0 22px rgba(255,204,0,0.85); border-color: #fff2b0; }
+}
+@keyframes premium-star-spin {
+    0% { transform: rotate(0deg) scale(1); }
+    50% { transform: rotate(180deg) scale(1.25); }
+    100% { transform: rotate(360deg) scale(1); }
+}
+        
     </style>
 </head>
 <body>
 
-<div id="stars"></div>
-
 <div id="select-screen">
     <h1>🌙 Umumumiy quiz test va yopiq savol-javoblar</h1>
+    <div class="premium-badge"><span class="star">⭐</span> PREMIUM</div>
     <p>Savollar sonini belgilang</p>
     <div id="range-info">Boshlang'ich raqamni tanlang</div>
     <div class="number-grid" id="numberGrid"></div>
