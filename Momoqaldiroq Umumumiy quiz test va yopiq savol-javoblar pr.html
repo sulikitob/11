@@ -42,7 +42,8 @@
             display: flex; flex-direction: column; align-items: center;
             gap: 25px;
             padding: 45px 30px 35px 30px;
-            background: linear-gradient(160deg, #101010, #0a0a0a);
+            background: linear-gradient(160deg, rgba(16,16,16,0.55), rgba(10,10,10,0.55));
+            backdrop-filter: blur(1px);
             border: 2px solid #ffd700;
             border-radius: 26px;
             box-shadow: 0 0 30px rgba(255,215,0,0.22), inset 0 0 40px rgba(255,215,0,0.03);
@@ -199,7 +200,8 @@
 
         .mode-wrapper {
             width: 100%;
-            background: linear-gradient(160deg, #101010, #0a0a0a);
+            background: linear-gradient(160deg, rgba(16,16,16,0.55), rgba(10,10,10,0.55));
+            backdrop-filter: blur(1px);
             border-radius: 26px;
             padding: 30px 25px;
             border: 2px solid #ffd700;
@@ -258,6 +260,9 @@
             border-radius: 50%;
             animation: twinkle 2.5s infinite ease-in-out;
         }
+        .star.glow {
+            box-shadow: 0 0 6px 1px rgba(255, 215, 0, 0.5);
+        }
         @keyframes twinkle {
             0%, 100% { opacity: 0.15; transform: scale(1); }
             50% { opacity: 1; transform: scale(1.6); }
@@ -306,9 +311,10 @@
         /* ===== Quiz ekrani ===== */
         .quiz-box {
             display: none;
-            width: 100%; max-width: 600px; background: #101010; padding: 30px;
+            width: 100%; max-width: 600px; background: rgba(16,16,16,0.6); padding: 30px;
             border-radius: 25px; box-shadow: 0 0 30px rgba(255,215,0,0.18);
             border: 2px solid #ffd700;
+            backdrop-filter: blur(1px);
             text-align: center; margin-top: 50px;
         }
         h2 { color: #00ff99; margin-bottom: 20px; font-size: 22px; }
@@ -353,8 +359,11 @@
         /* ===== Mobil to'liq ekran tuzatishlari ===== */
         @media (max-width: 480px) {
             body { padding: 12px; }
-            #select-screen h1 { font-size: 21px; }
+            #select-screen { padding: 35px 16px 24px 16px; }
+            #select-screen h1 { font-size: 20px; }
+            .gold-badge { width: 68px; height: 68px; font-size: 30px; }
             #mode-screen h1 { font-size: 19px; }
+            .mode-wrapper { padding: 20px 14px; }
             .mode-card { padding: 22px 10px; font-size: 14px; }
             .quiz-box { padding: 20px 16px; margin-top: 30px; }
             h2 { font-size: 18px; }
@@ -1307,13 +1316,14 @@ function saveUsedIndices(arr) {
 function buildStars() {
     const container = document.getElementById('stars');
     container.innerHTML = '';
-    const count = 100;
+    const count = 130;
     for (let i = 0; i < count; i++) {
         const s = document.createElement('div');
-        s.className = 'star';
+        const isGlow = Math.random() > 0.8;
+        s.className = 'star' + (isGlow ? ' glow' : '');
         s.style.left = Math.random() * 100 + '%';
         s.style.top = Math.random() * 100 + '%';
-        const size = (Math.random() * 2 + 1).toFixed(1);
+        const size = (isGlow ? (Math.random() * 1.5 + 2) : (Math.random() * 2 + 1)).toFixed(1);
         s.style.width = size + 'px';
         s.style.height = size + 'px';
         s.style.animationDelay = (Math.random() * 2.5).toFixed(2) + 's';
