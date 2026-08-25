@@ -8,8 +8,8 @@
 * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 html, body { width: 100%; min-height: 100%; }
 body {
-    font-family: 'Arial', sans-serif;
-    background: linear-gradient(135deg, #050505, #121212, #1d1d1d);
+    font-family: 'Segoe UI', 'Arial', sans-serif;
+    background: radial-gradient(ellipse at 50% 0%, #161616, #0a0a0a 60%);
     color: white;
     display: flex;
     flex-direction: column;
@@ -18,7 +18,8 @@ body {
     min-height: 100vh;
     min-height: 100dvh;
 }
-h1 { font-size: 22px; color: #00ff99; text-align: center; margin-bottom: 15px; }
+
+/* ===== Yulduzlar foni ===== */
 #stars {
     position: fixed; top: 0; left: 0; width: 100%; height: 100%;
     pointer-events: none; z-index: 0; overflow: hidden;
@@ -30,11 +31,89 @@ h1 { font-size: 22px; color: #00ff99; text-align: center; margin-bottom: 15px; }
     border-radius: 50%;
     animation: twinkle 2.5s infinite ease-in-out;
 }
+.star.glow {
+    box-shadow: 0 0 6px 1px rgba(255, 215, 0, 0.5);
+}
 @keyframes twinkle {
     0%, 100% { opacity: 0.15; transform: scale(1); }
     50% { opacity: 1; transform: scale(1.6); }
 }
-.wrap { position: relative; z-index: 2; width: 100%; max-width: 750px; display: flex; flex-direction: column; gap: 18px; }
+
+/* ===== Oltin nishon (badge) ===== */
+.gold-badge {
+    width: 84px; height: 84px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 35% 30%, #2e2e2e, #0f0f0f 70%);
+    border: 3px solid #ffd700;
+    box-shadow: 0 0 18px rgba(255,215,0,0.55), 0 0 40px rgba(255,215,0,0.2);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 38px;
+    margin-bottom: -8px;
+    position: relative; z-index: 3;
+}
+
+/* ===== Asosiy karta ===== */
+.wrap {
+    position: relative; z-index: 2;
+    width: 100%; max-width: 750px;
+    display: flex; flex-direction: column;
+    align-items: center;
+    gap: 18px;
+    padding: 45px 30px 35px 30px;
+    background: linear-gradient(160deg, rgba(16,16,16,0.55), rgba(10,10,10,0.55));
+    backdrop-filter: blur(1px);
+    border: 2px solid #ffd700;
+    border-radius: 26px;
+    box-shadow: 0 0 30px rgba(255,215,0,0.22), inset 0 0 40px rgba(255,215,0,0.03);
+}
+
+h1 {
+    font-size: 22px; color: #ffffff; text-align: center;
+    letter-spacing: 1px;
+    text-shadow: 0 0 12px rgba(255,255,255,0.3);
+    width: 100%;
+}
+
+/* ===== Yashil neon "Tanlanganlar" paneli ===== */
+.neon-bar {
+    width: 100%;
+    background: linear-gradient(135deg, #0f1a15, #131313);
+    border: 2px solid #00ff99;
+    color: #00ff99;
+    border-radius: 14px;
+    padding: 14px 18px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.25s;
+    text-shadow: 0 0 10px rgba(0,255,153,0.8);
+    box-shadow: 0 0 14px rgba(0,255,153,0.35), inset 0 0 18px rgba(0,255,153,0.06);
+    letter-spacing: 0.4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+.neon-bar:hover {
+    background: #00ff99;
+    color: #050505;
+    text-shadow: none;
+    box-shadow: 0 0 25px rgba(0,255,153,0.9);
+    transform: scale(1.015);
+}
+.neon-bar.back-mode {
+    border-color: #ffd700;
+    color: #ffd700;
+    text-shadow: 0 0 10px rgba(255,215,0,0.8);
+    box-shadow: 0 0 14px rgba(255,215,0,0.35), inset 0 0 18px rgba(255,215,0,0.06);
+}
+.neon-bar.back-mode:hover {
+    background: #ffd700;
+    color: #050505;
+    text-shadow: none;
+    box-shadow: 0 0 25px rgba(255,215,0,0.9);
+}
+
 .list-search {
     width: 100%;
     padding: 12px 16px;
@@ -110,27 +189,6 @@ h1 { font-size: 22px; color: #00ff99; text-align: center; margin-bottom: 15px; }
     padding-top: 10px;
 }
 .qa-answer b { color: #ffd700; }
-.tabs {
-    width: 100%;
-    display: flex;
-    gap: 10px;
-}
-.tab-btn {
-    flex: 1;
-    background: transparent;
-    border: 2px solid #ffd700;
-    color: #ffd700;
-    border-radius: 12px;
-    padding: 10px 8px;
-    font-size: 14px;
-    font-weight: bold;
-    cursor: pointer;
-    transition: 0.25s;
-}
-.tab-btn.active, .tab-btn:hover {
-    background: #ffd700;
-    color: #050505;
-}
 .list-toolbar {
     width: 100%;
     display: flex;
@@ -150,18 +208,21 @@ h1 { font-size: 22px; color: #00ff99; text-align: center; margin-bottom: 15px; }
 .list-clear-selected:hover { color: #ff4d4d; }
 @media (max-width: 480px) {
     body { padding: 12px; }
+    .wrap { padding: 35px 16px 24px 16px; }
     h1 { font-size: 19px; }
+    .gold-badge { width: 68px; height: 68px; font-size: 30px; }
+    .neon-bar { font-size: 14px; padding: 12px 10px; }
 }
 </style>
 </head>
 <body>
 <div id="stars"></div>
 <div class="wrap">
+    <div class="gold-badge">📋</div>
     <h1 id="pageTitle">📋 Barcha savol-javoblar</h1>
-    <div class="tabs">
-        <button class="tab-btn active" id="tabAll" onclick="showTab('all')">📋 Barchasi</button>
-        <button class="tab-btn" id="tabSelected" onclick="showTab('selected')">⭐ Tanlanganlar (<span id="selCount">0</span>)</button>
-    </div>
+
+    <button class="neon-bar" id="tabSelected" onclick="toggleTab()">⭐ Tanlanganlar (<span id="selCount">0</span>)</button>
+
     <input type="text" class="list-search" id="listSearch" placeholder="Savol bo'yicha qidirish..." oninput="renderList()">
     <div class="list-toolbar" id="selectedToolbar" style="display:none;">
         <div class="list-counter" id="listCounter" style="text-align:left;"></div>
@@ -1061,14 +1122,24 @@ function clearSelected() {
     renderList();
 }
 
-function showTab(tab) {
-    currentTab = tab;
-    document.getElementById('tabAll').classList.toggle('active', tab === 'all');
-    document.getElementById('tabSelected').classList.toggle('active', tab === 'selected');
-    document.getElementById('pageTitle').innerText = tab === 'all' ? '📋 Barcha savol-javoblar' : '⭐ Tanlangan savollarim';
-    document.getElementById('selectedToolbar').style.display = tab === 'selected' ? 'flex' : 'none';
-    document.getElementById('listCounterAll').style.display = tab === 'all' ? 'block' : 'none';
+function toggleTab() {
+    currentTab = (currentTab === 'all') ? 'selected' : 'all';
+    const btn = document.getElementById('tabSelected');
+    if (currentTab === 'selected') {
+        btn.classList.add('back-mode');
+        btn.innerHTML = '← Barchasiga qaytish';
+        document.getElementById('pageTitle').innerText = '⭐ Tanlangan savollarim';
+        document.getElementById('selectedToolbar').style.display = 'flex';
+        document.getElementById('listCounterAll').style.display = 'none';
+    } else {
+        btn.classList.remove('back-mode');
+        btn.innerHTML = '⭐ Tanlanganlar (<span id="selCount">0</span>)';
+        document.getElementById('pageTitle').innerText = '📋 Barcha savol-javoblar';
+        document.getElementById('selectedToolbar').style.display = 'none';
+        document.getElementById('listCounterAll').style.display = 'block';
+    }
     document.getElementById('listSearch').value = '';
+    updateSelCount();
     renderList();
 }
 
@@ -1090,7 +1161,7 @@ function renderList() {
     } else {
         document.getElementById('listCounter').innerText = `${filtered.length} ta savol tanlangan`;
         if (filtered.length === 0) {
-            container.innerHTML = `<div style="color:#666; text-align:center; padding:30px;">Hali hech qanday savol tanlanmagan.<br>"Barchasi" bo'limidan + tugmasi bilan qo'shing.</div>`;
+            container.innerHTML = `<div style="color:#666; text-align:center; padding:30px;">Hali hech qanday savol tanlanmagan.<br>"⭐ Tanlanganlar" tugmasidan orqaga qaytib, + tugmasi bilan qo'shing.</div>`;
             return;
         }
     }
@@ -1113,13 +1184,14 @@ function renderList() {
 function buildStars() {
     const container = document.getElementById('stars');
     container.innerHTML = '';
-    const count = 100;
+    const count = 130;
     for (let i = 0; i < count; i++) {
         const s = document.createElement('div');
-        s.className = 'star';
+        const isGlow = Math.random() > 0.8;
+        s.className = 'star' + (isGlow ? ' glow' : '');
         s.style.left = Math.random() * 100 + '%';
         s.style.top = Math.random() * 100 + '%';
-        const size = (Math.random() * 2 + 1).toFixed(1);
+        const size = (isGlow ? (Math.random() * 1.5 + 2) : (Math.random() * 2 + 1)).toFixed(1);
         s.style.width = size + 'px';
         s.style.height = size + 'px';
         s.style.animationDelay = (Math.random() * 2.5).toFixed(2) + 's';
