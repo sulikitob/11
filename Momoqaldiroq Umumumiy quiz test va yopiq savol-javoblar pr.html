@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Umumumiy quiz test va yopiq savol-javoblar</title>
+    <title>2-Bob</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
         html, body {
@@ -75,28 +75,93 @@
             color: #ff9900; font-size: 15px; font-weight: bold; min-height: 22px;
         }
 
+        /* ===== Random tanlash bo'limi ===== */
+        .random-section {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+        }
+        .random-main-btn {
+            width: 100%;
+            background: linear-gradient(135deg, #1b1b1b, #262626);
+            border: 2px solid #ffd700;
+            color: #ffd700;
+            border-radius: 14px;
+            padding: 14px 0;
+            font-size: 17px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.25s;
+            text-shadow: 0 0 8px rgba(255,215,0,0.5);
+            letter-spacing: 0.5px;
+        }
+        .random-main-btn:hover {
+            background: #ffd700;
+            color: #050505;
+            box-shadow: 0 0 20px rgba(255,215,0,0.8);
+            transform: scale(1.02);
+        }
+        .random-options-grid {
+            display: none;
+            grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+            gap: 12px;
+            width: 100%;
+            padding: 15px;
+            background: #111;
+            border-radius: 18px;
+            box-shadow: 0 0 25px rgba(255,215,0,0.12);
+        }
+        .random-num-btn {
+            background: #1b1b1b;
+            border: 2px solid #ffd700;
+            color: #ffd700;
+            border-radius: 12px;
+            padding: 14px 0;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.25s;
+        }
+        .random-num-btn:hover {
+            background: #ffd700;
+            color: #050505;
+            box-shadow: 0 0 20px rgba(255,215,0,0.8);
+            transform: scale(1.08);
+        }
+        .clear-history-link {
+            color: #666;
+            font-size: 12px;
+            text-decoration: underline;
+            cursor: pointer;
+            background: none;
+            border: none;
+        }
+        .clear-history-link:hover { color: #ff9900; }
+
         /* ===== Funksiya tanlash ekrani ===== */
-            #mode-screen {
+        #mode-screen {
             display: none;
             width: 100%; max-width: 700px;
             flex-direction: column; align-items: center;
             gap: 25px; padding: 20px 0;
         }
 
-        {
+        .mode-icon-top {
             width: 100%;
             max-width: 450px;
             aspect-ratio: 4 / 3;
             position: relative;
             background: rgba(5, 5, 5, 0.4);
-          
+            border: 4px double #ffd700;
             border-radius: 20px;
             padding: 15px;
             display: flex;
             justify-content: center;
             align-items: center;
         }
-         {
+        .mode-icon-top img {
             width: 100%;
             height: 100%;
             object-fit: cover;
@@ -113,7 +178,7 @@
             background: rgba(5, 5, 5, 0.4);
             border-radius: 20px;
             padding: 25px;
-       
+            border: 4px double #ffd700;
         }
         .mode-grid {
             width: 100%;
@@ -131,6 +196,7 @@
             position: relative;
             overflow: hidden;
             cursor: pointer;
+            border: 1px solid rgba(255, 215, 0, 0.3);
             font-size: 16px;
             font-weight: bold;
             backdrop-filter: blur(3px);
@@ -142,11 +208,8 @@
         }
         .mode-card:hover::before { top: 100%; left: 100%; }
         .mode-card:hover { transform: translateY(-5px) scale(1.02); border-color: #ffd700; box-shadow: 0 0 15px rgba(255,215,0,0.2); }
-@media(max-width:600px){ 
-    .mode-grid{ grid-template-columns: repeat(2, 1fr); } 
-    .mode-icon-top{ display: flex; justify-content: center; }
-    .mode-icon-top img{ width: 85%; max-width: 220px; }
-}
+        @media(max-width:600px){ .mode-grid{ grid-template-columns: 1fr; } }
+
         /* ===== Intro (countdown) ekran ===== */
         #intro-screen {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
@@ -259,6 +322,7 @@
         .btn-check:hover { background: #00ff99; color: black; }
         #closed-result { margin-top: 15px; font-size: 18px; min-height: 30px; text-align: center; }
 
+
         /* ===== Mobil to'liq ekran tuzatishlari ===== */
         @media (max-width: 480px) {
             body { padding: 12px; }
@@ -272,47 +336,22 @@
             #countdown { font-size: 60px; bottom: 35px; }
             .number-grid { grid-template-columns: repeat(auto-fill, minmax(48px, 1fr)); }
         }
-
-/* ===== Premium belgisi ===== */
-.premium-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    background: linear-gradient(135deg, #2a1f00, #1b1b1b);
-    border: 1px solid #ffcc00;
-    color: #ffcc00;
-    font-size: 13px;
-    font-weight: bold;
-    padding: 6px 14px;
-    border-radius: 20px;
-    margin-top: 8px;
-    box-shadow: 0 0 12px rgba(255,204,0,0.4);
-    animation: premium-glow 1.6s ease-in-out infinite;
-}
-.premium-badge .star {
-    animation: premium-star-spin 2.2s linear infinite;
-    display: inline-block;
-    text-shadow: 0 0 8px #ffcc00, 0 0 16px #ffcc00;
-}
-
-@keyframes premium-glow {
-    0%, 100% { box-shadow: 0 0 10px rgba(255,204,0,0.35); border-color: #ffcc00; }
-    50% { box-shadow: 0 0 22px rgba(255,204,0,0.85); border-color: #fff2b0; }
-}
-@keyframes premium-star-spin {
-    0% { transform: rotate(0deg) scale(1); }
-    50% { transform: rotate(180deg) scale(1.25); }
-    100% { transform: rotate(360deg) scale(1); }
-}
-        
     </style>
 </head>
 <body>
 
+<div id="stars"></div>
+
 <div id="select-screen">
-    <h1>🌙 Umumumiy quiz test va yopiq savol-javoblar</h1>
-    <div class="premium-badge"><span class="star">⭐</span> PREMIUM</div>
+    <h1>🌙Umumumiy quiz test va yopiq savol-javoblar</h1>
     <p>Savollar sonini belgilang</p>
+
+    <div class="random-section">
+        <button class="random-main-btn" id="randomToggleBtn" onclick="toggleRandomGrid()">🎲 Random</button>
+        <div class="random-options-grid" id="randomOptionsGrid"></div>
+        <button class="clear-history-link" onclick="clearUsedHistory()">🔄 Ishlatilgan tarixni tozalash</button>
+    </div>
+
     <div id="range-info">Boshlang'ich raqamni tanlang</div>
     <div class="number-grid" id="numberGrid"></div>
 </div>
@@ -334,7 +373,7 @@
 
 <div id="intro-screen">
     <div class="content-box">
-        <h1 style="color:#00ff99; font-size: 32px;">🌙Umumumiy quiz test va yopiq savol-javoblar </h1>
+        <h1 style="color:#00ff99; font-size: 32px;">🌙 2-Bob.Iskandar-1</h1>
         <div id="random-ayat"></div>
     </div>
     <div id="countdown">3</div>
@@ -348,7 +387,7 @@
 
 <script>
 const quizData = [
-{ q: "Hamma tug'ilgan kunini qanday bahona bilan ziyorat qilishga kelar edi?", correct: "xotira kuni munosabati bilan", wrongs: ["sayohat qilish istagi bilan", "akshon tadbiri munosabati bilan", "shunchaki yo'qlab qo'yish maqsadida"] },
+    { q: "Hamma tug'ilgan kunini qanday bahona bilan ziyorat qilishga kelar edi?", correct: "xotira kuni munosabati bilan", wrongs: ["sayohat qilish istagi bilan", "akshon tadbiri munosabati bilan", "shunchaki yo'qlab qo'yish maqsadida"] },
     { q: "Qishloqning nomi nima?", correct: "jiydalik", wrongs: ["tolzor", "terakli", "chinorli"] },
     { q: "Jiydalik qishlog'iga kelganlar nega kira olmay ovvora edilar?", correct: "tog'dan kelgan sel ko'prikni yarmini olib ketgani sababli", wrongs: ["yo'lda katta ko'chki sodir bo'lib yo'lni to'sib qo'ygani sababli", "daryo suvi toshib mashinalar o'ta olmay qolgani sababli", "qishloq ahli kirish yo'lini vaqtincha yopib qo'yganliklari sababli"] },
     { q: "Tundan kelgan ko'rshapalak deb nimaga ta'rif berilgan?", correct: "mashina", wrongs: ["samolyot", "poyezd", "mototsikl"] },
@@ -1213,11 +1252,28 @@ const ayats = [
     { text: "Albatta Biz senga ochiq g'alaba berdik.", meta: "Fath 48:1" }
 ];
 
+
+
+
 let activeQuiz = [];
 let currentQ = 0, score = 0, answered = 0;
+const RANDOM_PRESETS = [10, 15, 25, 33, 50, 100];
+const USED_KEY = 'quizUsedIndices_2bob';
 
 function shuffle(array) {
     return array.sort(() => Math.random() - 0.5);
+}
+
+function getUsedIndices() {
+    try {
+        return JSON.parse(localStorage.getItem(USED_KEY) || '[]');
+    } catch (e) {
+        return [];
+    }
+}
+
+function saveUsedIndices(arr) {
+    localStorage.setItem(USED_KEY, JSON.stringify(arr));
 }
 
 function buildStars() {
@@ -1253,6 +1309,19 @@ window.onload = function() {
     }
     buildStars();
 
+    // Random preset tugmalarini yaratish
+    const randGrid = document.getElementById('randomOptionsGrid');
+    RANDOM_PRESETS.forEach(n => {
+        const btn = document.createElement('button');
+        btn.className = 'random-num-btn';
+        btn.innerText = n;
+        btn.onclick = () => pickRandomCount(n);
+        randGrid.appendChild(btn);
+    });
+
+    // Oldin ishlatilgan savollarni sariq rangda belgilab qo'yish
+    markUsedButtons();
+
     const randomIdx = Math.floor(Math.random() * ayats.length);
     const selectedAyat = ayats[randomIdx];
     document.getElementById('random-ayat').innerHTML = `
@@ -1262,6 +1331,59 @@ window.onload = function() {
         </div>
     `;
 };
+
+function markUsedButtons() {
+    const used = getUsedIndices();
+    used.forEach(idx => {
+        if (numButtons[idx]) numButtons[idx].classList.add('picked');
+    });
+}
+
+function toggleRandomGrid() {
+    const grid = document.getElementById('randomOptionsGrid');
+    grid.style.display = (grid.style.display === 'grid') ? 'none' : 'grid';
+}
+
+function pickRandomCount(n) {
+    let used = getUsedIndices();
+    const allIndices = quizData.map((_, i) => i);
+    let unused = allIndices.filter(i => !used.includes(i));
+
+    // Agar ishlatilmagan savollar yetarli bo'lmasa, tarixni yangilaymiz (yangi aylanish boshlanadi)
+    if (unused.length < n) {
+        used = [];
+        unused = allIndices;
+    }
+
+    const shuffledUnused = shuffle([...unused]);
+    const selected = shuffledUnused.slice(0, n);
+
+    // Tanlanganlarni "ishlatilgan" deb belgilaymiz va saqlaymiz
+    used = [...used, ...selected];
+    saveUsedIndices(used);
+
+    // Savollarni asl tartibda joylaymiz
+    const orderedSelected = [...selected].sort((a, b) => a - b);
+    activeQuiz = orderedSelected.map(i => quizData[i]);
+
+    // Tanlangan raqam tugmalarini sariq rangga bo'yash
+    selected.forEach(i => {
+        if (numButtons[i]) numButtons[i].classList.add('picked');
+    });
+
+    document.getElementById('range-info').innerText = `Tasodifiy tanlandi: ${n} ta savol`;
+
+    setTimeout(() => {
+        document.getElementById('select-screen').style.display = 'none';
+        document.getElementById('mode-screen').style.display = 'flex';
+    }, 500);
+}
+
+function clearUsedHistory() {
+    localStorage.removeItem(USED_KEY);
+    numButtons.forEach(btn => btn.classList.remove('picked'));
+    document.getElementById('range-info').innerText = "Tarix tozalandi. Boshlang'ich raqamni tanlang";
+}
 
 function pickNumber(num, btnEl) {
     const info = document.getElementById('range-info');
