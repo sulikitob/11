@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>2-Bob</title>
+    <title>Umumumiy quiz test va yopiq savol-javoblar</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
         html, body {
@@ -12,8 +12,8 @@
             overflow-x: hidden;
         }
         body {
-            font-family: 'Arial', sans-serif;
-            background: linear-gradient(135deg, #050505, #121212, #1d1d1d);
+            font-family: 'Segoe UI', 'Arial', sans-serif;
+            background: radial-gradient(ellipse at 50% 0%, #161616, #0a0a0a 60%);
             color: white;
             display: flex;
             flex-direction: column;
@@ -23,14 +23,34 @@
             min-height: 100dvh;
         }
 
+        /* ===== Oltin dizayn elementlari ===== */
+        .gold-badge {
+            width: 84px; height: 84px;
+            border-radius: 50%;
+            background: radial-gradient(circle at 35% 30%, #2e2e2e, #0f0f0f 70%);
+            border: 3px solid #ffd700;
+            box-shadow: 0 0 18px rgba(255,215,0,0.55), 0 0 40px rgba(255,215,0,0.2);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 38px;
+            margin-bottom: -8px;
+            position: relative; z-index: 3;
+        }
+
         /* ===== Raqam tanlash ekrani ===== */
         #select-screen {
             width: 100%; max-width: 700px;
             display: flex; flex-direction: column; align-items: center;
-            gap: 25px; padding: 20px 0;
+            gap: 25px;
+            padding: 45px 30px 35px 30px;
+            background: linear-gradient(160deg, #101010, #0a0a0a);
+            border: 2px solid #ffd700;
+            border-radius: 26px;
+            box-shadow: 0 0 30px rgba(255,215,0,0.22), inset 0 0 40px rgba(255,215,0,0.03);
         }
         #select-screen h1 {
-            font-size: 26px; color: #00ff99; text-align: center;
+            font-size: 24px; color: #ffffff; text-align: center;
+            letter-spacing: 1px;
+            text-shadow: 0 0 12px rgba(255,255,255,0.3);
         }
         #select-screen p { color: #999; font-size: 14px; text-align: center; }
         .number-grid {
@@ -43,10 +63,11 @@
             padding: 10px;
             background: #111;
             border-radius: 20px;
-            box-shadow: 0 0 25px rgba(0,255,150,0.15);
+            box-shadow: 0 0 25px rgba(255,215,0,0.1);
+            border: 1px solid rgba(255,215,0,0.15);
         }
         .number-grid::-webkit-scrollbar { width: 8px; }
-        .number-grid::-webkit-scrollbar-thumb { background: #00ff99; border-radius: 10px; }
+        .number-grid::-webkit-scrollbar-thumb { background: #ffd700; border-radius: 10px; }
         .num-btn {
             background: #1b1b1b;
             border: 2px solid #00ff99;
@@ -66,13 +87,13 @@
             transform: scale(1.08);
         }
         .num-btn.picked {
-            background: #ff9900;
-            border-color: #ff9900;
+            background: #ffd700;
+            border-color: #ffd700;
             color: #050505;
-            box-shadow: 0 0 20px rgba(255,153,0,0.8);
+            box-shadow: 0 0 20px rgba(255,215,0,0.8);
         }
         #range-info {
-            color: #ff9900; font-size: 15px; font-weight: bold; min-height: 22px;
+            color: #ffd700; font-size: 15px; font-weight: bold; min-height: 22px;
         }
 
         /* ===== Random tanlash bo'limi ===== */
@@ -153,13 +174,14 @@
             max-width: 450px;
             aspect-ratio: 4 / 3;
             position: relative;
-            background: rgba(5, 5, 5, 0.4);
-            border: 4px double #ffd700;
+            background: radial-gradient(circle at 35% 30%, #2e2e2e, #0f0f0f 70%);
+            border: 3px solid #ffd700;
             border-radius: 20px;
             padding: 15px;
             display: flex;
             justify-content: center;
             align-items: center;
+            box-shadow: 0 0 18px rgba(255,215,0,0.4), 0 0 40px rgba(255,215,0,0.15);
         }
         .mode-icon-top img {
             width: 100%;
@@ -169,16 +191,19 @@
         }
 
         #mode-screen h1 {
-            font-size: 24px; color: #00ff99; text-align: center;
+            font-size: 22px; color: #ffffff; text-align: center;
             margin: 5px 0;
+            letter-spacing: 1px;
+            text-shadow: 0 0 12px rgba(255,255,255,0.3);
         }
 
         .mode-wrapper {
             width: 100%;
-            background: rgba(5, 5, 5, 0.4);
-            border-radius: 20px;
-            padding: 25px;
-            border: 4px double #ffd700;
+            background: linear-gradient(160deg, #101010, #0a0a0a);
+            border-radius: 26px;
+            padding: 30px 25px;
+            border: 2px solid #ffd700;
+            box-shadow: 0 0 30px rgba(255,215,0,0.22), inset 0 0 40px rgba(255,215,0,0.03);
         }
         .mode-grid {
             width: 100%;
@@ -203,11 +228,12 @@
         }
         .mode-card::before {
             content: ""; position: absolute; width: 200%; height: 200%;
-            background: linear-gradient(45deg,transparent,#00ff99,transparent);
+            background: linear-gradient(45deg,transparent,#ffd700,transparent);
             top: -150%; left: -150%; transform: rotate(25deg); transition: 0.7s;
+            opacity: 0.35;
         }
         .mode-card:hover::before { top: 100%; left: 100%; }
-        .mode-card:hover { transform: translateY(-5px) scale(1.02); border-color: #ffd700; box-shadow: 0 0 15px rgba(255,215,0,0.2); }
+        .mode-card:hover { transform: translateY(-5px) scale(1.02); border-color: #ffd700; box-shadow: 0 0 15px rgba(255,215,0,0.3); }
         @media(max-width:600px){ .mode-grid{ grid-template-columns: 1fr; } }
 
         /* ===== Intro (countdown) ekran ===== */
@@ -280,8 +306,9 @@
         /* ===== Quiz ekrani ===== */
         .quiz-box {
             display: none;
-            width: 100%; max-width: 600px; background: #1b1b1b; padding: 30px;
-            border-radius: 25px; box-shadow: 0 0 35px rgba(0, 255, 150, 0.1);
+            width: 100%; max-width: 600px; background: #101010; padding: 30px;
+            border-radius: 25px; box-shadow: 0 0 30px rgba(255,215,0,0.18);
+            border: 2px solid #ffd700;
             text-align: center; margin-top: 50px;
         }
         h2 { color: #00ff99; margin-bottom: 20px; font-size: 22px; }
@@ -343,7 +370,7 @@
 <div id="stars"></div>
 
 <div id="select-screen">
-    <h1>🌙Umumumiy quiz test va yopiq savol-javoblar</h1>
+    <h1>🌙 Umumumiy quiz test va yopiq savol-javoblar</h1>
     <p>Savollar sonini belgilang</p>
 
     <div class="random-section">
