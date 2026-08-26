@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<title>Raqamlar, sonlar va yillar</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+html, body { width: 100%; min-height: 100%; }
+body {
+    font-family: 'Segoe UI', 'Arial', sans-serif;
+    background: radial-gradient(ellipse at 50% 0%, #161616, #0a0a0a 60%);
+    color: white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    min-height: 100vh;
+    min-height: 100dvh;
+}
+
+#stars {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    pointer-events: none; z-index: 0; overflow: hidden;
+}
+.star {
+    position: absolute;
+    width: 2px; height: 2px;
+    background: #fff;
+    border-radius: 50%;
+    animation: twinkle 2.5s infinite ease-in-out;
+}
+.star.glow {
+    box-shadow: 0 0 6px 1px rgba(255, 215, 0, 0.5);
+}
+@keyframes twinkle {
+    0%, 100% { opacity: 0.15; transform: scale(1); }
+    50% { opacity: 1; transform: scale(1.6); }
+}
+
+.gold-badge {
+    width: 84px; height: 84px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 35% 30%, #2e2e2e, #0f0f0f 70%);
+    border: 3px solid #ffd700;
+    box-shadow: 0 0 18px rgba(255,215,0,0.55), 0 0 40px rgba(255,215,0,0.2);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 38px;
+    margin-bottom: -8px;
+    position: relative; z-index: 3;
+}
+
+.wrap {
+    position: relative; z-index: 2;
+    width: 100%; max-width: 750px;
+    display: flex; flex-direction: column;
+    align-items: center;
+    gap: 18px;
+    padding: 45px 30px 35px 30px;
+    background: linear-gradient(160deg, rgba(16,16,16,0.55), rgba(10,10,10,0.55));
+    backdrop-filter: blur(1px);
+    border: 2px solid #ffd700;
+    border-radius: 26px;
+    box-shadow: 0 0 30px rgba(255,215,0,0.22), inset 0 0 40px rgba(255,215,0,0.03);
+}
+
+h1 {
+    font-size: 22px; color: #ffffff; text-align: center;
+    letter-spacing: 1px;
+    text-shadow: 0 0 12px rgba(255,255,255,0.3);
+    width: 100%;
+}
+p.sub { color: #999; font-size: 13px; text-align: center; margin-top: -10px; }
+
+.list-search {
+    width: 100%;
+    padding: 12px 16px;
+    border-radius: 12px;
+    border: 2px solid #333;
+    background: #1b1b1b;
+    color: white;
+    font-size: 15px;
+    outline: none;
+}
+.list-search:focus { border-color: #00ff99; }
+.list-counter { color: #999; font-size: 13px; text-align: center; }
+
+.qa-list { width: 100%; display: flex; flex-direction: column; gap: 14px; }
+.qa-card {
+    position: relative;
+    background: linear-gradient(150deg, #1c1c1c, #141414);
+    border: 1px solid rgba(0, 255, 153, 0.28);
+    border-radius: 16px;
+    padding: 18px 20px;
+    box-shadow: 0 4px 14px rgba(0,0,0,0.35);
+    transition: 0.25s;
+}
+.qa-card:hover {
+    border-color: rgba(0,255,153,0.6);
+    box-shadow: 0 0 18px rgba(0,255,153,0.15);
+}
+.qa-num {
+    display: inline-block;
+    color: #050505;
+    background: #00ff99;
+    font-size: 12px;
+    font-weight: bold;
+    border-radius: 8px;
+    padding: 2px 9px;
+    margin-bottom: 8px;
+}
+.qa-question { color: #f0f0f0; font-size: 15.5px; line-height: 1.5; font-style: italic; margin-bottom: 10px; }
+.qa-answer {
+    color: #00ff99;
+    font-size: 16px;
+    font-weight: bold;
+    border-top: 1px dashed rgba(0,255,153,0.25);
+    padding-top: 10px;
+}
+.qa-answer b { color: #ffd700; }
+
+.bob-title {
+    width: 100%;
+    text-align: left;
+    color: #ffd700;
+    font-size: 15px;
+    font-weight: bold;
+    letter-spacing: 0.5px;
+    margin-top: 10px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid rgba(255,215,0,0.25);
+}
+
+@media (max-width: 480px) {
+    body { padding: 12px; }
+    .wrap { padding: 35px 16px 24px 16px; }
+    h1 { font-size: 19px; }
+    .gold-badge { width: 68px; height: 68px; font-size: 30px; }
+}
+</style>
+</head>
+<body>
+<div id="stars"></div>
+<div class="wrap">
+    <div class="gold-badge">🔢</div>
+    <h1>🔢 Raqamlar, sonlar va yillar</h1>
+    <p class="sub">"Nechta?", "necha yosh?", "necha yil?", "qancha vaqt?" so'rog'iga javob beruvchi barcha savol-javoblar</p>
+
+    <input type="text" class="list-search" id="listSearch" placeholder="Savol yoki son bo'yicha qidirish..." oninput="renderList()">
+    <div class="list-counter" id="listCounterAll"></div>
+    <div class="qa-list" id="qaList"></div>
+</div>
+
+<script>
+const raqamlar = [
+{ bob: "2-Bob", q: "Toshkentga kelganining nechanchi kuni peshinda unga Xoji bobo telefon qilgan edi?", a: "3-kuni" },
+{ bob: "2-Bob", q: "Xoji bobo va xotini Toshkentda qancha vaqt yashab ketishgan edi?", a: "1 yildan ko'roq" },
+{ bob: "2-Bob", q: "Iskandarning nechta farzandi bor edi?", a: "2 ta" },
+{ bob: "2-Bob", q: "Xoji boboning nechta oti bor?", a: "4 ta" },
+{ bob: "2-Bob", q: "G'aniqul tog'a necha yoshda edi?", a: "60+" },
+{ bob: "2-Bob", q: "Xoji bobomizning nechta qizi bor?", a: "4 ta" },
+{ bob: "2-Bob", q: "Ilk bora bu hovliga qadam qo'yganiga necha yillar bo'lib ketdi Iskandarning?", a: "10 yildan oshib ketdi" },
+{ bob: "2-Bob", q: "O'qishni bitirib kelgach necha yil prokurorga yordamchilik qildi Iskandar?", a: "1 yil" },
+{ bob: "2-Bob", q: "Xoji bobo Jiydalida necha yil sarkotiblik qilgan?", a: "4 yil" },
+{ bob: "2-Bob", q: "Iskandar Dilyani endi uchrata boshlagan paytlari necha yoshda edi?", a: "14-15 yosh" },
+{ bob: "2-Bob", q: "Tevarak-ko'ydagi nechta xonadon Doniyorovning hovuzidan suv ichar edi?", a: "10-15 ta" },
+{ bob: "2-Bob", q: "Shokir Iskandardan necha yosh katta?", a: "2 yosh" },
+
+{ bob: "3-Bob (Oyravshan-1)", q: "Zebo jurnalidagi opa Oyravshanga nechta savol berdi?", a: "3" },
+{ bob: "3-Bob (Oyravshan-1)", q: "Bosh muharrir odatda tahririyatga qancha vaqtda 1 kelib ketar edi?", a: "Hafta-10 kunda bir" },
+{ bob: "3-Bob (Oyravshan-1)", q: "Opaning nechta qizi bor?", a: "2" },
+{ bob: "3-Bob (Oyravshan-1)", q: "Oyravshan nechi yoshga kirgan edi?", a: "28" },
+{ bob: "3-Bob (Oyravshan-1)", q: "Xusnijamol nechi yoshda esi?", a: "18-19" },
+{ bob: "3-Bob (Oyravshan-1)", q: "Xusnijamol uyning nechinchi qavatidan qaradi?", a: "2-qavatidan" },
+{ bob: "3-Bob (Oyravshan-1)", q: "Oyravshan bu yerda turganiga qancha vaqtdan oshdi?", a: "1 oy" },
+{ bob: "3-Bob (Oyravshan-1)", q: "Muntazam Jamolzodaning nechta farzansi bor?", a: "1 qizi" },
+{ bob: "3-Bob (Oyravshan-1)", q: "Oyravshan 1 ta mas nta she'r o'qidi?", a: "4" },
+{ bob: "3-Bob (Oyravshan-1)", q: "Qori akaning yonida bo'ladigan baqaloq qori akadan nechi yosh kichik edi?", a: "4" },
+
+{ bob: "4-Bob (G'ayrat-1)", q: "Sanam va Sevarning yosh orasidagi farq nechi yosh?", a: "2" },
+{ bob: "4-Bob (G'ayrat-1)", q: "To'qsabo'ning nechta qizi bor edi?", a: "2" },
+{ bob: "4-Bob (G'ayrat-1)", q: "Oq laylak arog'idan har yili 1 dona ochadi, hozir g'ayrat bahonasida nechinchisi ochiladi?", a: "20" },
+{ bob: "4-Bob (G'ayrat-1)", q: "To'qsabo' 5 yilga kesildi, yoza-yoz qilib nechi yilda chiqib keladi?", a: "3 yil" },
+{ bob: "4-Bob (G'ayrat-1)", q: "Rais nechchi yillik kommunist edi?", a: "30" },
+{ bob: "4-Bob (G'ayrat-1)", q: "Kolxoz raisi-deputat To'qsabo'ni nechi yilga kesdiradi?", a: "5" },
+{ bob: "4-Bob (G'ayrat-1)", q: "G'ayrat qaynotasining o'rnida qancha vaqt ham o'tirmadi?", a: "1 yil ham" },
+
+{ bob: "5-Bob (Oyravshan-3)", q: "Saylov nechi yilda bir bo'ladi asarda?", a: "5" },
+{ bob: "5-Bob (Oyravshan-3)", q: "Tamaraning nechta bolasi bor?", a: "4" },
+{ bob: "5-Bob (Oyravshan-3)", q: "O'sha payti saylovda nechta kishi nomzod edi?", a: "1" },
+{ bob: "5-Bob (Oyravshan-3)", q: "Saylov haqida G'ayrat gapirgach, maktab partiya tashkilotchisi G'ayratni komsomoldan qancha muddatga o'chirtirdi?", a: "2-3 hafta" },
+{ bob: "5-Bob (Oyravshan-3)", q: "Deputatlikka nomzod asosan nechta kishi edi?", a: "3" },
+{ bob: "5-Bob (Oyravshan-3)", q: "Qadahbozlik avjida to'rdan nechi kishi joy olgan edi?", a: "3" },
+{ bob: "5-Bob (Oyravshan-3)", q: "Oyravshanning nechta jiyani bor?", a: "2" },
+
+{ bob: "6-Bob", q: "To'yxonaning 1-qavatidan chiqqan nechchi kishilik joyni tanladi?", a: "50-60" },
+{ bob: "6-Bob", q: "O'dha oqsham zalda bir varakayiga nechta to'y ekan?", a: "3" },
+{ bob: "6-Bob", q: "Yana yilda nechi marta hukumat kasalxonasida yotishi ham bor?", a: "2" },
+{ bob: "6-Bob", q: "Necha oyda bir marta moshinasini har xil narsalarga to'ldirib Mansur kelar edi?", a: "2 oyda bir" },
+{ bob: "6-Bob", q: "Rais boboning kampiri necha yil to'shakka mixlanib yotdi?", a: "10 yil" },
+{ bob: "6-Bob", q: "Boboning nechta farzandi bor?", a: "2" },
+{ bob: "6-Bob", q: "Rais hozir nechi yoshda nari beri?", a: "60" },
+{ bob: "6-Bob", q: "Oyravshan nechchi yoshda edi?", a: "30 ga yetar yetmas" },
+{ bob: "6-Bob", q: "Pardaboy Xosiyatxondan nechi yosh kichik?", a: "3-4 yosh" },
+
+{ bob: "7-Bob (G'ayrat-2)", q: "Majlis Payti G'ayratga nechi marta telefon bo'lgan edi?", a: "7-8" },
+{ bob: "7-Bob (G'ayrat-2)", q: "Burxon Aliyorov nechi yildan beri chiroqchilik nonini yeb kelar edi?", a: "20" },
+{ bob: "7-Bob (G'ayrat-2)", q: "G'ayrat viloyat boshqarmasiga boshliq bo'lib ishlashiga nechi yildan oshdi hu narsalarni sezmagan?", a: "4" },
+{ bob: "7-Bob (G'ayrat-2)", q: "Ijaraxonada Oyravshan va G'ayrat nechi kun birga qolishadi?", a: "1 kecha" },
+{ bob: "7-Bob (G'ayrat-2)", q: "G'ayrat Vorisxonning diydorini bir xam ko'rmasdan qorong'u yerto'lasida nechi oyga yaqin yotib chiqdi?", a: "4 oy" },
+{ bob: "7-Bob (G'ayrat-2)", q: "Jumaniyozning nechta farzandi bor edi?", a: "2 aka-uka" },
+
+{ bob: "8-Bob (Oyravshan-4)", q: "Orada bir oy-yarim oy tanaffus bilan o'sha yili Rais bobo nechchi marta kasalxonada yotib chiqdi?", a: "3" },
+{ bob: "8-Bob (Oyravshan-4)", q: "U payt Oyravshanning o'g'li necha yoshda edi?", a: "4" },
+{ bob: "8-Bob (Oyravshan-4)", q: "Rais bobo ToshMIda nechchinchi qavatda davolanib yotardi?", a: "5" },
+{ bob: "8-Bob (Oyravshan-4)", q: "Yarimta bo'lib qolgan Rais bobo Toshkentga bemalol kelib keta olmas, oyda necha marta Oyravshanga telefon qilib so'rardi?", a: "2 marta" },
+{ bob: "8-Bob (Oyravshan-4)", q: "Tibbiyot masalalari bilan shug'ullanadigan muxbir qizni o'rtaga qo'yib topdirilgan nomdor doktor, dadasini necha kunga olib qoladi?", a: "2 kunga" },
+{ bob: "8-Bob (Oyravshan-4)", q: "Benuqson uylangan, nechta bolasi bor edi?", a: "2" },
+{ bob: "8-Bob (Oyravshan-4)", q: "Lazizbek Ikromovich necha yoshda edi?", a: "50" },
+{ bob: "8-Bob (Oyravshan-4)", q: "Oyravshan nechchinchi kursni bitirar-bitirmas, pedinstitutdagi dong'i sabab viloyat televideniyasiga ishga taklif etiladi?", a: "3-kursni" },
+{ bob: "8-Bob (Oyravshan-4)", q: "Iskandar Oyravshandan necha yosh katta edi?", a: "7-8 yosh" },
+{ bob: "8-Bob (Oyravshan-4)", q: "Issiqko'ldagi \"Dilorom\" deb atalmish bu jannatda Oyravshan qancha vaqt beg'am, bolalikdagi erkatoy qizaloqqa aylandi?", a: "2 hafta" },
+{ bob: "8-Bob (Oyravshan-4)", q: "Abubakr hozir nechinchi sinfda edi?", a: "2-sinfda" },
+{ bob: "8-Bob (Oyravshan-4)", q: "Oyravshan hozir necha yoshda edi?", a: "40 yoshda" },
+
+{ bob: "9-Bob (Iskandar-2)", q: "Iskandarning hayoti 1 haftada o'zgarib ketdi, unga nechta xabar kelgan edi?", a: "3" },
+{ bob: "9-Bob (Iskandar-2)", q: "Lazizbek Qodirov chet elga qochib ketganiga necha kun bo'ldi?", a: "3 kun" },
+{ bob: "9-Bob (Iskandar-2)", q: "Lazizbekning xotini - xolasining dardmand qizi nechta o'g'li bilan qolib ketdi?", a: "2" },
+
+{ bob: "10-Bob (Ta'ziya)", q: "Bugun ta'ziyaning nechanchi kuni edi?", a: "3" },
+{ bob: "10-Bob (Ta'ziya)", q: "Xoji bobo necha yil poytaxt nonini yeb, keyin yurtiga qaytadi?", a: "2 yil" },
+{ bob: "10-Bob (Ta'ziya)", q: "G'ayrat qancha kun Jiydalida turib, Toshkentga qaytdi?", a: "2 kun" },
+];
+
+function buildStars() {
+    const container = document.getElementById('stars');
+    container.innerHTML = '';
+    const count = 130;
+    for (let i = 0; i < count; i++) {
+        const s = document.createElement('div');
+        const isGlow = Math.random() > 0.8;
+        s.className = 'star' + (isGlow ? ' glow' : '');
+        s.style.left = Math.random() * 100 + '%';
+        s.style.top = Math.random() * 100 + '%';
+        const size = (isGlow ? (Math.random() * 1.5 + 2) : (Math.random() * 2 + 1)).toFixed(1);
+        s.style.width = size + 'px';
+        s.style.height = size + 'px';
+        s.style.animationDelay = (Math.random() * 2.5).toFixed(2) + 's';
+        s.style.animationDuration = (1.5 + Math.random() * 2).toFixed(2) + 's';
+        container.appendChild(s);
+    }
+}
+
+function renderList() {
+    const query = document.getElementById('listSearch').value.trim().toLowerCase();
+    const container = document.getElementById('qaList');
+    container.innerHTML = '';
+
+    const filtered = raqamlar
+        .map((item, idx) => ({ item, idx }))
+        .filter(({ item }) => (item.q + ' ' + item.a).toLowerCase().includes(query));
+
+    document.getElementById('listCounterAll').innerText = `${filtered.length} / ${raqamlar.length} ta son savoli`;
+
+    let lastBob = null;
+    filtered.forEach(({ item, idx }) => {
+        if (item.bob !== lastBob && query === '') {
+            const bobEl = document.createElement('div');
+            bobEl.className = 'bob-title';
+            bobEl.innerText = item.bob;
+            container.appendChild(bobEl);
+            lastBob = item.bob;
+        }
+        const card = document.createElement('div');
+        card.className = 'qa-card';
+        card.innerHTML = `
+            <span class="qa-num">${idx + 1} · ${item.bob}</span>
+            <div class="qa-question">${item.q}</div>
+            <div class="qa-answer"><b>Javob:</b> ${item.a}</div>
+        `;
+        container.appendChild(card);
+    });
+}
+
+buildStars();
+renderList();
+</script>
+</body>
+</html>
