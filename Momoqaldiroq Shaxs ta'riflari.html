@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<title>Shaxs ta'riflari</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+html, body { width: 100%; min-height: 100%; }
+body {
+    font-family: 'Segoe UI', 'Arial', sans-serif;
+    background: radial-gradient(ellipse at 50% 0%, #161616, #0a0a0a 60%);
+    color: white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    min-height: 100vh;
+    min-height: 100dvh;
+}
+
+#stars {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    pointer-events: none; z-index: 0; overflow: hidden;
+}
+.star {
+    position: absolute;
+    width: 2px; height: 2px;
+    background: #fff;
+    border-radius: 50%;
+    animation: twinkle 2.5s infinite ease-in-out;
+}
+.star.glow {
+    box-shadow: 0 0 6px 1px rgba(0, 255, 153, 0.5);
+}
+@keyframes twinkle {
+    0%, 100% { opacity: 0.15; transform: scale(1); }
+    50% { opacity: 1; transform: scale(1.6); }
+}
+
+.gold-badge {
+    width: 90px; height: 90px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 35% 30%, #2e2e2e, #0f0f0f 70%);
+    border: 3px solid #ffd700;
+    box-shadow: 0 0 18px rgba(255,215,0,0.55), 0 0 40px rgba(255,215,0,0.2);
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: -8px;
+    position: relative; z-index: 3;
+    animation: badgePulse 3s infinite ease-in-out;
+}
+@keyframes badgePulse {
+    0%, 100% { box-shadow: 0 0 18px rgba(255,215,0,0.55), 0 0 40px rgba(255,215,0,0.2); }
+    50% { box-shadow: 0 0 26px rgba(255,215,0,0.75), 0 0 55px rgba(255,215,0,0.32); }
+}
+.gold-badge svg { width: 44px; height: 44px; display: block; }
+
+.wrap {
+    position: relative; z-index: 2;
+    width: 100%; max-width: 750px;
+    display: flex; flex-direction: column;
+    align-items: center;
+    gap: 18px;
+    padding: 45px 30px 35px 30px;
+    background: linear-gradient(160deg, rgba(16,16,16,0.55), rgba(10,10,10,0.55));
+    backdrop-filter: blur(1px);
+    border: 2px solid #ffd700;
+    border-radius: 26px;
+    box-shadow: 0 0 30px rgba(255,215,0,0.22), inset 0 0 40px rgba(255,215,0,0.03);
+}
+
+h1 {
+    font-size: 22px; color: #ffffff; text-align: center;
+    letter-spacing: 1px;
+    text-shadow: 0 0 12px rgba(255,255,255,0.3);
+    width: 100%;
+}
+p.sub { color: #999; font-size: 13px; text-align: center; margin-top: -10px; }
+
+.list-search {
+    width: 100%;
+    padding: 12px 16px;
+    border-radius: 12px;
+    border: 2px solid #333;
+    background: #1b1b1b;
+    color: white;
+    font-size: 15px;
+    outline: none;
+}
+.list-search:focus { border-color: #00ff99; }
+.list-counter { color: #999; font-size: 13px; text-align: center; }
+
+.qa-list { width: 100%; display: flex; flex-direction: column; gap: 14px; }
+.qa-card {
+    position: relative;
+    background: linear-gradient(150deg, #1c1c1c, #141414);
+    border: 1px solid rgba(0, 255, 153, 0.28);
+    border-radius: 16px;
+    padding: 18px 20px;
+    box-shadow: 0 4px 14px rgba(0,0,0,0.35);
+    transition: 0.25s;
+}
+.qa-card:hover {
+    border-color: rgba(0,255,153,0.6);
+    box-shadow: 0 0 18px rgba(0,255,153,0.15);
+}
+.qa-num {
+    display: inline-block;
+    color: #050505;
+    background: #00ff99;
+    font-size: 12px;
+    font-weight: bold;
+    border-radius: 8px;
+    padding: 2px 9px;
+    margin-bottom: 8px;
+}
+.qa-question { color: #f0f0f0; font-size: 15.5px; line-height: 1.5; font-style: italic; margin-bottom: 10px; }
+.qa-answer {
+    color: #00ff99;
+    font-size: 16px;
+    font-weight: bold;
+    border-top: 1px dashed rgba(0,255,153,0.25);
+    padding-top: 10px;
+}
+.qa-answer b { color: #ffd700; }
+
+.bob-title {
+    width: 100%;
+    text-align: left;
+    color: #ffd700;
+    font-size: 15px;
+    font-weight: bold;
+    letter-spacing: 0.5px;
+    margin-top: 10px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid rgba(255,215,0,0.25);
+}
+
+@media (max-width: 480px) {
+    body { padding: 12px; }
+    .wrap { padding: 35px 16px 24px 16px; }
+    h1 { font-size: 19px; }
+    .gold-badge { width: 72px; height: 72px; }
+    .gold-badge svg { width: 36px; height: 36px; }
+}
+</style>
+</head>
+<body>
+<div id="stars"></div>
+<div class="wrap">
+    <div class="gold-badge">
+        <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+                <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#ffe9ee"/>
+                    <stop offset="45%" stop-color="#ff5c7a"/>
+                    <stop offset="100%" stop-color="#a8324a"/>
+                </linearGradient>
+            </defs>
+            <circle cx="32" cy="21" r="12" fill="url(#goldGrad)"/>
+            <path d="M8 56c0-13.3 10.7-22 24-22s24 8.7 24 22" stroke="url(#goldGrad)" stroke-width="6" stroke-linecap="round" fill="none"/>
+        </svg>
+    </div>
+    <h1>Shaxs ta'riflari</h1>
+    <p class="sub">Tashqi ko'rinish, xarakter va odat orqali "kim?" deb so'ralgan savollar</p>
+
+    <input type="text" class="list-search" id="listSearch" placeholder="Ta'rif yoki javob bo'yicha qidirish..." oninput="renderList()">
+    <div class="list-counter" id="listCounterAll"></div>
+    <div class="qa-list" id="qaList"></div>
+</div>
+
+<script>
+const tariflar = [
+{ bob: "1-Bob", q: "Bosh-oyoq jinsi libosdagi g'aybar, boyvachcha kishi kim?", a: "Iskandar" },
+{ bob: "1-Bob", q: "Yuki birgina osma sumkadan iborat ozg'inroq kishi kim?", a: "G'ayrat aka" },
+
+{ bob: "2-Bob", q: "Bu kishi hech odamga o'xshab gapirolmaydi, bir og'izgina gapni ham albatta ohangjamaga solib, qo'yib bersangiz uch tilda birdek, Xayyomdan ruboiylar qo'shib aytsa, kim?", a: "Xoji bobo" },
+{ bob: "2-Bob", q: "Indamas, odamovi, qornini g'amlab, sigaretini tutatib tursa bas, kim?", a: "Jo'rabek" },
+{ bob: "2-Bob", q: "Necha yildirki katta do'xtirlikni yig'ishtirib boyvuchcha sifat bo'lib uyda o'tirgan kim?", a: "Dilrabo" },
+{ bob: "2-Bob", q: "Qachon qaramang egnida dengizchilarning qorachipor \"telnyashkasi\", kulrang soch-soqoli o'sgan, labida arzondan arzon tamaki, tishlarini battar sarg'aytirib turgan odam kim?", a: "Gena amaki" },
+{ bob: "2-Bob", q: "Tanisa-tanimasa endi ko'rgan odamiga ham do'stona ko'z qisib qo'yish odati bor, izxori xurmati shu bo'lsa kerak. Kim?", a: "Gena amaki" },
+{ bob: "2-Bob", q: "Ko'zlari sal ko'kishligini aytmasa... otasining tus o'zi, bo'yi-basti ham, andak enkayib yurishi ham, ovozining bo'g'iq xirriligigacha kim?", a: "Jo'ra" },
+{ bob: "2-Bob", q: "Gung-soqov desa ham bo'ladi: uring-so'king, g'iq degan ovoz chiqarmaydi, bir zaylda kulib turaveradi. Kim?", a: "Jo'ra" },
+{ bob: "2-Bob", q: "Qo'lini doimo orqaga qilib yuradigan sersavlat shaxs kim?", a: "Xoji bobo" },
+{ bob: "2-Bob", q: "Maktab direktori bo'lib ishlaydigan shirinso'z, baqaloq xotin kim?", a: "O'lmas xola" },
+{ bob: "2-Bob", q: "Qop-qora, daroz, qoqichang xotin kim?", a: "Kayvoni xola" },
+{ bob: "2-Bob", q: "Sochi kaltagina qilib kesilgan boshini bir tomonga solintirgan, katta-katta ko'zlarida ma'sum bir xayrat... kim?", a: "Dilyaxon" },
+{ bob: "2-Bob", q: "Erka tantiligi 5 yashar boladan ham kim?", a: "Shokir" },
+{ bob: "2-Bob", q: "Ko'zining oqidan boshqa hamma joyi qop-qora kimlar?", a: "Ko'mirchilar" },
+{ bob: "2-Bob", q: "Gapning koni, she'ru g'azal aralashtirib 3 tilda barobar sayrab o'tirdi. Bilmagan latifasi yo'q, olis Kremldagi dovdirab qolgan chollarni ham tap tortmay...", a: "Xoji bobo" },
+{ bob: "2-Bob", q: "Odatdagi tortinish, iymanishlar yo'q, xuddi eski tanishlardek bemalol gap berib gap olib o'tiribdi. Kim haqida?", a: "Oyravshan" },
+{ bob: "2-Bob", q: "Televizorda sayrayverib burro bo'lib ketgan, poytaxt ekranlarini gullatib yurgan oyimtalarning o'zi kim?", a: "Oyravshan" },
+{ bob: "2-Bob", q: "She'r o'qiyotganida tamoman o'zgacha qiyofada o'zgacha maqomga kiradi...", a: "Oyravshan" },
+{ bob: "2-Bob", q: "U har gal davraga yaqinlasharkan, erining kaftidan quchib, kal boshidan muchchi olgan bo'ladi, kim?", a: "Dilora" },
+{ bob: "2-Bob", q: "Borgan yurtining nuksi urganmi... oldingi ko'rki yo'q, xuddi pati yulingan tovuq deysiz, kim?", a: "Dilora" },
+{ bob: "2-Bob", q: "\"Maxsumsifat mardum\" deb ta'riflangan kishi kim?", a: "Abdushukur aka" },
+{ bob: "2-Bob", q: "Muridimiz soqov hisoblanadi - bu kim haqida aytilgan?", a: "Abdushukur aka" },
+
+{ bob: "3-Bob", q: "Armansifatning ismi kim?", a: "Avet" },
+{ bob: "3-Bob", q: "To'laroq ko'ringani bilan u rosa chaqqon ekan, boz ustiga juda ham sho'x. Kim?", a: "Avet" },
+{ bob: "3-Bob", q: "Goh cho'nqayib Goh yonboshlab olib fotoapparatini chiqqilatarkan okey deya chap ko'zini qisib qo'yadi kim?", a: "Avet" },
+{ bob: "3-Bob", q: "Ko'zoynagi ustidan oyravshanga qattiq tikilgan basavlat odamni kim deb chaqirishardi?", a: "Qori aka" },
+{ bob: "3-Bob", q: "Egnida po'rim ko'ylak, bo'ynidagi xamishagi zangori sharf - ta'rif kim haqida?", a: "Opa haqida" },
+{ bob: "3-Bob", q: "Bujur basharasini obdon shibbalab, shochlarini kestirib xurpaytirib jingalak qilib olgan, baribir yog'li allaqanday yopishqoq, xamon qazg'oqlari bordek...", a: "Muflixa" },
+{ bob: "3-Bob", q: "Go'ngxo'r chug'urchiq kim?", a: "Muflixa" },
+{ bob: "3-Bob", q: "Bu to'y-u tantanadan birgina odam bebaxradek u darvoza tagiga stul qo'yib yakkayolg'iz o'tiribdi, xavo iliq bo'lishiga qaramay egnida qalin guppi cho'pon, boshida qizag'i bir qarich keladigan andijom do'ppi. Kelgan-ketganga qontalash kim?", a: "Opaning eri" },
+
+{ bob: "4-Bob", q: "Bo'yi 2 metr, kaftlari ketmondek, afti zanjining o'zi, gapirganda nuqul iljayib, xuddi kishini ermaklayotgandek o'ynoqilik bilan gapiradi. Kim?", a: "Jumaniyoz daroz" },
+{ bob: "4-Bob", q: "Elning musofir bolasi talaba xona yoki u yer-bu yerda arzon garov ijara qilib kun ko'rsa, bu kishim amakisiningmi, tog'asiningmi o'rdasimon hovlisida yashaydi. Kim haqida gap ketmoqda?", a: "Jumaniyoz daroz" },
+{ bob: "4-Bob", q: "Mehnat qilishga qiyinsinib, haqqini ajratib olishga qarasa go'ra o'ta ochko'z kim?", a: "G'ayrat" },
+{ bob: "4-Bob", q: "Sirtdan baqirchaqiru to'poriroq ko'rinadigan odam, qarzi boshidan oshib toshgan bo'lsa ham royishnamo biror arzgo'yni noumid qaytarmaydi. Kim haqida gap ketmoqda?", a: "To'qsabo'" },
+{ bob: "4-Bob", q: "Tumshuq osmonda, o'zi ham osmondan tushganday karrilab, qachon qaramang qo'li orqada, jiydalini o'zi tug'ib qo'ygan kabi shishinib yuradi. Bu kim?", a: "Juma To'qsabo'" },
+{ bob: "4-Bob", q: "Komsomolning-kamolotning kattasiman deb yuradigan odam kim?", a: "Azamat" },
+{ bob: "4-Bob", q: "Shunday farzand ko'rguncha devorning kavagiga to'kmaysanmi, ey bandai nodon! Shu xaromidan familiyamni qaytib olaman deb yuraman, xech iloji yo'q - kim haqida aytilgan?", a: "Azamat" },
+{ bob: "4-Bob", q: "Juma To'qsabo'ning 1-xotini qanday edi?", a: "Xushro'yligi ustiga suvni ko'rsa yotib oladigan tanbal tuya misoli yotoqiroq xilidan bo'lib chiqadi" },
+
+{ bob: "5-Bob", q: "Dafatan qaragan odam uni erkak kishimikan deydi: yuzini tapoq bosgan, qop-qora, yonoqlari turtib chiqqan, otbashara kim?", a: "Tamara" },
+{ bob: "5-Bob", q: "Gungurs, boshini ko'tarib odamning yuziga qarashni bilmaydi, uyalinqiragandek yerga tikilib turgani turgan kim?", a: "Cho'riboy" },
+{ bob: "5-Bob", q: "Novchadan-novcha, ko'rkam, cho'zinchoq yuzli, qoramag'iz kishi. Allanechuk xorg'in, boshqalarga o'xshab yuzingizga tikilib qaramoqni bilmaydi, sipo-vazmin kim?", a: "Farovonlik hissadorlik jamiyatining raisi" },
+{ bob: "5-Bob", q: "Gaplari lo'nda-lo'nda, mazmundor. Odatdagidek ortiqcha uzib-ulamoqqa hojat yo'q - ta'rif kim haqida?", a: "Farovonlik hissadorlik jamiyatining raisi" },
+{ bob: "5-Bob", q: "Nihoyatda xushmuomala, marhamatli kishi kim?", a: "Partiya boshi" },
+{ bob: "5-Bob", q: "Eski kinolardagi qo'rboshilarga o'xshab ketadigan, sochi tap-taqir qirilgan, beti oyboltadek, ko'zlari qisiqqa moyil shaxs kim?", a: "Nurman Eshboltayev" },
+{ bob: "5-Bob", q: "Tekisgina, to'kisgina sochlari bejirim turmaklangan, oq koftasining yoqalari belburma kostyumdan tashqarida. Bo'ynida jimir-jimir zanjircha. Xullas, risola bop kim?", a: "Madam Xosiyatxon" },
+{ bob: "5-Bob", q: "Pishiq-puxta, ishonchli odam - kimga tegishli bu ta'rif?", a: "Musulmonovga" },
+{ bob: "5-Bob", q: "Chindan ham bidir-bidir gapdon ekan, ammo aytgan biror so'zi esda qolmaydi - kimning?", a: "Sharofatning" },
+{ bob: "5-Bob", q: "U hamma ishda ustoziga taqlid qilishi ko'rinib turardi, go'yoki Madam Xosiyatning nusxasi, lekin xiraroq-pachoqroq nusxa. Viloyat pedinstitutini bitirgan - kim?", a: "Samiya" },
+{ bob: "5-Bob", q: "Musichai beozordek ko'rinib, girdida girgitton bo'lib yurgan pismiq kim?", a: "Madam Xosiyatxon" },
+{ bob: "5-Bob", q: "Tishlarining orasi sarg'ayib yotadi, yap-yangi qimmatbaho tuflilarining ichiga ham qarab bo'lmaydi - kimning?", a: "Madam Xosiyatxonning" },
+{ bob: "5-Bob", q: "Saranjom-sarishtalikni yaxshi ko'radi, bu uyda yolg'iz qolganiga, keksaligiga qaramay bir zum tinmaydi - kim?", a: "Oyravshanning dadasi" },
+{ bob: "5-Bob", q: "Ro'parasiga cho'nqaygan bu odam nogahon Oyravshanning ko'ziga otasidek, amakisidek, yo'q yanada yaqin, aziz ko'rinib ketdi - kim?", a: "Rais bobo" },
+
+{ bob: "6-Bob", q: "Bunda har maqomda bir chimdim topsa bo'lardi: negadir kaltaroq nikoh ko'ylagi ustidan tizzaga tushadigan yengsiz belburma Adras mursak, alomat tu, ko'rgan odam ko'z uzolmay qolardi. Mayli, kim nima desa - der. Bitta yarimtasi kuyib o'lsa bas - ta'rif kim haqida?", a: "Oyravshan" },
+
+{ bob: "7-Bob", q: "...ning yaxshi odati - kalavani chuvalatib o'tirmaydi, masalani ko'ndalang qo'yib, aytar gapini shartta-shartta aytadi-da, yakun yasaydi-qo'yadi. Kim?", a: "Jumaniyoz" },
+{ bob: "7-Bob", q: "Gapga no'noqligi-yu o'tirish-turishida palapartishtoroq ko'rinishi aldamchi holat: har qanday masalada muammoning jon joyini bir qarashda bexato aniqlaydi. Kim?", a: "Jumaniyoz" },
+{ bob: "7-Bob", q: "Xushmuomala, xatto uncha-muncha hazilkash kim?", a: "Vorisxon" },
+{ bob: "7-Bob", q: "Juda bamaylixotir, og'ir-vazmin, beozor odam. Nimani so'ramang, jo'yali maslahat beradi. Kim?", a: "Burxon Aliyorov" },
+{ bob: "7-Bob", q: "O'ta kamgap-og'irkarvon, ammo og'iz ochgudek bo'lsa, albatta nishonga urgudek qilib xazil aralash so'zlaydi. Ziyofatlarda necha bor birga o'tirishgan, ko'zi to'q odam. O'zi tug'ilib o'sgan Zarang tumanida ozroq ekinbop yeri, 2 azamat o'g'li bor - ta'rif kim haqida?", a: "Diyor Shoyimboyev" },
+{ bob: "7-Bob", q: "O'qishga kechroq kirgan, sirtqi yurfakda o'qirdi, imtihon topshirganini birov ko'rmagan; otardan tushgan yaqinlari bilan hisob-kitobini to'g'irlab yurardi. Yuzi yaltillab orqaga taralgan sermavj sochlari moydan yaltirab turardi. Hovli biqinidagi xonada buvisi bilan yashardi - ta'rif kim haqida?", a: "Vorisxon (Jobir Otarchi)" },
+{ bob: "7-Bob", q: "Kaftdekkina bu hovlida faqat kimning qaqqillab kulishlari yangrab turadi. O'zi oq-sariqdan kelgan, bir qiz va bir o'g'ilning onasi bo'lsa-da haliyam oqi oq?", a: "Aslida kelinoyi" },
+{ bob: "7-Bob", q: "U qayerdadir shofyorlik qiladi, jussasi dum-damaloq, piyoladek-piyoladek ko'zlari go'yoki ichidagi musallasidan rang olgan, qontalash - ta'rif kim haqida?", a: "Ilhom aka" },
+{ bob: "7-Bob", q: "Ko'ylak tugmalari yechilib ketgan, kajavasimon qorni selkillaydi. Sochlari har yon to'zg'ib, tepakali ochilib qolgan - kim?", a: "Ilhom aka" },
+{ bob: "7-Bob", q: "Qariyb ikki yildirki shu hovlida yashab, cho'zinchoq yuzli, odam zoriga doim o'qrayib qaraydigan ushoqqina kim?", a: "Badjahl kampir" },
+{ bob: "7-Bob", q: "Martabador uy egasini kamdan-kam ko'rgan. Onda-sonda uchrashib qolganlarida ham negadir doim qovoqlari shishinqirab yuradigan, yelkasida beso'naqay to'n - kim?", a: "Boltavoy doyi" },
+{ bob: "7-Bob", q: "Uy-ro'zg'or bilan ishi yo'q, ko'pincha mamlakat bo'ylab xizmat safarlarida yuradi - ta'rif kim haqida?", a: "Jumaniyoz" },
+
+{ bob: "8-Bob", q: "Uzun bo'yli, xipchadan kelgan, qorin-porini yo'q, kiyimlari yarashiq, bug'doyrang, qirra burun, ko'kishtob ko'zli, 30-35 yoshlardagi sipo va nazokatli muomalali kim haqida gap ketmoqda?", a: "Muzaffarxo'ja Muhammadxo'jayev" },
+{ bob: "8-Bob", q: "Kalta po'stin kiygan, kaltaroq, baroqqosh, oq yuzli, iyagida pichoq bilan kesilgandek kemtikchasi bor, tepakal, yon tomonidagi qo'ng'ir soch tolalari mahorat bilan oldinga taralgan - bu kim haqida?", a: "Lazizbek Ikromovich" },
+{ bob: "8-Bob", q: "Sochlari burkanib o'tirgan, munchoq ko'zli qiz kim haqida gap?", a: "Asalka" },
+{ bob: "8-Bob", q: "Ko'rkam tortib, to'lishib, arbonlarga xos bir tus olib qolgan kim edi?", a: "Iskandar aka" },
+{ bob: "8-Bob", q: "Ishga puxta, tayoqdek to'g'ri, suvni ham puflab ichadigan, xalol-pokiza kim edi?", a: "G'ayrat" },
+{ bob: "8-Bob", q: "Bo'yi bir qarich-u, kursiga o'rnashgach, odam qatori bo'lib qoladigan kim edi?", a: "Muflixaxon" },
+
+{ bob: "9-Bob", q: "\"Mard, chapani, do'lvor tabiat, bir issig'i bor, yonidan ketgingiz kelmaydi, yoqimtoy, xojatbaror, yor-do'stining ko'pligi ne-ne kazo-kazolar bilan bordi-keldi qadrdon\" - ta'rif kim haqida?", a: "Zo'rbankning boshlig'i (Lazizbek Qodirov)" },
+{ bob: "9-Bob", q: "\"Xushsurat, sertavoze bir yigit, dallol, qo'shmachi\" - ta'rif kim haqida?", a: "Xo'ja Xo'jayevich" },
+{ bob: "9-Bob", q: "\"Uning yuzini kamdan-kam holda ko'rish mumkin edi, qari maqomida kuzalgan sochi mudom bir betini to'sib yashirib turar edi\" - ta'rif kim haqida?", a: "Nozlixon" },
+
+{ bob: "10-Bob", q: "\"3 kundirki, shu yerda azaxonada har kuni 2-3 soat o'tirib ketadi\" - bu kim haqida?", a: "G'ayrat" },
+{ bob: "10-Bob", q: "\"U ham qaynotasi bilan deyarli bir xil libosda, egnida novchadan-novcha, qomatiga kaltalik qilib turgan och kulrang yaktak, boshida sal kattaroqmi...\" - ta'rif kim haqida?", a: "Xans" },
+];
+
+function buildStars() {
+    const container = document.getElementById('stars');
+    container.innerHTML = '';
+    const count = 130;
+    for (let i = 0; i < count; i++) {
+        const s = document.createElement('div');
+        const isGlow = Math.random() > 0.8;
+        s.className = 'star' + (isGlow ? ' glow' : '');
+        s.style.left = Math.random() * 100 + '%';
+        s.style.top = Math.random() * 100 + '%';
+        const size = (isGlow ? (Math.random() * 1.5 + 2) : (Math.random() * 2 + 1)).toFixed(1);
+        s.style.width = size + 'px';
+        s.style.height = size + 'px';
+        s.style.animationDelay = (Math.random() * 2.5).toFixed(2) + 's';
+        s.style.animationDuration = (1.5 + Math.random() * 2).toFixed(2) + 's';
+        container.appendChild(s);
+    }
+}
+
+function renderList() {
+    const query = document.getElementById('listSearch').value.trim().toLowerCase();
+    const container = document.getElementById('qaList');
+    container.innerHTML = '';
+
+    const filtered = tariflar
+        .map((item, idx) => ({ item, idx }))
+        .filter(({ item }) => (item.q + ' ' + item.a).toLowerCase().includes(query));
+
+    document.getElementById('listCounterAll').innerText = `${filtered.length} / ${tariflar.length} ta ta'rif`;
+
+    let lastBob = null;
+    filtered.forEach(({ item, idx }) => {
+        if (item.bob !== lastBob && query === '') {
+            const bobEl = document.createElement('div');
+            bobEl.className = 'bob-title';
+            bobEl.innerText = item.bob;
+            container.appendChild(bobEl);
+            lastBob = item.bob;
+        }
+        const card = document.createElement('div');
+        card.className = 'qa-card';
+        card.innerHTML = `
+            <span class="qa-num">${idx + 1} · ${item.bob}</span>
+            <div class="qa-question">${item.q}</div>
+            <div class="qa-answer"><b>Kim:</b> ${item.a}</div>
+        `;
+        container.appendChild(card);
+    });
+}
+
+buildStars();
+renderList();
+</script>
+</body>
+</html>
