@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<title>Joylar tasviri va ta'rifi</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+html, body { width: 100%; min-height: 100%; }
+body {
+    font-family: 'Segoe UI', 'Arial', sans-serif;
+    background: radial-gradient(ellipse at 50% 0%, #161616, #0a0a0a 60%);
+    color: white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    min-height: 100vh;
+    min-height: 100dvh;
+}
+
+#stars {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    pointer-events: none; z-index: 0; overflow: hidden;
+}
+.star {
+    position: absolute;
+    width: 2px; height: 2px;
+    background: #fff;
+    border-radius: 50%;
+    animation: twinkle 2.5s infinite ease-in-out;
+}
+.star.glow {
+    box-shadow: 0 0 6px 1px rgba(255, 215, 0, 0.5);
+}
+@keyframes twinkle {
+    0%, 100% { opacity: 0.15; transform: scale(1); }
+    50% { opacity: 1; transform: scale(1.6); }
+}
+
+.gold-badge {
+    width: 84px; height: 84px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 35% 30%, #2e2e2e, #0f0f0f 70%);
+    border: 3px solid #ffd700;
+    box-shadow: 0 0 18px rgba(255,215,0,0.55), 0 0 40px rgba(255,215,0,0.2);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 38px;
+    margin-bottom: -8px;
+    position: relative; z-index: 3;
+}
+
+.wrap {
+    position: relative; z-index: 2;
+    width: 100%; max-width: 750px;
+    display: flex; flex-direction: column;
+    align-items: center;
+    gap: 18px;
+    padding: 45px 30px 35px 30px;
+    background: linear-gradient(160deg, rgba(16,16,16,0.55), rgba(10,10,10,0.55));
+    backdrop-filter: blur(1px);
+    border: 2px solid #ffd700;
+    border-radius: 26px;
+    box-shadow: 0 0 30px rgba(255,215,0,0.22), inset 0 0 40px rgba(255,215,0,0.03);
+}
+
+h1 {
+    font-size: 22px; color: #ffffff; text-align: center;
+    letter-spacing: 1px;
+    text-shadow: 0 0 12px rgba(255,255,255,0.3);
+    width: 100%;
+}
+p.sub { color: #999; font-size: 13px; text-align: center; margin-top: -10px; }
+
+.list-search {
+    width: 100%;
+    padding: 12px 16px;
+    border-radius: 12px;
+    border: 2px solid #333;
+    background: #1b1b1b;
+    color: white;
+    font-size: 15px;
+    outline: none;
+}
+.list-search:focus { border-color: #00ff99; }
+.list-counter { color: #999; font-size: 13px; text-align: center; }
+
+.qa-list { width: 100%; display: flex; flex-direction: column; gap: 14px; }
+.qa-card {
+    position: relative;
+    background: linear-gradient(150deg, #1c1c1c, #141414);
+    border: 1px solid rgba(0, 255, 153, 0.28);
+    border-radius: 16px;
+    padding: 18px 20px;
+    box-shadow: 0 4px 14px rgba(0,0,0,0.35);
+    transition: 0.25s;
+}
+.qa-card:hover {
+    border-color: rgba(0,255,153,0.6);
+    box-shadow: 0 0 18px rgba(0,255,153,0.15);
+}
+.qa-num {
+    display: inline-block;
+    color: #050505;
+    background: #00ff99;
+    font-size: 12px;
+    font-weight: bold;
+    border-radius: 8px;
+    padding: 2px 9px;
+    margin-bottom: 8px;
+}
+.qa-question { color: #f0f0f0; font-size: 15.5px; line-height: 1.5; font-style: italic; margin-bottom: 10px; }
+.qa-answer {
+    color: #00ff99;
+    font-size: 16px;
+    font-weight: bold;
+    border-top: 1px dashed rgba(0,255,153,0.25);
+    padding-top: 10px;
+}
+.qa-answer b { color: #ffd700; }
+
+.bob-title {
+    width: 100%;
+    text-align: left;
+    color: #ffd700;
+    font-size: 15px;
+    font-weight: bold;
+    letter-spacing: 0.5px;
+    margin-top: 10px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid rgba(255,215,0,0.25);
+}
+
+@media (max-width: 480px) {
+    body { padding: 12px; }
+    .wrap { padding: 35px 16px 24px 16px; }
+    h1 { font-size: 19px; }
+    .gold-badge { width: 68px; height: 68px; font-size: 30px; }
+}
+</style>
+</head>
+<body>
+<div id="stars"></div>
+<div class="wrap">
+    <div class="gold-badge">🏞️</div>
+    <h1>🏞️ Joylar tasviri va ta'rifi</h1>
+    <p class="sub">Tashqi ko'rinish va tasvir orqali "bu qayer?" deb so'ralgan savollar</p>
+
+    <input type="text" class="list-search" id="listSearch" placeholder="Ta'rif yoki javob bo'yicha qidirish..." oninput="renderList()">
+    <div class="list-counter" id="listCounterAll"></div>
+    <div class="qa-list" id="qaList"></div>
+</div>
+
+<script>
+const tasvirlar = [
+{ bob: "2-Bob", q: "Bir vaqtlar harbiylar qal'asi sanalgan shaharning qoq markazida, chorak gektarcha keladigan, gulu-gulzor bog'i, otxonayu molxonasi bor joy qayer?", a: "Xoji boboning chorbog'i" },
+
+{ bob: "4-Bob (G'ayrat-1)", q: "Hovlisi jiydalining qoq markazida, eski istirohat bog'ining etagidan o'tadigan kattakonlar yashaydigan qator uylarga yondosh tor ko'chaning adog'ida kimning uyi?", a: "Juma To'qsabo'ning uyi" },
+
+{ bob: "5-Bob (Oyravshan-3)", q: "Shimolda tog'lar qurshovida joylashgan qayer?", a: "Jiydali" },
+{ bob: "5-Bob (Oyravshan-3)", q: "Etakda yassi adirliklar-u poyonsiz ekinzorlar bag'rida qayer?", a: "Zarang" },
+{ bob: "5-Bob (Oyravshan-3)", q: "\"Soya-salqinligi, to'g'ri tog'-u toshi, ko'rkam odamlari, archazorlarimizning bo'yu tarovati\" - ana hamma gap shunda, bu yer qayer?", a: "Jiydali" },
+{ bob: "5-Bob (Oyravshan-3)", q: "Yo'lka bo'ylab ekilgan qator archalar qanday archa edi?", a: "Tuya archa" },
+{ bob: "5-Bob (Oyravshan-3)", q: "Bu mehmonxona nimani eslatadi?", a: "Kavkaz qurortini" },
+{ bob: "5-Bob (Oyravshan-3)", q: "Archazordan keyin qanday bog' bor edi?", a: "Quyuq o'rikzor" },
+{ bob: "5-Bob (Oyravshan-3)", q: "O'rikzordan keyin yana qanday zor bor?", a: "Tokzor" },
+{ bob: "5-Bob (Oyravshan-3)", q: "Tokzordan keyin qanday daraxtlar bor?", a: "Qop-qora shudgor" },
+{ bob: "5-Bob (Oyravshan-3)", q: "Tanasining bir yoni og'zi ochiq ajdarhoga o'xshab ko'ringan narsa nima?", a: "Ko'hna tut" },
+
+{ bob: "6-Bob", q: "Rais boni ko'pincha o'rganib qolgan manzili qayerga tushadi?", a: "Eski hayvonot bog'idagi so'lim bir go'shada joylashgan hukumat mehmonxonasi" },
+{ bob: "6-Bob", q: "Bu joy kamtarona yo'sinda \"Farovon\" xo'jaligining chorbog'i, shiypon deb atalgan bilan, aslida nima hisoblanadi?", a: "Tuman hokimligining norasmiy dachasi" },
+
+{ bob: "7-Bob (G'ayrat-2)", q: "Baland Panjara bilan o'ralgan 3 qavatli qora oyanavand bino. Qurilganiga ko'p bo'lgani yo'q. Eski shahardagi eski istirohat bog'ining etakrog'ida bir vaqt...", a: "Vorisxonning binosi" },
+
+{ bob: "8-Bob (Oyravshan-4)", q: "Qayerning bog'i xuddi Bog'i Eram, xorij chamanzorlaridek?", a: "Hukumat kasalxonasining" },
+{ bob: "8-Bob (Oyravshan-4)", q: "Qayer xuddi jannat-restoran?", a: "Hukumat kasalxonasi" },
+];
+
+function buildStars() {
+    const container = document.getElementById('stars');
+    container.innerHTML = '';
+    const count = 130;
+    for (let i = 0; i < count; i++) {
+        const s = document.createElement('div');
+        const isGlow = Math.random() > 0.8;
+        s.className = 'star' + (isGlow ? ' glow' : '');
+        s.style.left = Math.random() * 100 + '%';
+        s.style.top = Math.random() * 100 + '%';
+        const size = (isGlow ? (Math.random() * 1.5 + 2) : (Math.random() * 2 + 1)).toFixed(1);
+        s.style.width = size + 'px';
+        s.style.height = size + 'px';
+        s.style.animationDelay = (Math.random() * 2.5).toFixed(2) + 's';
+        s.style.animationDuration = (1.5 + Math.random() * 2).toFixed(2) + 's';
+        container.appendChild(s);
+    }
+}
+
+function renderList() {
+    const query = document.getElementById('listSearch').value.trim().toLowerCase();
+    const container = document.getElementById('qaList');
+    container.innerHTML = '';
+
+    const filtered = tasvirlar
+        .map((item, idx) => ({ item, idx }))
+        .filter(({ item }) => (item.q + ' ' + item.a).toLowerCase().includes(query));
+
+    document.getElementById('listCounterAll').innerText = `${filtered.length} / ${tasvirlar.length} ta ta'rif`;
+
+    let lastBob = null;
+    filtered.forEach(({ item, idx }) => {
+        if (item.bob !== lastBob && query === '') {
+            const bobEl = document.createElement('div');
+            bobEl.className = 'bob-title';
+            bobEl.innerText = item.bob;
+            container.appendChild(bobEl);
+            lastBob = item.bob;
+        }
+        const card = document.createElement('div');
+        card.className = 'qa-card';
+        card.innerHTML = `
+            <span class="qa-num">${idx + 1} · ${item.bob}</span>
+            <div class="qa-question">${item.q}</div>
+            <div class="qa-answer"><b>Qayer:</b> ${item.a}</div>
+        `;
+        container.appendChild(card);
+    });
+}
+
+buildStars();
+renderList();
+</script>
+</body>
+</html>
