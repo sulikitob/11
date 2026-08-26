@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<title>Yosh va davr ma'lumotlari</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+html, body { width: 100%; min-height: 100%; }
+body {
+    font-family: 'Segoe UI', 'Arial', sans-serif;
+    background: radial-gradient(ellipse at 50% 0%, #161616, #0a0a0a 60%);
+    color: white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    min-height: 100vh;
+    min-height: 100dvh;
+}
+
+#stars {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    pointer-events: none; z-index: 0; overflow: hidden;
+}
+.star {
+    position: absolute;
+    width: 2px; height: 2px;
+    background: #fff;
+    border-radius: 50%;
+    animation: twinkle 2.5s infinite ease-in-out;
+}
+.star.glow {
+    box-shadow: 0 0 6px 1px rgba(0, 255, 153, 0.5);
+}
+@keyframes twinkle {
+    0%, 100% { opacity: 0.15; transform: scale(1); }
+    50% { opacity: 1; transform: scale(1.6); }
+}
+
+.gold-badge {
+    width: 90px; height: 90px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 35% 30%, #2e2e2e, #0f0f0f 70%);
+    border: 3px solid #ffd700;
+    box-shadow: 0 0 18px rgba(255,215,0,0.55), 0 0 40px rgba(255,215,0,0.2);
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: -8px;
+    position: relative; z-index: 3;
+    animation: badgePulse 3s infinite ease-in-out;
+}
+@keyframes badgePulse {
+    0%, 100% { box-shadow: 0 0 18px rgba(255,215,0,0.55), 0 0 40px rgba(255,215,0,0.2); }
+    50% { box-shadow: 0 0 26px rgba(255,215,0,0.75), 0 0 55px rgba(255,215,0,0.32); }
+}
+.gold-badge svg { width: 44px; height: 44px; display: block; }
+
+.wrap {
+    position: relative; z-index: 2;
+    width: 100%; max-width: 750px;
+    display: flex; flex-direction: column;
+    align-items: center;
+    gap: 18px;
+    padding: 45px 30px 35px 30px;
+    background: linear-gradient(160deg, rgba(16,16,16,0.55), rgba(10,10,10,0.55));
+    backdrop-filter: blur(1px);
+    border: 2px solid #ffd700;
+    border-radius: 26px;
+    box-shadow: 0 0 30px rgba(255,215,0,0.22), inset 0 0 40px rgba(255,215,0,0.03);
+}
+
+h1 {
+    font-size: 22px; color: #ffffff; text-align: center;
+    letter-spacing: 1px;
+    text-shadow: 0 0 12px rgba(255,255,255,0.3);
+    width: 100%;
+}
+p.sub { color: #999; font-size: 13px; text-align: center; margin-top: -10px; }
+
+.list-search {
+    width: 100%;
+    padding: 12px 16px;
+    border-radius: 12px;
+    border: 2px solid #333;
+    background: #1b1b1b;
+    color: white;
+    font-size: 15px;
+    outline: none;
+}
+.list-search:focus { border-color: #00ff99; }
+.list-counter { color: #999; font-size: 13px; text-align: center; }
+
+.qa-list { width: 100%; display: flex; flex-direction: column; gap: 14px; }
+.qa-card {
+    position: relative;
+    background: linear-gradient(150deg, #1c1c1c, #141414);
+    border: 1px solid rgba(0, 255, 153, 0.28);
+    border-radius: 16px;
+    padding: 18px 20px;
+    box-shadow: 0 4px 14px rgba(0,0,0,0.35);
+    transition: 0.25s;
+}
+.qa-card:hover {
+    border-color: rgba(0,255,153,0.6);
+    box-shadow: 0 0 18px rgba(0,255,153,0.15);
+}
+.qa-num {
+    display: inline-block;
+    color: #050505;
+    background: #00ff99;
+    font-size: 12px;
+    font-weight: bold;
+    border-radius: 8px;
+    padding: 2px 9px;
+    margin-bottom: 8px;
+}
+.qa-tag {
+    display: inline-block;
+    color: #00ff99;
+    background: rgba(0,255,153,0.12);
+    border: 1px solid rgba(0,255,153,0.4);
+    font-size: 11px;
+    font-weight: bold;
+    border-radius: 8px;
+    padding: 2px 8px;
+    margin-bottom: 8px;
+    margin-left: 6px;
+}
+.qa-question { color: #f0f0f0; font-size: 15.5px; line-height: 1.5; font-style: italic; margin-bottom: 10px; }
+.qa-answer {
+    color: #00ff99;
+    font-size: 16px;
+    font-weight: bold;
+    border-top: 1px dashed rgba(0,255,153,0.25);
+    padding-top: 10px;
+}
+.qa-answer b { color: #ffd700; }
+
+.bob-title {
+    width: 100%;
+    text-align: left;
+    color: #ffd700;
+    font-size: 15px;
+    font-weight: bold;
+    letter-spacing: 0.5px;
+    margin-top: 10px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid rgba(255,215,0,0.25);
+}
+
+@media (max-width: 480px) {
+    body { padding: 12px; }
+    .wrap { padding: 35px 16px 24px 16px; }
+    h1 { font-size: 19px; }
+    .gold-badge { width: 72px; height: 72px; }
+    .gold-badge svg { width: 36px; height: 36px; }
+}
+</style>
+</head>
+<body>
+<div id="stars"></div>
+<div class="wrap">
+    <div class="gold-badge">
+        <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+                <linearGradient id="hgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#f3e6ff"/>
+                    <stop offset="45%" stop-color="#b565ff"/>
+                    <stop offset="100%" stop-color="#6b2ea8"/>
+                </linearGradient>
+            </defs>
+            <path d="M16 10h32M16 54h32" stroke="url(#hgGrad)" stroke-width="4" stroke-linecap="round"/>
+            <path d="M20 10c0 10 6 15 12 18-6 3-12 8-12 18M44 10c0 10-6 15-12 18 6 3 12 8 12 18" stroke="url(#hgGrad)" stroke-width="3.5" fill="none" stroke-linejoin="round"/>
+            <path d="M25 16c1.5 6 4 8.5 7 10 3-1.5 5.5-4 7-10z" fill="url(#hgGrad)" opacity="0.85"/>
+            <path d="M25 48c1.5-6 4-8.5 7-10 3 1.5 5.5 4 7 10z" fill="url(#hgGrad)" opacity="0.55"/>
+        </svg>
+    </div>
+    <h1>Yosh va davr ma'lumotlari</h1>
+    <p class="sub">Shaxslarning yoshi yoki yashagan/tasvirlangan davriga oid ma'lumotlar</p>
+
+    <input type="text" class="list-search" id="listSearch" placeholder="Ism, yosh yoki davr bo'yicha qidirish..." oninput="renderList()">
+    <div class="list-counter" id="listCounterAll"></div>
+    <div class="qa-list" id="qaList"></div>
+</div>
+
+<script>
+const malumotlar = [
+{ bob: "8-Bob", tag: "Yosh", q: "Uzun bo'yli, xipchadan kelgan, bug'doyrang, qirra burun, 30-35 yoshlardagi sipo va nazokatli muomalali kim?", a: "Muzaffarxo'ja Muhammadxo'jayev — aniq yosh oralig'i: 30-35 yosh" },
+];
+
+function buildStars() {
+    const container = document.getElementById('stars');
+    container.innerHTML = '';
+    const count = 130;
+    for (let i = 0; i < count; i++) {
+        const s = document.createElement('div');
+        const isGlow = Math.random() > 0.8;
+        s.className = 'star' + (isGlow ? ' glow' : '');
+        s.style.left = Math.random() * 100 + '%';
+        s.style.top = Math.random() * 100 + '%';
+        const size = (isGlow ? (Math.random() * 1.5 + 2) : (Math.random() * 2 + 1)).toFixed(1);
+        s.style.width = size + 'px';
+        s.style.height = size + 'px';
+        s.style.animationDelay = (Math.random() * 2.5).toFixed(2) + 's';
+        s.style.animationDuration = (1.5 + Math.random() * 2).toFixed(2) + 's';
+        container.appendChild(s);
+    }
+}
+
+function renderList() {
+    const query = document.getElementById('listSearch').value.trim().toLowerCase();
+    const container = document.getElementById('qaList');
+    container.innerHTML = '';
+
+    const filtered = malumotlar
+        .map((item, idx) => ({ item, idx }))
+        .filter(({ item }) => (item.q + ' ' + item.a + ' ' + item.tag).toLowerCase().includes(query));
+
+    document.getElementById('listCounterAll').innerText = `${filtered.length} / ${malumotlar.length} ta ma'lumot`;
+
+    let lastBob = null;
+    filtered.forEach(({ item, idx }) => {
+        if (item.bob !== lastBob && query === '') {
+            const bobEl = document.createElement('div');
+            bobEl.className = 'bob-title';
+            bobEl.innerText = item.bob;
+            container.appendChild(bobEl);
+            lastBob = item.bob;
+        }
+        const card = document.createElement('div');
+        card.className = 'qa-card';
+        card.innerHTML = `
+            <span class="qa-num">${idx + 1} · ${item.bob}</span>
+            <span class="qa-tag">${item.tag}</span>
+            <div class="qa-question">${item.q}</div>
+            <div class="qa-answer"><b>Ma'lumot:</b> ${item.a}</div>
+        `;
+        container.appendChild(card);
+    });
+}
+
+buildStars();
+renderList();
+</script>
+</body>
+</html>
