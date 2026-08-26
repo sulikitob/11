@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<title>Barcha personajlar</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+html, body { width: 100%; min-height: 100%; }
+body {
+    font-family: 'Segoe UI', 'Arial', sans-serif;
+    background: radial-gradient(ellipse at 50% 0%, #161616, #0a0a0a 60%);
+    color: white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    min-height: 100vh;
+    min-height: 100dvh;
+}
+
+/* ===== Yulduzlar foni ===== */
+#stars {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    pointer-events: none; z-index: 0; overflow: hidden;
+}
+.star {
+    position: absolute;
+    width: 2px; height: 2px;
+    background: #fff;
+    border-radius: 50%;
+    animation: twinkle 2.5s infinite ease-in-out;
+}
+.star.glow {
+    box-shadow: 0 0 6px 1px rgba(0, 255, 153, 0.5);
+}
+@keyframes twinkle {
+    0%, 100% { opacity: 0.15; transform: scale(1); }
+    50% { opacity: 1; transform: scale(1.6); }
+}
+
+/* ===== Yashil nishon (badge) ===== */
+.gold-badge {
+    width: 84px; height: 84px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 35% 30%, #2e2e2e, #0f0f0f 70%);
+    border: 3px solid #00ff99;
+    box-shadow: 0 0 18px rgba(0,255,153,0.55), 0 0 40px rgba(0,255,153,0.2);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 38px;
+    margin-bottom: -8px;
+    position: relative; z-index: 3;
+}
+
+/* ===== Asosiy karta ===== */
+.wrap {
+    position: relative; z-index: 2;
+    width: 100%; max-width: 750px;
+    display: flex; flex-direction: column;
+    align-items: center;
+    gap: 18px;
+    padding: 45px 30px 35px 30px;
+    background: linear-gradient(160deg, rgba(16,16,16,0.55), rgba(10,10,10,0.55));
+    backdrop-filter: blur(1px);
+    border: 2px solid #00ff99;
+    border-radius: 26px;
+    box-shadow: 0 0 30px rgba(0,255,153,0.22), inset 0 0 40px rgba(0,255,153,0.03);
+}
+
+h1 {
+    font-size: 22px; color: #ffffff; text-align: center;
+    letter-spacing: 1px;
+    text-shadow: 0 0 12px rgba(255,255,255,0.3);
+    width: 100%;
+}
+
+.list-search {
+    width: 100%;
+    padding: 12px 16px;
+    border-radius: 12px;
+    border: 2px solid #333;
+    background: #1b1b1b;
+    color: white;
+    font-size: 15px;
+    outline: none;
+}
+.list-search:focus { border-color: #00ff99; }
+.list-counter { color: #999; font-size: 13px; text-align: center; }
+.qa-list {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+    gap: 14px;
+}
+.qa-card {
+    position: relative;
+    background: linear-gradient(150deg, #1c1c1c, #141414);
+    border: 1px solid rgba(0, 255, 153, 0.28);
+    border-radius: 16px;
+    padding: 18px 18px 16px 18px;
+    box-shadow: 0 4px 14px rgba(0,0,0,0.35);
+    transition: 0.25s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    min-height: 70px;
+}
+.qa-card:hover {
+    border-color: rgba(0,255,153,0.65);
+    box-shadow: 0 0 18px rgba(0,255,153,0.18);
+    transform: translateY(-2px);
+}
+.qa-num {
+    position: absolute;
+    top: -9px;
+    left: 12px;
+    display: inline-block;
+    color: #050505;
+    background: #00ff99;
+    font-size: 11px;
+    font-weight: bold;
+    border-radius: 8px;
+    padding: 2px 8px;
+}
+.qa-question {
+    color: #f0f0f0;
+    font-size: 15.5px;
+    line-height: 1.5;
+    font-weight: bold;
+}
+@media (max-width: 480px) {
+    body { padding: 12px; }
+    .wrap { padding: 35px 16px 24px 16px; }
+    h1 { font-size: 19px; }
+    .gold-badge { width: 68px; height: 68px; font-size: 30px; }
+    .qa-list { grid-template-columns: repeat(auto-fill, minmax(145px, 1fr)); }
+}
+</style>
+</head>
+<body>
+<div id="stars"></div>
+<div class="wrap">
+    <div class="gold-badge">🎭</div>
+    <h1 id="pageTitle">🎭 Barcha personajlar</h1>
+
+    <input type="text" class="list-search" id="listSearch" placeholder="Ism bo'yicha qidirish..." oninput="renderList()">
+    <div class="list-counter" id="listCounterAll"></div>
+    <div class="qa-list" id="qaList"></div>
+</div>
+
+<script>
+const namesData = [
+    "Iskandar",
+    "Oyravshan",
+    "G'ayrat",
+    "Xoji bobo",
+    "Adolat poshsha",
+    "G'aniqul (Gena amaki)",
+    "Marusa",
+    "Jo'raboy",
+    "Jo'ra (Jo'rabek, Georgiy)",
+    "Dilrabo poshsha",
+    "Mayram",
+    "Xalima",
+    "Nekbibi (ertak qahramoni)",
+    "Rasul aka",
+    "O'lmas xola",
+    "Shurik (Shokir)",
+    "Kayvoni xola (Tarasha xola)",
+    "Dilya (Dilyaxon)",
+    "Sho'ro bobo",
+    "Xasan (Xans)",
+    "Abdushukur aka",
+    "Dilora",
+    "Jamolzoda (Muntazamxon)",
+    "Avet",
+    "Qori aka",
+    "Muflixa (Muflixaxon)",
+    "Zamira (Zamiraxon)",
+    "Xusnijamol",
+    "Mirg'iyos",
+    "Jumaniyoz (daroz, Matyoqubov)",
+    "Juma To'qsabo' (Mamar To'qsabo')",
+    "Baltavay",
+    "Azamat",
+    "Sanam",
+    "Sevar",
+    "Gulsara",
+    "Toshtemir Chaqqon",
+    "Madam Xosiyat (Xosiyatxon)",
+    "Tamara",
+    "Cho'riboy",
+    "Pardaboy",
+    "Mansur",
+    "Davron",
+    "Vasya",
+    "Ashura",
+    "Botirali",
+    "Saidaxon",
+    "Dilbar",
+    "Rais bobo",
+    "Nurman Eshboltayev",
+    "To'lqin Boymirzayev",
+    "Musulmonov",
+    "Shoyimardonov (Shavkat)",
+    "Sharipov domla",
+    "Raxmon",
+    "Samiya",
+    "Sharofat",
+    "Zahro",
+    "Shuhrat (sobiq hokim)",
+    "Shoikrom",
+    "Valera",
+    "Faxriddin",
+    "Abdukarim (Mavlonov)",
+    "Burxon Aliyorov",
+    "Vorisxon",
+    "Diyor Shoyimboyev",
+    "Jobir Otarchi (Jobir Salim)",
+    "Aslida",
+    "Ilhom aka",
+    "Emine xonim",
+    "Boltavoy doyi",
+    "Yanvar aka",
+    "Baqirbek",
+    "Olim Orifjonov",
+    "Lazizbek Ikromovich",
+    "Muzaffarxo'ja Muhammadxo'jayev (Benuqson)",
+    "Asalka",
+    "Ramziddin Po'latovich",
+    "Abubakr (Abakir)",
+    "Mastura chaqqon",
+    "Lazizbek Qodirov",
+    "Xo'ja Xo'jayevich",
+    "Nozlixon"
+];
+
+function renderList() {
+    const query = document.getElementById('listSearch').value.trim().toLowerCase();
+    const container = document.getElementById('qaList');
+    container.innerHTML = '';
+
+    const source = namesData.map((item, idx) => ({ item, idx }));
+    const filtered = source.filter(({ item }) => item.toLowerCase().includes(query));
+
+    document.getElementById('listCounterAll').innerText = `${filtered.length} / ${namesData.length} ta personaj`;
+
+    if (filtered.length === 0) {
+        container.innerHTML = `<div style="grid-column:1/-1; color:#666; text-align:center; padding:30px;">Hech narsa topilmadi.</div>`;
+        return;
+    }
+
+    filtered.forEach(({ item, idx }) => {
+        const card = document.createElement('div');
+        card.className = 'qa-card';
+        card.innerHTML = `
+            <span class="qa-num">${idx + 1}</span>
+            <div class="qa-question">${item}</div>
+        `;
+        container.appendChild(card);
+    });
+}
+
+function buildStars() {
+    const container = document.getElementById('stars');
+    container.innerHTML = '';
+    const count = 130;
+    for (let i = 0; i < count; i++) {
+        const s = document.createElement('div');
+        const isGlow = Math.random() > 0.8;
+        s.className = 'star' + (isGlow ? ' glow' : '');
+        s.style.left = Math.random() * 100 + '%';
+        s.style.top = Math.random() * 100 + '%';
+        const size = (isGlow ? (Math.random() * 1.5 + 2) : (Math.random() * 2 + 1)).toFixed(1);
+        s.style.width = size + 'px';
+        s.style.height = size + 'px';
+        s.style.animationDelay = (Math.random() * 2.5).toFixed(2) + 's';
+        s.style.animationDuration = (1.5 + Math.random() * 2).toFixed(2) + 's';
+        container.appendChild(s);
+    }
+}
+
+buildStars();
+renderList();
+</script>
+</body>
+</html>
