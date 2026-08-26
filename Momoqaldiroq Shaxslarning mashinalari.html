@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<title>Mashinalar - kimniki</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+html, body { width: 100%; min-height: 100%; }
+body {
+    font-family: 'Segoe UI', 'Arial', sans-serif;
+    background: radial-gradient(ellipse at 50% 0%, #161616, #0a0a0a 60%);
+    color: white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    min-height: 100vh;
+    min-height: 100dvh;
+}
+
+#stars {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    pointer-events: none; z-index: 0; overflow: hidden;
+}
+.star {
+    position: absolute;
+    width: 2px; height: 2px;
+    background: #fff;
+    border-radius: 50%;
+    animation: twinkle 2.5s infinite ease-in-out;
+}
+.star.glow {
+    box-shadow: 0 0 6px 1px rgba(255, 215, 0, 0.5);
+}
+@keyframes twinkle {
+    0%, 100% { opacity: 0.15; transform: scale(1); }
+    50% { opacity: 1; transform: scale(1.6); }
+}
+
+.gold-badge {
+    width: 84px; height: 84px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 35% 30%, #2e2e2e, #0f0f0f 70%);
+    border: 3px solid #ffd700;
+    box-shadow: 0 0 18px rgba(255,215,0,0.55), 0 0 40px rgba(255,215,0,0.2);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 38px;
+    margin-bottom: -8px;
+    position: relative; z-index: 3;
+}
+
+.wrap {
+    position: relative; z-index: 2;
+    width: 100%; max-width: 750px;
+    display: flex; flex-direction: column;
+    align-items: center;
+    gap: 18px;
+    padding: 45px 30px 35px 30px;
+    background: linear-gradient(160deg, rgba(16,16,16,0.55), rgba(10,10,10,0.55));
+    backdrop-filter: blur(1px);
+    border: 2px solid #ffd700;
+    border-radius: 26px;
+    box-shadow: 0 0 30px rgba(255,215,0,0.22), inset 0 0 40px rgba(255,215,0,0.03);
+}
+
+h1 {
+    font-size: 22px; color: #ffffff; text-align: center;
+    letter-spacing: 1px;
+    text-shadow: 0 0 12px rgba(255,255,255,0.3);
+    width: 100%;
+}
+p.sub { color: #999; font-size: 13px; text-align: center; margin-top: -10px; }
+
+.list-search {
+    width: 100%;
+    padding: 12px 16px;
+    border-radius: 12px;
+    border: 2px solid #333;
+    background: #1b1b1b;
+    color: white;
+    font-size: 15px;
+    outline: none;
+}
+.list-search:focus { border-color: #00ff99; }
+.list-counter { color: #999; font-size: 13px; text-align: center; }
+
+.qa-list { width: 100%; display: flex; flex-direction: column; gap: 14px; }
+.qa-card {
+    position: relative;
+    background: linear-gradient(150deg, #1c1c1c, #141414);
+    border: 1px solid rgba(0, 255, 153, 0.28);
+    border-radius: 16px;
+    padding: 18px 20px;
+    box-shadow: 0 4px 14px rgba(0,0,0,0.35);
+    transition: 0.25s;
+}
+.qa-card:hover {
+    border-color: rgba(0,255,153,0.6);
+    box-shadow: 0 0 18px rgba(0,255,153,0.15);
+}
+.qa-num {
+    display: inline-block;
+    color: #050505;
+    background: #00ff99;
+    font-size: 12px;
+    font-weight: bold;
+    border-radius: 8px;
+    padding: 2px 9px;
+    margin-bottom: 8px;
+}
+.qa-question { color: #f0f0f0; font-size: 15.5px; line-height: 1.5; font-style: italic; margin-bottom: 10px; }
+.qa-answer {
+    color: #00ff99;
+    font-size: 16px;
+    font-weight: bold;
+    border-top: 1px dashed rgba(0,255,153,0.25);
+    padding-top: 10px;
+}
+.qa-answer b { color: #ffd700; }
+
+.bob-title {
+    width: 100%;
+    text-align: left;
+    color: #ffd700;
+    font-size: 15px;
+    font-weight: bold;
+    letter-spacing: 0.5px;
+    margin-top: 10px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid rgba(255,215,0,0.25);
+}
+
+@media (max-width: 480px) {
+    body { padding: 12px; }
+    .wrap { padding: 35px 16px 24px 16px; }
+    h1 { font-size: 19px; }
+    .gold-badge { width: 68px; height: 68px; font-size: 30px; }
+}
+</style>
+</head>
+<body>
+<div id="stars"></div>
+<div class="wrap">
+    <div class="gold-badge">🚗</div>
+    <h1>🚗 Mashinalar - kimniki?</h1>
+    <p class="sub">Shaxslarga tegishli mashina rusumlari bo'yicha savol-javoblar</p>
+
+    <input type="text" class="list-search" id="listSearch" placeholder="Ism yoki mashina rusumi bo'yicha qidirish..." oninput="renderList()">
+    <div class="list-counter" id="listCounterAll"></div>
+    <div class="qa-list" id="qaList"></div>
+</div>
+
+<script>
+const mashinalar = [
+{ bob: "1-Bob", q: "Iskandar Jiydalik qishlog'iga qanaqa moshinada keladi?", a: "Prado" },
+{ bob: "1-Bob", q: "G'ayrat aka qanaqa moshinada, necha kishi bilan kelgan edi?", a: "Kumush rang Neksiyada, 3 nafar kishi bilan" },
+
+{ bob: "3-Bob (Oyravshan-1)", q: "Qori akada qanday rusumdagi moshina bor edi?", a: "Eski Moskvich" },
+{ bob: "3-Bob (Oyravshan-1)", q: "Ziyofatdan Zamira opa va oyravshan kimning qizil jigulisida qaytishdi?", a: "Avetning" },
+{ bob: "3-Bob (Oyravshan-1)", q: "Zebo jurnalidagi opa qaysi moshinaga o'tirdi?", a: "Volga" },
+
+{ bob: "5-Bob (Oyravshan-3)", q: "Xosiyatxon qaysi moshinaga o'tirib ketdi?", a: "Matiz" },
+{ bob: "5-Bob (Oyravshan-3)", q: "Samiya qanaqa mashina haydar edi?", a: "Matiz" },
+{ bob: "5-Bob (Oyravshan-3)", q: "Vasya qanaqa mashina shofyori?", a: "Damas" },
+{ bob: "5-Bob (Oyravshan-3)", q: "Cho'riboyning mittigina nimasiyam bor edi?", a: "Traktori" },
+{ bob: "5-Bob (Oyravshan-3)", q: "Xosiyatning qanday rusumli moshinasi bor?", a: "Matiz" },
+
+{ bob: "6-Bob", q: "Rais ko'pincha Mansur bilan kattakon qaysi moshinasida keladi?", a: "Jip" },
+{ bob: "6-Bob", q: "Bobo Oyravshanga qandau moshina sovg'a qiladi?", a: "Matiz" },
+
+{ bob: "7-Bob (G'ayrat-2)", q: "G'ayrat qanaqa rusumli moshina olgan edi?", a: "Volga" },
+
+{ bob: "8-Bob (Oyravshan-4)", q: "Benuqsonning qanday mashinasi bor edi?", a: "Neksiya" },
+{ bob: "8-Bob (Oyravshan-4)", q: "Lazizbek Ikromovichning qanday mashinasi bor edi?", a: "Jip" },
+{ bob: "8-Bob (Oyravshan-4)", q: "Mehmon Xosiyatxon qora rangdagi qanday mashinada keladi?", a: "Opel" },
+{ bob: "8-Bob (Oyravshan-4)", q: "Iskandar Oyravshanni qaysi mashinasiga mindirdi?", a: "Lasettisiga" },
+
+{ bob: "9-Bob (Iskandar-2)", q: "Dilrabo hamon norozi bo'lib, laqma kuyovning o'zi saxiy-serpul qaynota sovg'a qilgan qaysi mashinaga quvonib yurganini aytadi?", a: "Toyota" },
+];
+
+function buildStars() {
+    const container = document.getElementById('stars');
+    container.innerHTML = '';
+    const count = 130;
+    for (let i = 0; i < count; i++) {
+        const s = document.createElement('div');
+        const isGlow = Math.random() > 0.8;
+        s.className = 'star' + (isGlow ? ' glow' : '');
+        s.style.left = Math.random() * 100 + '%';
+        s.style.top = Math.random() * 100 + '%';
+        const size = (isGlow ? (Math.random() * 1.5 + 2) : (Math.random() * 2 + 1)).toFixed(1);
+        s.style.width = size + 'px';
+        s.style.height = size + 'px';
+        s.style.animationDelay = (Math.random() * 2.5).toFixed(2) + 's';
+        s.style.animationDuration = (1.5 + Math.random() * 2).toFixed(2) + 's';
+        container.appendChild(s);
+    }
+}
+
+function renderList() {
+    const query = document.getElementById('listSearch').value.trim().toLowerCase();
+    const container = document.getElementById('qaList');
+    container.innerHTML = '';
+
+    const filtered = mashinalar
+        .map((item, idx) => ({ item, idx }))
+        .filter(({ item }) => (item.q + ' ' + item.a).toLowerCase().includes(query));
+
+    document.getElementById('listCounterAll').innerText = `${filtered.length} / ${mashinalar.length} ta mashina savoli`;
+
+    let lastBob = null;
+    filtered.forEach(({ item, idx }) => {
+        if (item.bob !== lastBob && query === '') {
+            const bobEl = document.createElement('div');
+            bobEl.className = 'bob-title';
+            bobEl.innerText = item.bob;
+            container.appendChild(bobEl);
+            lastBob = item.bob;
+        }
+        const card = document.createElement('div');
+        card.className = 'qa-card';
+        card.innerHTML = `
+            <span class="qa-num">${idx + 1} · ${item.bob}</span>
+            <div class="qa-question">${item.q}</div>
+            <div class="qa-answer"><b>Mashina:</b> ${item.a}</div>
+        `;
+        container.appendChild(card);
+    });
+}
+
+buildStars();
+renderList();
+</script>
+</body>
+</html>
