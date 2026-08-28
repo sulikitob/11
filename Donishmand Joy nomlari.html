@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-<title>Joy va qishloq nomlari</title>
+<title>Joy nomlari</title>
 <style>
 * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 html, body { width: 100%; min-height: 100%; }
@@ -91,9 +91,12 @@ p.sub { color: #999; font-size: 13px; text-align: center; margin-top: -10px; }
     background: linear-gradient(150deg, #1c1c1c, #141414);
     border: 1px solid rgba(0, 255, 153, 0.28);
     border-radius: 16px;
-    padding: 18px 20px;
+    padding: 16px 20px;
     box-shadow: 0 4px 14px rgba(0,0,0,0.35);
     transition: 0.25s;
+    display: flex;
+    align-items: center;
+    gap: 14px;
 }
 .qa-card:hover {
     border-color: rgba(0,255,153,0.6);
@@ -107,17 +110,9 @@ p.sub { color: #999; font-size: 13px; text-align: center; margin-top: -10px; }
     font-weight: bold;
     border-radius: 8px;
     padding: 2px 9px;
-    margin-bottom: 8px;
+    flex-shrink: 0;
 }
-.qa-question { color: #f0f0f0; font-size: 15.5px; line-height: 1.5; font-style: italic; margin-bottom: 10px; }
-.qa-answer {
-    color: #00ff99;
-    font-size: 16px;
-    font-weight: bold;
-    border-top: 1px dashed rgba(0,255,153,0.25);
-    padding-top: 10px;
-}
-.qa-answer b { color: #ffd700; }
+.qa-name { color: #ffd700; font-size: 17px; font-weight: bold; }
 
 .bob-title {
     width: 100%;
@@ -144,7 +139,7 @@ p.sub { color: #999; font-size: 13px; text-align: center; margin-top: -10px; }
 <div class="wrap">
     <div class="gold-badge">📍</div>
     <h1>📍 Joy nomlari</h1>
-    <p class="sub">"Qayer?", "qayerlik?", "qaysi tuman/shahar/qishloq?" so'rog'iga javob beruvchi barcha savol-javoblar</p>
+    <p class="sub">"Qayer?", "qaysi joy?", "qaysi bozor/qal'a?" so'rog'iga javob beruvchi barcha savol-javoblar</p>
 
     <input type="text" class="list-search" id="listSearch" placeholder="Joy nomi yoki savol bo'yicha qidirish..." oninput="renderList()">
     <div class="list-counter" id="listCounterAll"></div>
@@ -182,26 +177,17 @@ function renderList() {
     container.innerHTML = '';
 
     const filtered = joylar
-        .map((item, idx) => ({ item, idx }))
-        .filter(({ item }) => (item.q + ' ' + item.a).toLowerCase().includes(query));
+        .map((name, idx) => ({ name, idx }))
+        .filter(({ name }) => name.toLowerCase().includes(query));
 
-    document.getElementById('listCounterAll').innerText = `${filtered.length} / ${joylar.length} ta joy nomi savoli`;
+    document.getElementById('listCounterAll').innerText = `${filtered.length} / ${joylar.length} ta joy nomi`;
 
-    let lastBob = null;
-    filtered.forEach(({ item, idx }) => {
-        if (item.bob !== lastBob && query === '') {
-            const bobEl = document.createElement('div');
-            bobEl.className = 'bob-title';
-            bobEl.innerText = item.bob;
-            container.appendChild(bobEl);
-            lastBob = item.bob;
-        }
+    filtered.forEach(({ name, idx }) => {
         const card = document.createElement('div');
         card.className = 'qa-card';
         card.innerHTML = `
-            <span class="qa-num">${idx + 1} · ${item.bob}</span>
-            <div class="qa-question">${item.q}</div>
-            <div class="qa-answer"><b>Qayer:</b> ${item.a}</div>
+            <span class="qa-num">${idx + 1}</span>
+            <div class="qa-name">📍 ${name}</div>
         `;
         container.appendChild(card);
     });
