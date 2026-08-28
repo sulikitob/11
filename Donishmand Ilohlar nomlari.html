@@ -125,18 +125,6 @@ p.sub { color: #999; font-size: 13px; text-align: center; margin-top: -10px; }
 }
 .qa-answer b { color: #ffd700; }
 
-.bob-title {
-    width: 100%;
-    text-align: left;
-    color: #ffd700;
-    font-size: 15px;
-    font-weight: bold;
-    letter-spacing: 0.5px;
-    margin-top: 10px;
-    padding-bottom: 6px;
-    border-bottom: 1px solid rgba(255,215,0,0.25);
-}
-
 @media (max-width: 480px) {
     body { padding: 12px; }
     .wrap { padding: 35px 16px 24px 16px; }
@@ -151,9 +139,9 @@ p.sub { color: #999; font-size: 13px; text-align: center; margin-top: -10px; }
 <div class="wrap">
     <div class="gold-badge">🎭</div>
     <h1>Ilohlar nomlari</h1>
-    <p class="sub">Tashqi ko'rinish, xarakter va odat orqali "kim?" deb so'ralgan savollar</p>
+    <p class="sub">Yunon mifologiyasidagi xudo va ilohlar haqidagi savollar</p>
 
-    <input type="text" class="list-search" id="listSearch" placeholder="Ta'rif yoki javob bo'yicha qidirish..." oninput="renderList()">
+    <input type="text" class="list-search" id="listSearch" placeholder="Savol yoki javob bo'yicha qidirish..." oninput="renderList()">
     <div class="list-counter" id="listCounterAll"></div>
     <div class="qa-list" id="qaList"></div>
 </div>
@@ -201,25 +189,22 @@ function renderList() {
 
     const filtered = tariflar
         .map((item, idx) => ({ item, idx }))
-        .filter(({ item }) => (item.q + ' ' + item.a).toLowerCase().includes(query));
+        .filter(({ item }) => (item.q + ' ' + item.correct).toLowerCase().includes(query));
 
-    document.getElementById('listCounterAll').innerText = `${filtered.length} / ${tariflar.length} ta ta'rif`;
+    document.getElementById('listCounterAll').innerText = `${filtered.length} / ${tariflar.length} ta savol`;
 
-    let lastBob = null;
+    if (filtered.length === 0) {
+        container.innerHTML = `<div style="color:#666; text-align:center; padding:30px;">Hech narsa topilmadi.</div>`;
+        return;
+    }
+
     filtered.forEach(({ item, idx }) => {
-        if (item.bob !== lastBob && query === '') {
-            const bobEl = document.createElement('div');
-            bobEl.className = 'bob-title';
-            bobEl.innerText = item.bob;
-            container.appendChild(bobEl);
-            lastBob = item.bob;
-        }
         const card = document.createElement('div');
         card.className = 'qa-card';
         card.innerHTML = `
-            <span class="qa-num">${idx + 1} · ${item.bob}</span>
+            <span class="qa-num">${idx + 1}</span>
             <div class="qa-question">${item.q}</div>
-            <div class="qa-answer"><b>Kim:</b> ${item.a}</div>
+            <div class="qa-answer"><b>Javob:</b> ${item.correct}</div>
         `;
         container.appendChild(card);
     });
