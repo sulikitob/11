@@ -401,60 +401,133 @@ const quizData = [
 
  /* ===== 2***  ===== */
 
-{ q: "Bittagina kichkina tepalikdan iborat orolda chayla va odam bor, orolda yana nima bor?", correct: "Qo'y", wrongs: ["Echki", "It", "Tovuq"] },
-  { q: "Qo'y tepalikda nimadan mamnun?", correct: "Tepalikda o'sadigan o'tlardan", wrongs: ["Quyoshli havodan", "Dengiz shabadasidan", "Erkin yurishidan"] },
-  { q: "Qo'y tepalikda o'sadigan o'tlardan mamnun, odam esa nimadan mamnun?", correct: "Qo'y borligidan", wrongs: ["Tepalik go'zalligidan", "Chaylaning qulayligidan", "Yolg'izlikdan"] },
-  { q: "Bo'rilar kiyiklar, quyonlar va qo'ylar bilan oziqlanadi degan ta'rifga yana nimalarni qo'shib qo'yish mumkin?", correct: "Pishiriq qoldiqlari, kartoshka pyuresi, dimlama qotgan non va boshqalarni", wrongs: ["Faqat yashil o'tlarni", "Faqat baliqlarni", "Faqat qushlarni"] },
-  { q: "Fabrikada qaysi kun bilinmaydi?", correct: "Yakshanba kuni", wrongs: ["Dushanba kuni", "Shanba kuni", "Juma kuni"] },
-  { q: "Qancha vaqt ichida Klemenslarnikiga ovqatlanishga yetib boraman?", correct: "Yarim soatga", wrongs: ["Bir soatga", "O'n daqiqaga", "Ikki soatga"] },
-  { q: "Klemens mehmonxonasining shkafi ustida 2 ta qotirilgan nima turadi?", correct: "Qush", wrongs: ["Baliq", "Hayvon haykali", "Gul"] },
-  { q: "Qotirilgan qushlarning turi nima edi?", correct: "Xo'jasavdogar va Chipor kaptar", wrongs: ["Bulbul va Tovus", "Lochin va Burgut", "Chumchuq va Qarg'a"] },
-  { q: "Bu qushlarni Klemensga kim sovg'a qilgan edi?", correct: "Onasi", wrongs: ["Otasi", "Do'sti", "Amakisi"] },
-  { q: "Klemensning onasi muzeyda kim bo'lib ishlagan edi?", correct: "Muzeyda tulum yasaydigan usta bo'lib", wrongs: ["Muzey gidi bo'lib", "Muzey direktori bo'lib", "Tozalovchi bo'lib"] },
-  { q: "Klemens nima ichishga taklif qilganida \"jonim bilan\" deyman?", correct: "Pivo", wrongs: ["Choy", "Sharob", "Sharbat"] },
-  { q: "Klemens fabrika yopilgandan keyin nima qilishni rejalashtirgan edi?", correct: "Sayohat qilishni", wrongs: ["Uylanishni", "Nafaqaga chiqishni", "Kitob yozishni"] },
-  { q: "Klemens qayerlarga sayohat qilishni orzu qilardi?", correct: "Ant tog'lariga, Kasbiy dengiziga, Afrika janubidagi Yaxshi Umid burniga, Shimoliy dengizdagi Helgolandga va Janubiy Amerikadagi Olovli yerga", wrongs: ["Faqat Yevropa mamlakatlariga", "Faqat dengiz bo'ylab sayr qilishga", "Faqat qo'shni shaharlarga"] },
-  { q: "Xayollarimda ibodatxona devorlarida bitta hayvonning rasmi bo'lardi - qaysi hayvonning rasmi tushurilgan edi?", correct: "Fillarning", wrongs: ["Sherlarning", "Bo'rilarning", "Otlarning"] },
-  { q: "Gidning aytishicha fillarning rasmi qanday yasalgan edi?", correct: "Ko'rishmagan xartum va quloqlarini eshitib yasashgan edi", wrongs: ["To'g'ridan-to'g'ri ko'rib yasashgan edi", "Rasmlardan ko'chirib yasashgan edi", "Xayoliy tasvirlab yasashgan edi"] },
-  { q: "Panjara simi orasidan qaysi hayvon uchib o'tgan edi?", correct: "Ari", wrongs: ["Kapalak", "Chumchuq", "Pashsha"] },
-  { q: "Boshliq bog'idagi nimalarni yil bo'yi yig'ishtirmaydi, chunki keyingi yil yana osib yurmayin deydi?", correct: "Yangi yil bezaklarini", wrongs: ["Gulchambarlarni", "Fonarchalarni", "Bayroqchalarni"] },
-  { q: "Boshliqni shu paytgacha faqat nechta odam ko'rgan edi?", correct: "1 ta", wrongs: ["3 ta", "5 ta", "Hech kim"] },
-  { q: "Boshliq fabrika yopilganidan keyin nima qilish niyatida edi?", correct: "O'zi va fabrika haqidagi xayollarni yozish niyatida", wrongs: ["Boshqa fabrika ochish niyatida", "Sayohatga chiqish niyatida", "Nafaqaga chiqib dam olish niyatida"] },
-  { q: "Boshliq uchar-sharda nima qilishni niyat qilardi?", correct: "Fabrikani ustidan uchib o'tib, chiroyli turganini ko'rishni хohlardi", wrongs: ["Tog'lar osha uchib o'tishni хohlardi", "Dengiz ustidan uchishni хohlardi", "Shaharni yuqoridan ko'rishni хohlardi"] },
-  { q: "Juda aqlli hayvon deb ta'riflangan hayvon qaysi?", correct: "Bo'ri", wrongs: ["Ayiq", "Tulki", "Bo'rsiq"] },
-  { q: "Bo'rini ko'rganda nima qilish kerak?", correct: "Qarsak chalib, tovush chiqarib uni qo'rqitish yoki kattaroq ko'rinishga harakat qilish kerak (jilmaymagan holda)", wrongs: ["Sekin orqaga chekinib qochish kerak", "Yerga cho'kkalab yashirinish kerak", "Tovush chiqarmay turaverish kerak"] },
-  { q: "Bo'rini ko'rganda nima qilish kerakligini menga kim o'rgatgan edi?", correct: "Loze", wrongs: ["Klemens", "Boshliq", "Oshpaz"] },
-  { q: "Loze kim bo'lib ishlardi?", correct: "Ovchi bo'lib", wrongs: ["O'rmonchi bo'lib", "Qorovul bo'lib", "Baliqchi bo'lib"] },
-  { q: "Qaysi hayvon odamga hujum qilganida o'zini o'lganga solishi kerak?", correct: "Ayiq", wrongs: ["Bo'ri", "Yo'lbars", "Qoplon"] },
-  { q: "Odam o'zini o'lganga solganida qayerini to'sishi kerak?", correct: "Bo'ynini", wrongs: ["Boshini", "Yuzini", "Ko'kragini"] },
-  { q: "Nima uchun odam o'zini o'lganga solganida bo'ynini yopishi kerak?", correct: "Chunki ayiq o'z o'ljasini bo'ynidan tortib o'rmon ichiga olib kirib ketadi", wrongs: ["Chunki ayiq bo'yindan tishlab o'ldiradi", "Chunki bo'yin eng nozik joy hisoblanadi", "Chunki ayiq qon hidini bo'yindan sezadi"] },
-  { q: "Men doim ishni nimadan boshlayman?", correct: "Hududni aylanishdan", wrongs: ["Hujjatlarni tekshirishdan", "Choy ichishdan", "Rejaga qarab chiqishdan"] },
-  { q: "Dunyodagi eng tinch joy qayer?", correct: "Tovush o'tkazmaydigan kamera", wrongs: ["Chuqur g'or", "Yerosti yo'li", "Observatoriya"] },
-  { q: "Beton, metin va shisha tolali devorlardan tashkil topgan, prujina oyoqlar ko'tarib turadigan bu nima?", correct: "Tovush o'tkazmaydigan kamera", wrongs: ["Fazogirlar kapsulasi", "Seysmologik laboratoriya", "Yerosti tunneli"] },
-  { q: "Tovush o'tkazmaydigan kamerada nima tekshiriladi?", correct: "Narsalarning akustikasi", wrongs: ["Narsalarning og'irligi", "Narsalarning harorati", "Narsalarning zichligi"] },
-  { q: "Kamerali xona juda tinch joy bo'lib, odam nimalarni eshitishi mumkin?", correct: "Ichki a'zolarni, qon harakatini, o'pka shovqinini", wrongs: ["Faqat yurak urishini", "Faqat nafasni", "Tashqaridagi shamolni"] },
-  { q: "Fabrika atrofini 4 km gacha nimalar o'rab turadi?", correct: "Makkajo'xori, bug'doy va rabs ekilgan dalalar", wrongs: ["Uzumzorlar va bog'lar", "O'rmonlar va daryolar", "Cho'l va tog'lar"] },
-  { q: "Makkajo'xori, bug'doy va rabs ekilgan dalalarni nimalar ajratib turadi?", correct: "Dala yo'llari", wrongs: ["Daryo va anhorlar", "Panjaralar", "Devorlar"] },
-  { q: "Dalalar tugagan joydan nimalar boshlanadi?", correct: "O'rmonlar", wrongs: ["Tog'lar", "Ko'llar", "Shaharlar"] },
-  { q: "Boshliq bo'rilarni qayerdan kelgan deb aytgan edi?", correct: "Tog'lardan", wrongs: ["O'rmonlardan", "Dashtlardan", "Dalalardan"] },
-  { q: "O'rmon chetida nima qoqib qo'yilgan edi?", correct: "Metaldan yasalgan, yomg'ir va havo sabab payvandlangan joylari qolgan xoч belgisi", wrongs: ["Yog'ochdan yasalgan yo'l belgisi", "Toshdan yasalgan haykal", "Temir panjara"] },
-  { q: "Kamerada tiq etgan harakat yo'q, faqatgina nimalarning harakati bor?", correct: "Devor yoriqlarida o'sgan begona o'tlarning shamol esgandagi harakati", wrongs: ["Devordagi soatning tikillashi", "Suv tomchilarining tovushi", "Chumolilarning yurishi"] },
-  { q: "Egnida choyxona kurtka, qo'lida menga ko'rinmaydigan bir narsaga qarab turadi - bu kim?", correct: "Loze", wrongs: ["Klemens", "Boshliq", "Oshpaz"] },
-  { q: "Oshpaz yo'qolgan fazogirni kimga o'xshatgan edi?", correct: "Lozeга", wrongs: ["Klemensga", "Qorovul qizga", "Boshliqqa"] },
-  { q: "Klemensdan xoч haqida so'raganimda u qanday javob qaytaradi?", correct: "U yerdan odam jasadi topilganini aytadi", wrongs: ["Uni cho'ponlar o'rnatganini aytadi", "Uni fabrika ochilgan yili qo'yishganini aytadi", "Bu joyni hech kim bilmasligini aytadi"] },
-  { q: "Necha yil muqaddam xoч (belgi)ni o'rnatishgan edi?", correct: "8 yil", wrongs: ["3 yil", "15 yil", "20 yil"] },
-  { q: "Jasad kimga tegishli edi?", correct: "Erkak kishiga", wrongs: ["Ayol kishiga", "Bolaga", "Noma'lum"] },
-  { q: "Tafsilotlarni kimdan so'raganimda u juda qattiq ta'sirlangan edi?", correct: "Loze", wrongs: ["Klemens", "Boshliq", "Oshpaz"] },
-  { q: "Loze jinoyat haqidagi qog'ozlarni A4 qog'ozga jamlab qo'ygan edi, ustiga nima deb yozib qo'yilgan edi?", correct: "O. T. O", wrongs: ["N. O. M", "J. I. N", "X. A. T"] },
-  { q: "O. T. O nima degan ma'noni bildiradi?", correct: "Osmondan tushgan odam", wrongs: ["O'ldirilgan Tanish Odam", "Ochiq Turgan Ombor", "O'rmondagi Topilgan Obyekt"] },
-  { q: "Lozening qaysi xarakteri menga yoqar edi?", correct: "Sinchkovligi, menga o'xshaganligi uchun", wrongs: ["Kulgililigi", "Jasoratliligi", "Sabr-toqatliligi"] },
-  { q: "Loze har doimgiday ovga ryukzagiga nimalarni solib ketadi?", correct: "Saryog' surtilgan non, qahva to'ldirilgan termos, binokl", wrongs: ["Faqat suv va nonushta", "Ov quroli va patronlar", "Xarita va kompas"] },
-  { q: "Odam nimalarni ko'rganda har safar birinchi marta ko'rayotgandek hayron qoladi?", correct: "Kit va yer qatlamini", wrongs: ["Fil va bo'rini", "Osmon va yulduzlarni", "Dengiz va tog'larni"] },
-  { q: "Oshpaz doim bu narsani qilmas edi, ammo Klemens talabiga binoan istisno qilinardi - nima edi bu?", correct: "Televizorni yoqilishi", wrongs: ["Radio tinglash", "Musiqa qo'yish", "Gazeta o'qish"] },
-  { q: "Jasad topilgan joyga odamlar to'plangan, politsiyachilar hujjatlarini topmadi, ammo nimalarni topdi?", correct: "Zanjir, fudbolka, jinsi shim", wrongs: ["Soat va uzuk", "Pasport va pul", "Telefon va kalitlar"] },
-  { q: "Jasadning cho'ntagida qanday pul birligi bor edi?", correct: "Markaziy Afrika (pul birligi)", wrongs: ["Yevro", "Dollar", "Funt sterling"] },
-  { q: "Jasadning fudbolkasida nimaning nomi yozilgan edi?", correct: "Kamerundagi firmaning nomi", wrongs: ["Fransuz firmasining nomi", "Mahalliy futbol klubining nomi", "Nemis firmasining nomi"] },
-  { q: "Ushbu dalillar va jasad terisining rangi uning qayerdan ekanligini anglatardi (taxmin hali isbotlanmagan) - qayer?", correct: "Kamerun", wrongs: ["Nigeriya", "Kongo", "Efiopiya"] },
+  {q: "Rayon kotibi. Oʻtgan yili Qahramonlik unvoniga sazovor boʻlib, \"Oltin yulduz\" taqqan fargʻonaliklarning biri kim edi?", a: ["Xorunboy Ermatov", "Anvar Eshonov", "Abdulla Qahhor", "Umarali"], correct: "Xorunboy Ermatov"},
+
+  {q: "Oʻzi juda shinavanda odam. Sanʼat-adabiyot ahllarini boshiga koʻtaradi. Kelganimizni eshitib Adhamga, mehnatkashlarimiz bilan bir uchrashuv qilsak, qandoq boʻlarkin, degan ekan. Bu kim edi?", a: ["Xorun Ermatov", "Umarali", "G'upra", "Anvar Eshonov"], correct: "Xorun Ermatov"},
+
+  {q: "Oʻlmas bilan ikkovimiz Anvarjon yetovida katta yoʻl yoqasidagi hovlilardan bir-ikkitasini koʻrgani yoʻlga chiqdik. Kim yozmoqchi boʻlgan qissa ishtirokchilaridan ikkitasiga hovli koʻrishimiz kerak edi?", a: ["Oʻlmas", "Umarali", "G'upra", "Anvar"], correct: "Oʻlmas"},
+
+  {q: "Ketma-ket sakkizta hovli koʻrdik, kimlar plan qilgani kelishgan deb oʻylab, xotin-xalaj orqamizdan ergashib yuribdi. Bizni kim deb oʻylashgan edi?", a: ["Gazchilar", "Militsiyachilar", "Sartaroshlar", "Amaldorlar"], correct: "Gazchilar"},
+
+  {q: "Koʻrganlarimizdan nechtasi xuddi biz qidirgan hovli edi?", a: ["2", "3", "4", "5"], correct: "2"},
+
+  {q: "U saranjom-sarishta, fayzligina, ozoda edi. Uzum novdalari baland valishga chiroyli qilib taralgan. Gʻoʻra tugib qolgan \"poshshoyi\" oʻrigi shoxida ikkita bedana qovoq osilgan bu hovli kimniki edi?", a: ["Gulchehraning", "Umaralining", "Rononing", "G'upraning"], correct: "Gulchehraning"},
+
+  {q: "Ikkita hovlidan keyin yana bitta shunaqa fayzli, ozoda, saranjom-sarishta hovliga kirdik. Oshxona devorida quyonni quvlab ketayotgan boʻri suratiga koʻzimiz tushdi. Surat tagiga nima deb yozib qoʻyilgan edi?", a: ["Ну, погоди!", "Tom va Jerri", "Qo'y va bo'ri", "Bo'rining ovi"], correct: "Ну, погоди!"},
+
+  {q: "Hovli etagida pushtasiga sarimsoq-piyoz qadalgan qulupnay arigʻiga galife shim kiygan oʻrta yashar bir kishi suv ochyapti. U kim, dedi Oʻlmas?", a: ["Abdullaning tog'asi", "Umaralining akasi", "G'upraning otasi", "Rayon kotibi"], correct: "Abdullaning tog'asi"},
+
+  {q: "Ayvon oʻrtasidagi kattakon stol ustida orqa qopqogʻi ochilgan qanaqa nomli televizor turardi?", a: ["Rekord", "Elektronika", "Horizont", "Sokol"], correct: "Rekord"},
+
+  {q: "– Isitmangiz ancha baland, tinchroq joyda yotib, ukol olib, bir kungina davolansangiz otdek boʻlib ketasiz, – dedi keksa feldsher. U aytgan \"tinchroq joy\" qayer edi?", a: ["atlas kombinatining sihatgohi", "rayon kasalxonasi", "qishloq shifoxonasi", "farg'ona sanatoriysi"], correct: "atlas kombinatining sihatgohi"},
+
+  {q: "Qancha uxlaganimni bilmayman. Koʻzimni ochsam, tepamda kim turibdi?", a: ["Umarali", "O'lmas", "G'upra", "Anvar"], correct: "Umarali"},
+
+  {q: "Ochiqkoʻngil, birovga tirnoqcha ham ozor bermaydigan, ogʻzidan biron nojoʻya soʻz chiqmagan, oʻta odobli, madaniyatli bu olim yigitni qattiq hurmat qilardim, issiq gaplar boʻlsa, mendan oldin u sevinib ketardi. Ta'rif kim haqida?", a: ["Umarali", "O'lmas", "G'upra", "Abdulla Qahhor"], correct: "Umarali"},
+
+  {q: "Uni koʻrib chehram yorishgandek boʻldi. \"Odam taftini odam oladi\" deganlari shu boʻlsa kerak-da. Kimni koʻrib shunday boʻlgan edi?", a: ["Umaralini", "O'lmasni", "G'upraning", "Anvarni"], correct: "Umaralini"},
+
+  {q: "Sizlar ketdingizlaru men bechora yetim boladek mungʻayib qolaverdim. Sirtqi talabalarimga, hordiq kuni ham imtihon olmoqchiman, deganimda sevinib ketishdi. Toshkentga oʻtirib borgan moshina rusumi nima edi?", a: ["Jiguli", "Moskvich", "Volga", "Zaporojets"], correct: "Jiguli"},
+
+  {q: "Yuvuqsiz, irkit odam bilan koʻrishib qolsa, mehmonxonaga yugurib borib choʻmilib kelardi. Oʻpishib koʻrishadiganlardan qochib yurardi. Tirnogʻi oʻsib ketgan, boʻyni terlab, hadeb dastroʻmolini shilta qilib oʻtiradigan odam yonidan turib hovliga chiqib ketar, qaytishda boshqa odam yoniga kelib oʻtirardi. Ta'rif kim haqida?", a: ["Umarali", "O'lmas", "G'upra", "Anvar"], correct: "Umarali"},
+
+  {q: "Sizni menga xudo yetkazdi. Ertaga qayer markazida Oʻlmasning qissasi muhokamasi boʻladi?", a: ["Quva markazida", "Farg'ona markazida", "Yozyovon markazida", "Nishon markazida"], correct: "Quva markazida"},
+
+  {q: "Sizni menga xudo yetkazdi. Ertaga Quva markazida Oʻlmasning qaysi qissasi muhokamasi boʻladi?", a: ["Sevgim-sevgilim", "Ming bir jon", "Kecha va kunduz", "Oltin devor"], correct: "Sevgim-sevgilim"},
+
+  {q: "– Sizni menga xudo yetkazdi. Ertaga Quva markazida Oʻlmasning \"Sevgim-sevgilim\" qissasi muhokamasi boʻladi. Men bu ahvoldaman. Muhokamani oʻzingiz oʻtkazib berasiz, – dedim unga yalingandek. Kimga aytilgan edi bu gap?", a: ["Umaraliga", "O'lmasga", "Xorunboy akaga", "G'upraga"], correct: "Umaraliga"},
+
+  {q: "Indinga kim yozuvchi mehmonlarni bedana oviga olib chiqmoqchi? Toza havoda maza qilib bir aylanib kelasiz.", a: ["Xorunboy aka", "Umarali", "O'lmas", "Anvar"], correct: "Xorunboy aka"},
+
+  {q: "Bilaman. Kim bedana oviga bormaydi? Oʻq yeb tipirchilab jon berayotgan bedanalarni koʻrishga yuragi dosh berolmaydi.", a: ["Umarali", "O'lmas", "G'upra", "Xorunboy aka"], correct: "Umarali"},
+
+  {q: "U bolalik paytlarida uyda qoʻy soʻymoqchi boʻlsalar, uni qarindoshlarinikiga joʻnatib yuborardilar. Koʻrsa mutlaqo goʻsht yemay qoʻyadi, deb shunday qilishardi, hatto kalla-pochasigacha koʻz tushmaydigan joyga yashirib qoʻyardilar. Ta'rif kim haqida?", a: ["Umarali", "O'lmas", "G'upra", "Anvar"], correct: "Umarali"},
+
+  {q: "Shunaqa injiq odamlarning xotiniga oson tutib boʻlmaydi. Kuniga necha martalab dastroʻmol-u kiyimbosh almashtiradiganlarning xotini kir yuvishdan boʻshamaydi. Uning xotinidan, kelin, tirikchilik qalay, deb soʻrayman. – Dorilfununga qoʻshniligimiz ham boshimizga balo boʻldi. Likkalikka kirib kelaveradilar. Bitta befahm men bilan quchoqlashib koʻrishdi, deb choʻmilib kiyim almashtirib chiqib ketadilar, sal vaqt oʻtmay, qoʻli terlaydigan jurnallardan, radiodan, televizorlardan oladigan qalamhaqlarini non puli qilib oʻtiribman. Ta'rif kim haqida?", a: ["Umarali", "O'lmas", "G'upra", "Xorunboy"], correct: "Umarali"},
+
+  {q: "Kelin tagdor gapni tushunadigan qayerliklardan edi?", a: ["beshariqliklardan", "marg'ilonliklardan", "quvaliklardan", "nishonliklardan"], correct: "beshariqliklardan"},
+
+  {q: "...ham gapni topib-topib gapiradigan serhazil kishi ekan. Kim edi bu?", a: ["Bosh shifokor", "Feldsher", "Rayon kotibi", "O'qituvchi"], correct: "Bosh shifokor"},
+
+  {q: "Juda erka kasal chiqib qoldingiz. Nima yeb oʻralib yotsa tuzalib ketadigan narsaku bu. Bugun yotib bir uxlang, ertaga haydalasiz. Koʻryapsizmi, sizdan boshqa bitta ham \"bemor\" yoʻq. Bir oʻzingizga qozon-choʻmich, idish-tovoq qilib shuncha odamni ovora qilib oʻtiribmiz. Nima yesa tuzalib ketadi?", a: ["Serqalampir achchiq shoʻrva ichsa", "Issiq choy ichsa", "Asal bilan sut ichsa", "Ko'proq dam olsa"], correct: "Serqalampir achchiq shoʻrva ichsa"},
+
+  {q: "Uchrashuvda negadir kimlar kam edi? Adabiyot muallimalarining hammasi shu yerda.", a: ["erkak muallimlar", "ayol muallimlar", "o'quvchilar", "rahbarlar"], correct: "erkak muallimlar"},
+
+  {q: "Koʻrinishidan shaddodligi bilinib turgan bir qiz oʻrnidan turdi. U ogʻzidagi qoplama tilla tishni yaqinda qoʻydirgan boʻlsa kerak, boʻlar-boʻlmasga ogʻzini katta ochib kulardi. Kulib boʻlgandan keyin ham ogʻzi ochiqligicha qolardi. Uning oftob urib qoraygan yuzi, shamolda yorilib, qalinlashib ketgan edi. Bu qiz kim edi?", a: ["G'apura G'ufra", "Rono", "Gulchehra", "Mastura"], correct: "G'apura G'ufra"},
+
+  {q: "G'afura O'lmas Umarbekovga qanday savol beradi?", a: ["Toshkent ayollarining hammasi shunaqami yo bitta sizniki shunaqa chiqib qolganmi?", "Nega ayollar haqida shunday yozasiz?", "Bu qahramon rostdan ham bo'lganmi?", "Siz o'zingiz shunday odammisiz?"], correct: "Toshkent ayollarining hammasi shunaqami yo bitta sizniki shunaqa chiqib qolganmi?"},
+
+  {q: "Sevgim-sevgilim asarida qayerda Oypopuk degan qizni sevib qolganligi haqida aytiladi?", a: ["Yakkachinorda", "Marg'ilonda", "Quvada", "Nishonda"], correct: "Yakkachinorda"},
+
+  {q: "\"Oqsoqol\" qoʻlini koʻtarib gʻovurni bosdi. U kim edi? Shaddodligi uchun uni \"oqsoqol\" derdilar. Hamon ogʻzini ochib turgan qizga qaradi.", a: ["kolxoz raisining madaniy ishlar boʻyicha birinchi oʻrinbosari", "rayon kotibi", "maktab direktori", "feldsher"], correct: "kolxoz raisining madaniy ishlar boʻyicha birinchi oʻrinbosari"},
+
+  {q: "O'lmas Umarbekov kim aytganiday, \"ertaga qichishadigan joyini bugun qashlab qoʻyadiganlardan\" deb aytgan edi?", a: ["Abdulla Qahhor", "Oybek", "G'afur G'ulom", "Cho'lpon"], correct: "Abdulla Qahhor"},
+
+  {q: "G'apuraning qaysi gapidan keyin oʻtirganlar birdan unga qiziqib qaradilar?", a: ["Yozuvchilar nima uchun shafqatsiz, rahmsiz, qahri qattiq boʻladi degan gapidan", "Adabiyot nima uchun kerak degan gapidan", "Kitob o'qish foydami degan gapidan", "O'zi yozuvchi bo'lishni xohlagani haqidagi gapidan"], correct: "Yozuvchilar nima uchun shafqatsiz, rahmsiz, qahri qattiq"},
+
+  {q: "\"Oʻtkan kunlar\"dagi Kumushbibi, \"Boy ila xizmatchi\"dagi Jamilani, \"Qutlugʻ qon\"dagi Yoʻlchini, \"Sevgim-sevgilim\"dagi Oypopukni, Ufqdagi Tursunboyga nima boʻldi? Uni kim oʻldirdi? G'apura bu savolni nega berdi?", a: ["Albatta, yozuvchi oʻldirgan, shu uchun", "Ular urushda halok bo'lgan", "Taqdir shunday hukm qilgan", "Ular haqiqatda yashagan odamlar edi"], correct: "Albatta, yozuvchi oʻldirgan, shu uchun"},
+
+  {q: "G'afuraga... Asarni qayerdan olib o'qiding, deganda \"Yozyovonimizda toʻqqizta odamda bu kitobning qoʻlda koʻchirilgan nusxasi bor. Shulardan bittasini oʻqidim-da!\" deydi. Qaysi asar haqida gap ketyapdi?", a: ["Kecha va Kunduz", "O'tkan kunlar", "Sevgim-sevgilim", "Ming bir jon"], correct: "Kecha va Kunduz"},
+
+  {q: "Qaysi asarlardan bittasidayam odam o'lmaydi, \"Arshin mol olon\" kabi murod-maqsadlariga yetadi?", a: ["Oltin devor va kelinlar qozg'oloni", "Kecha va kunduz", "O'tkan kunlar", "Sevgim-sevgilim"], correct: "Oltin devor va kelinlar qozg'oloni"},
+
+  {q: "Qizgina ishlab turib kechki maktabni \"oltin medal\" bilan tugatibdi. Adabiyotning qonun-qoidalarini mutlaqo bilmaydi. Buni unga tushuntiradigan odamning oʻzi yoʻq. Oʻzicha toʻgʻri-notoʻgʻri xulosalar chiqarib yuribdi. Ta'rif kim haqida?", a: ["G'upra haqida", "Rono haqida", "Gulchehra haqida", "Mastura haqida"], correct: "G'upra haqida"},
+
+  {q: "Qaysi taraflarda unchalik koʻp oʻqiydigan kitob \"jinnisi\" yoʻq, desa boʻladi? Qani endi unga G'upraga bir rahnamo topilsa, Toshkentga oʻqishga yuborsa.", a: ["Quva taraflarda", "Beshariq taraflarda", "Nishon taraflarda", "Marg'ilon taraflarda"], correct: "Quva taraflarda"},
+
+  {q: "Umarali yonida oʻtirgan Quvaning kotibi kimga shu fikrini aytgan edi, u oʻylanib qoldi. Yuzlarini oftob qoraytirib sopolga oʻxshatib qoʻygan, qir shamoli...", a: ["Ermatovga", "O'lmasga", "Xorunboy akaga", "G'upraga"], correct: "Ermatovga"},
+
+  {q: "G'upralar oilasi Qashqadaryoning qaysi rayonidan koʻchib kelgan?", a: ["Nishon", "Qarshi", "Kitob", "Shahrisabz"], correct: "Nishon"},
+
+  {q: "Otasi traktor ketida paxtaga dori sepib yurib oʻpkasini xasta qilib qoʻygan ekan. Bu oila vodiyga toza havo istab kelib qolgan edi. Oʻsha kezlarda Mark... Kim haqida gap ketyapti?", a: ["G'upra", "Umarali", "Rono", "Gulchehra"], correct: "G'upra"},
+
+  {q: "G'upraning nechta akasi bor?", a: ["2 ta", "1 ta", "3 ta", "4 ta"], correct: "2 ta"},
+
+  {q: "Bittasi Qoʻqonga qatnaydigan avtobusda haydovchi. Bittasi maishiy xizmat kombinatida raykomlarga, ispolkomlarga zoʻr kostyumlar tikadi... Kimning akalari bular?", a: ["G'upraning", "Rononing", "Umaralining", "Gulchehraning"], correct: "G'upraning"},
+
+  {q: "G'upra kimning singlisi edi?", a: ["Ali partnoyning", "Xorunboy Ermatovning", "Umaralining", "Abdullaning"], correct: "Ali partnoyning"},
+
+  {q: "G'upra qanday maktabda o'qir edi?", a: ["Kechki", "Kunduzgi", "Internat", "Musiqa maktabida"], correct: "Kechki"},
+
+  {q: "Medalimni buvim dadam rahmatlining orden-medallari bilan sandiqda saqlardi. Noinsof akam buvimni aldab, medalimni olib, xotiniga nima yasatib beripti?", a: ["Tish", "Uzuk", "Sirg'a", "Bilaguzuk"], correct: "Tish"},
+
+  {q: "Siz, \"akang senga Toshkentda kiyishingga bosh-oyoq kiyim tikib beradi\", deyapsiz. Agar akam birovga tekinga bitta nima qilib bersa, oʻsha kuni joni chiqib ketadi?", a: ["tugma qadab bersa", "yamoq solib bersa", "ip bersa", "ignani bersa"], correct: "tugma qadab bersa"},
+
+  {q: "Buvim kelin boʻlib tushganda katta acham \"yuz ochdi\" kuni \"koʻrmana\"ga nima bergan ekan? Shuni sandiqdan olib menga berdi.", a: ["tilla toʻgʻnogʻich", "tilla uzuk", "tilla sirg'a", "kumush bilaguzuk"], correct: "tilla toʻgʻnogʻich"},
+
+  {q: "Toʻgʻnogʻichni birpas tomosha qilib, keyin uni buvimga qaytib berdim. Bu toʻgʻnogʻich buvimga qaynonasidan esdalik. Necha yildan beri uni sira unutmasdan saqlab kelgan edi?", a: ["45", "35", "50", "40"], correct: "45"},
+
+  {q: "Qayerda zoʻr tish texnigi bor, deb eshitgan edim. Oʻshanga uch kun qatnab rasmona tillodan qoplama qoʻydirib keldim.", a: ["Marg'ilonda", "Quvada", "Andijonda", "Farg'onada"], correct: "Marg'ilonda"},
+
+  {q: "Necha yildan beri topgan pullarimning yarmidan koʻpini kassaga qoʻyardim?", a: ["5", "3", "7", "10"], correct: "5"},
+
+  {q: "G'upraning bitta apachasi sartaroshga shogird tushib yurgan tojik bola bilan qayerga qochib ketgan?", a: ["Dushanbega", "Samarqandga", "Buxoroga", "Xo'jandga"], correct: "Dushanbega"},
+
+  {q: "Bitta yangacham bolalar bogʻchasida murabbiy. Yana bitta yangacham yaqinda \"jijilagan\". Yaʼni boʻshangan. Hozir eshikda jiji boqib oʻtiripti. Buvim qayerda ekanini aytdi?", a: ["parranda fermasida", "uyida", "bog'chada", "fermer xo'jaligida"], correct: "parranda fermasida"},
+
+  {q: "\"Ming bir jon\" degan asarini oʻqiganmisiz? Oʻqimagan boʻlsanglar albatta topib oʻqinglar. Ana oʻladi, mana oʻladi deb kutishayotgan bemor eshikdan olib kirilgan oʻz tobutini derazadan koʻrgan, ayvonda uning joni uzilishini kutayotgan gʻassolni koʻrgan. Bu kimning asari edi?", a: ["Mastura Aliyevaning", "Oybekning", "Abdulla Qahhorning", "O'lmas Umarbekovning"], correct: "Mastura Aliyevaning"},
+
+  {q: "Qaysi asarning ham har bir soʻzini sinchiklab oʻqish kerak? Yozuvchi soʻz tagiga soʻz yashiradi. Oʻsha soʻzni topib oʻqish kerak. Oypopuk nega oʻzini... (qaysi asar haqida gap ketyapti)", a: ["Sevgim sevgilim", "Kecha va kunduz", "O'tkan kunlar", "Ming bir jon"], correct: "Sevgim sevgilim"},
+
+  {q: "Kim bilan olishib ham boʻlmaydi, bas kelib ham boʻlmaydi? Hatto parrandalarning ham urgʻochisi jonini tikib \"qonli jangga\" kiradi.", a: ["Ayol kishi bilan", "Erkak bilan", "Bolasi bilan", "Dushman bilan"], correct: "Ayol kishi bilan"},
+
+  {q: "...ham ana shunaqa shaddod, gapni bilib-bilib aytadigan, gʻururini yerga urmaydiganlardan edi. Kim edi bu?", a: ["Oqsoqol", "Umarali", "G'upra", "Rayon kotibi"], correct: "Oqsoqol"},
+
+  {q: "Bu kitobni kechalari bolishimning tagiga qoʻyib yotaman. Har uygʻonganimda olib silab-silab joyiga qoʻyaman. Shuni yozgan yigitni bir koʻrarmikanman, deb nolalar qilganman. Mana, nolishim xudoga yetib, u bilan roʻbaroʻ qilib qoʻydi. Bu gaplarni aytgan qiz kim edi?", a: ["Oʻlmasdan koʻz uzolmay uning qoshlariga mahliyo boʻlib oʻtirgan suzikko'z qiz", "Baqaloq qiz", "G'apura", "Rono"], correct: "Oʻlmasdan koʻz uzolmay uning qoshlariga mahliyo boʻlib oʻtirgan suzikko'z qiz"},
+
+  {q: "Bir baqaloq qiz oʻrnidan turdi. – Endi uni qoʻldan chiqazma. Mahkam ushla! Toʻyananing kattasi mendan sendan nima aylansin, deydi?", a: ["Qo'y", "Ho'kiz", "Toy", "Tuya"], correct: "Qo'y"},
+
+  {q: "Suzukkoʻz qiz nozlanib kimni \"eritmoqchi\" boʻldi? Kim Toshkentda ne-ne tam-tam qizlarning \"tuzogʻi\"dan omon chiqqan, bu masalada katta malaka orttirgan yigitlardan edi. Bu qizning nozu karashmalaridan ichida kulibgina oʻtirardi. Qiz uning oldiga kitob bilan ruchka qoʻydi.", a: ["O'lmas", "Umarali", "Xorunboy aka", "Anvar"], correct: "O'lmas"},
+
+  {q: "\"Shunga dastxat yozib bering. Iltimos, singlim demang...\" Qoʻy toʻyana qilmoqchi boʻlgan qiz gap qotdi: \"nima deb\" deb yozsinmi? Dedi. Yana kulgi, yana chapak boʻldi. Nima deb yozdi?", a: ["Sevgim-sevgilim, koʻzlarimning oq-u qora", "Sevgilim, umrbod unutilmaysan", "Sizga hurmat bilan", "Eng yaxshi tilaklarim bilan"], correct: "Sevgim-sevgilim, koʻzlarimning oq-u qora"},
+
+  {q: "\"Koʻp yozing, – dedi u, – yaxshilab yozing, menga qarab turib yozing.\" Bu gapni aytgan qizning ismi kim edi?", a: ["Rono", "Gulchehra", "Mastura", "G'upra"], correct: "Rono"},
+
+  {q: "Rononing nechta opachasi bor?", a: ["3 ta", "2 ta", "4 ta", "1 ta"], correct: "3 ta"},
+
+  {q: "\"Xudo xohlasa, tilla tish qoʻydirganimdan keyin Toshkentga boraman, koʻrishib qolarmiz.\" – \"Toshkentlik bechoralar umrida tilla tish koʻrmagan. Qoʻlingdan sudrab telestudiyaga opkirib ketadi. Oʻshaqda kim boʻlib qolib ketishing ham mumkin,\" – qizlarning kalaka qilib aytgan soʻzlarini ham \"Roʻnoʻ\" yaxshilikka yoʻydi. Nima boʻlib qolishi mumkin edi?", a: ["Diktor", "Artist", "O'qituvchi", "Jurnalist"], correct: "Diktor"},
+
+  {q: "\"Boʻlishi mumkin. Hayotda nimalar boʻlmaydi,\" – deb javob qildi ularga. Dastxat yozilgan kitobni olarkan birov eshitmaydigan qilib sekingina, har qanday erkakni eritib, \"uygʻotib\" yuboradigan gʻalati gʻamza bilan nima dedi?", a: ["Ikkalamiz birga suratga tushaylik", "Meni unutmang", "Yana kelib turing", "Xat yozib turaman"], correct: "Ikkalamiz birga suratga tushaylik"},
 
 
     /* ===== 2-QISM.1*** ===== */
