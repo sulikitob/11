@@ -315,8 +315,68 @@
     box-shadow: 0 6px 24px rgba(255,204,0,0.6);
   }
 
+  /* 2-mavsum pul yutug'i egalari — mavjud uslubga mos */
+  .winners {
+    margin-top: 30px;
+    text-align: center;
+  }
+  .winners .title-box h1 {
+    font-size: 22px;
+    letter-spacing: 2px;
+  }
+  .winners-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 22px;
+    margin-top: 26px;
+  }
+  .winner {
+    position: relative;
+    overflow: hidden;
+    background: rgba(255,255,255,0.02);
+    border: 1px solid rgba(255,204,0,0.4);
+    border-radius: 16px;
+    padding: 18px 12px 18px 12px;
+    text-align: center;
+    transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+  }
+  .winner:hover {
+    transform: translateY(-4px);
+    border-color: #ffcc00;
+    box-shadow: 0 8px 24px rgba(255,204,0,0.4);
+  }
+  .winner .rank {
+    color: #ffcc00;
+    font-size: 11px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    font-weight: 800;
+    margin-bottom: 10px;
+  }
+  .winner .avatar {
+    border: 3px solid #ffcc00;
+    box-shadow: 0 0 14px rgba(255,204,0,0.55);
+    background: radial-gradient(circle at 35% 30%, #4a3a12, #0f0f0f 75%);
+  }
+  .winner .fullname {
+    color: #f2f2f2;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0.3px;
+    line-height: 1.35;
+    margin-top: 2px;
+  }
+  .winner .amount {
+    margin-top: 8px;
+    color: #2ecc71;
+    font-size: 14px;
+    font-weight: 800;
+    letter-spacing: 0.4px;
+  }
+
   @media (max-width: 760px) {
     .grid { grid-template-columns: repeat(2, 1fr); }
+    .winners-grid { grid-template-columns: repeat(2, 1fr); }
   }
 
   @media (max-width: 640px) {
@@ -325,6 +385,7 @@
     .title-box h1 { font-size: 18px; letter-spacing: 2px; }
     .owner { flex-direction: column; text-align: center; }
     .premium h2 { font-size: 17px; }
+    .winners .title-box h1 { font-size: 16px; }
   }
 
   /* Bog'lanish overlay */
@@ -496,6 +557,48 @@
       <p>Hurmatli qadrli ro'yxatdagi kitobxonlar, sizlardan 1 yillik Zuho premiumni qabul qilishingizni so'rayman. Hurmat bilan, Zuho.uz</p>
       <button class="btn" onclick="showContacts()">Zuho.uz</button>
     </div>
+
+    <!-- ===== 2-MAVSUM PUL YUTUG'I EGALARI ===== -->
+    <div class="winners" id="winnersSection">
+      <div class="title-box">
+        <h1>🏆 2-mavsum pul yutug'i egalari</h1>
+      </div>
+      <div class="winners-grid">
+        <div class="winner">
+          <div class="rank">1-o'rin</div>
+          <div class="avatar winner"><img src="ravza.jpg" alt="G'olib rasmi" onerror="this.style.display='none'"></div>
+          <div class="fullname">Ravzabonu Davronova </div>
+          <div class="amount">50 000 so'm</div>
+        </div>
+        <div class="winner">
+          <div class="rank">2-o'rin</div>
+          <div class="avatar winner"><img src="g2.jpg" alt="G'olib rasmi" onerror="this.style.display='none'"></div>
+          <div class="fullname">Sevinch Muradullayeva </div>
+          <div class="amount">30 000 so'm</div>
+        </div>
+        <div class="winner">
+          <div class="rank">3-o'rin</div>
+          <div class="avatar winner"><img src="g3.jpg" alt="G'olib rasmi" onerror="this.style.display='none'"></div>
+          <div class="fullname">Qanoatxon</div>
+          <div class="amount">20 000 so'm</div>
+        </div>
+        <div class="winner">
+          <div class="rank">4-o'rin</div>
+          <div class="avatar winner"><img src="g4.jpg" alt="G'olib rasmi" onerror="this.style.display='none'"></div>
+          <div class="fullname">Otaboy Sultonboyev </div>
+          <div class="amount">10 000 so'm</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Pul yutuqlarini qabul qilish — maxsus taklif -->
+    <div class="premium" style="margin-top: 26px;">
+      <span class="badge">Maxsus taklif</span>
+      <h2>Pul <span>yutug'ingizni</span> qabul qilib oling!</h2>
+      <p>Qadrli kitobxonlar sovg'a egasi bo'lganingiz bilan tabriklayman Alloh barakali qilsin , sizlardan sovg'alaringizni Zuho prizelarni qabul qilishingizni so'rayman. Hurmat bilan, Zuho.uz  Hurmat bilan, Zuho.uz</p>
+      <button class="btn" onclick="showContacts()">Zuho.uz</button>
+    </div>
+
   </div>
 </div>
 
@@ -575,6 +678,9 @@
   });
   document.querySelectorAll('.member.boy').forEach(function (card) {
     addColorSparkles(card, 6, '#4aa3ff');
+  });
+  document.querySelectorAll('.winner').forEach(function (card) {
+    addColorSparkles(card, 6, '#ffcc00');
   });
 
   // Zuho.uz tugmasi bosilganda bog'lanish oynasi
