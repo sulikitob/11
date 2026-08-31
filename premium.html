@@ -517,6 +517,131 @@
   .contact-link.pink .c-handle {
     color: #ff8fc7;
   }
+
+  /* Sovg'a qabul qilish — yashil uslub */
+  .gifts {
+    margin-top: 30px;
+    text-align: center;
+  }
+  .gifts .title-box h1 {
+    font-size: 22px;
+    letter-spacing: 2px;
+  }
+  .gifts-grid {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 22px;
+    margin-top: 26px;
+  }
+  .gift-card {
+    position: relative;
+    overflow: hidden;
+    width: 100%;
+    max-width: 320px;
+    background: rgba(255,255,255,0.02);
+    border: 1px solid rgba(46,204,113,0.4);
+    border-radius: 16px;
+    padding: 18px 12px 18px 12px;
+    text-align: center;
+    transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+  }
+  .gift-card:hover {
+    transform: translateY(-4px);
+    border-color: #2ecc71;
+    box-shadow: 0 8px 24px rgba(46,204,113,0.4);
+  }
+  .gift-card .rank {
+    color: #2ecc71;
+    font-size: 11px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    font-weight: 800;
+    margin-bottom: 10px;
+  }
+  .gift-card .avatar {
+    width: 100%;
+    max-width: 148px;
+    aspect-ratio: 1 / 1;
+    margin: 0 auto;
+    border-radius: 16px;
+    border: 3px solid #2ecc71;
+    box-shadow: 0 0 14px rgba(46,204,113,0.55);
+    background: radial-gradient(circle at 35% 30%, #123a24, #0f0f0f 75%);
+    overflow: hidden;
+  }
+  .gift-card .avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+  .gift-card .fullname {
+    color: #f2f2f2;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0.3px;
+    line-height: 1.35;
+    margin-top: 10px;
+  }
+  .gift-card .congrats {
+    margin-top: 6px;
+    color: #2ecc71;
+    font-size: 12.5px;
+    font-weight: 600;
+    letter-spacing: 0.2px;
+    line-height: 1.4;
+  }
+
+  /* Sovg'a egalari ustidagi 1 ta profil — ko'k rangda */
+  .gift-owner {
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: linear-gradient(135deg, rgba(74,163,255,0.10), rgba(255,255,255,0.02));
+    border: 1px solid #4aa3ff;
+    border-radius: 20px;
+    padding: 22px 24px;
+    margin-top: 30px;
+    box-shadow: 0 0 22px rgba(74,163,255,0.25);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  .gift-owner:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 0 32px rgba(74,163,255,0.45);
+  }
+  .gift-owner .photo {
+    width: 96px;
+    height: 96px;
+    border-radius: 50%;
+    border: 3px solid #4aa3ff;
+    box-shadow: 0 0 16px rgba(74,163,255,0.55);
+    overflow: hidden;
+    background: radial-gradient(circle at 35% 30%, #12314f, #0f0f0f 75%);
+  }
+  .gift-owner .photo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+  .gift-owner .role {
+    margin-top: 12px;
+    color: #4aa3ff;
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    font-weight: 700;
+  }
+  .gift-owner .name {
+    margin-top: 4px;
+    color: #ffffff;
+    font-size: 17px;
+    font-weight: 700;
+    letter-spacing: 0.3px;
+  }
 </style>
 </head>
 <body>
@@ -642,6 +767,42 @@
       <button class="btn" onclick="showContacts()">Zuho.uz</button>
     </div>
 
+    <!-- Sovg'a egalari ustidagi profil (ko'k) -->
+    <div class="gift-owner" id="giftOwnerCard">
+      <div class="photo">
+        <img src="OTABOY.jpg" alt="Otaboy Sultonboyev" onerror="this.style.display='none'">
+      </div>
+      <div class="role">Sovg'a egasi</div>
+      <div class="name">Otaboy Sultonboyev</div>
+    </div>
+
+    <!-- ===== SOVG'A EGALARI (yashil) ===== -->
+    <div class="gifts" id="giftsSection">
+      <div class="title-box">
+        <h1>🎁 Sovg'a egalari</h1>
+      </div>
+      <div class="gifts-grid">
+        <div class="gift-card">
+          <div class="rank">1-sovg'a</div>
+          <div class="avatar"><img src="sovga1.jpg" alt="Sovg'a rasmi" onerror="this.style.display='none'"></div>
+          <div class="fullname">Ism familiya</div>
+          <div class="congrats">Tabriklaymiz! Sovg'angizni qabul qiling</div>
+        </div>
+        <div class="gift-card">
+          <div class="rank">2-sovg'a</div>
+          <div class="avatar"><img src="sovga2.jpg" alt="Sovg'a rasmi" onerror="this.style.display='none'"></div>
+          <div class="fullname">Ism familiya</div>
+          <div class="congrats">Tabriklaymiz! Sovg'angizni qabul qiling</div>
+        </div>
+        <div class="gift-card">
+          <div class="rank">3-sovg'a</div>
+          <div class="avatar"><img src="sovga3.jpg" alt="Sovg'a rasmi" onerror="this.style.display='none'"></div>
+          <div class="fullname">Ism familiya</div>
+          <div class="congrats">Tabriklaymiz! Sovg'angizni qabul qiling</div>
+        </div>
+      </div>
+    </div>
+
   </div>
 </div>
 
@@ -724,6 +885,9 @@
   });
   document.querySelectorAll('.winner').forEach(function (card) {
     addColorSparkles(card, 6, '#ffcc00');
+  });
+  document.querySelectorAll('.gift-card').forEach(function (card) {
+    addColorSparkles(card, 6, '#2ecc71');
   });
 
   // Zuho.uz tugmasi bosilganda bog'lanish oynasi
