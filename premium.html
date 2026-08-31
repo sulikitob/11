@@ -649,10 +649,9 @@
 <div class="stars" id="stars"></div>
 
 <div class="wrap">
-
   <div class="card">
 
-    <!-- Rahbar / Adminka — golden effect, both people equal -->
+    <!-- Rahbar / Adminka -->
     <div class="owner" id="ownerCard">
       <div class="person">
         <div class="photo">
@@ -674,7 +673,7 @@
       </div>
     </div>
 
-    <!-- 7 nafar a'zo — hammasi bir xil shaklda -->
+    <!-- A'zolar grid -->
     <div class="grid">
       <div class="member girl">
         <div class="avatar girl"><img src="PARD.jpg" alt="Laylo Pardayeva" onerror="this.style.display='none'"></div>
@@ -720,7 +719,7 @@
       <button class="btn" onclick="showContacts()">Zuho.uz</button>
     </div>
 
-    <!-- ===== 2-MAVSUM PUL YUTUG'I EGALARI ===== -->
+    <!-- Pul yutug'i egalari -->
     <div class="winners" id="winnersSection">
       <div class="title-box">
         <h1>🏆 Pul yutug'i egalari</h1>
@@ -729,13 +728,13 @@
         <div class="winner">
           <div class="rank">1-o'rin</div>
           <div class="avatar winner"><img src="RAVZA.jpg" alt="G'olib rasmi" onerror="this.style.display='none'"></div>
-          <div class="fullname">Ravzabonu Davronova </div>
+          <div class="fullname">Ravzabonu Davronova</div>
           <div class="amount">50 000 so'm</div>
         </div>
         <div class="winner">
           <div class="rank">2-o'rin</div>
           <div class="avatar winner"><img src="queen be.jpg" alt="G'olib rasmi" onerror="this.style.display='none'"></div>
-          <div class="fullname">Sevinch Muradullayeva </div>
+          <div class="fullname">Sevinch Muradullayeva</div>
           <div class="amount">30 000 so'm</div>
         </div>
         <div class="winner">
@@ -752,22 +751,16 @@
         </div>
       </div>
     </div>
-   
-        </div>
-      </div>
-    </div>
 
-
-   
-    <!-- Pul yutuqlarini qabul qilish — maxsus taklif -->
+    <!-- Pul yutuqlarini qabul qilish -->
     <div class="premium" style="margin-top: 26px;">
       <span class="badge">Maxsus taklif</span>
       <h2>Pul <span>yutug'ingizni</span> qabul qilib oling!</h2>
-      <p>Qadrli kitobxonlar sovg'a egasi bo'lganingiz bilan tabriklayman Alloh barakali qilsin , sizlardan sovg'alaringizni Zuho prizelarni qabul qilishingizni so'rayman. Hurmat bilan, Zuho.uz  Hurmat bilan, Zuho.uz</p>
+      <p>Qadrli kitobxonlar sovg'a egasi bo'lganingiz bilan tabriklayman Alloh barakali qilsin , sizlardan sovg'alaringizni Zuho prizelarni qabul qilishingizni so'rayman. Hurmat bilan, Zuho.uz</p>
       <button class="btn" onclick="showContacts()">Zuho.uz</button>
     </div>
 
-    <!-- Sovg'a egalari ustidagi profil (ko'k) -->
+    <!-- Sovg'a egasi (ko'k) -->
     <div class="gift-owner" id="giftOwnerCard">
       <div class="photo">
         <img src="OTABOY.jpg" alt="Otaboy Sultonboyev" onerror="this.style.display='none'">
@@ -776,7 +769,7 @@
       <div class="name">Otaboy Sultonboyev</div>
     </div>
 
-   <!-- ===== SOVG'A EGALARI (yashil) ===== -->
+    <!-- Sovg'a egalari (yashil) -->
     <div class="gifts" id="giftsSection">
       <div class="title-box">
         <h1>🎁 Sovg'a egalari</h1>
@@ -849,7 +842,6 @@
     starsContainer.appendChild(star);
   }
 
-  // Rahbar/Adminka kartasiga uzluksiz porillovchi yulduzchalar
   function addSparkles(card, count) {
     for (let i = 0; i < count; i++) {
       const star = document.createElement('span');
@@ -863,7 +855,6 @@
   }
   addSparkles(document.getElementById('ownerCard'), 14);
 
-  // Har bir a'zo profiliga o'z rangiga mos porlovchi yulduzchalar
   function addColorSparkles(card, count, color) {
     for (let i = 0; i < count; i++) {
       const star = document.createElement('span');
@@ -890,7 +881,6 @@
     addColorSparkles(card, 6, '#2ecc71');
   });
 
-  // Zuho.uz tugmasi bosilganda bog'lanish oynasi
   function showContacts() {
     document.getElementById('contactOverlay').classList.add('show');
   }
