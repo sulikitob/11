@@ -578,7 +578,7 @@
     display: block;
   }
 
-  /* Sovg'a egasi ustidagi 1 ta profil — ko'k rangda */
+  /* Sovg'a egasi ustidagi 1 ta profil — ko'k rangda porlaydigan uslub */
   .gift-owner {
     position: relative;
     overflow: hidden;
@@ -588,33 +588,38 @@
     background: linear-gradient(135deg, rgba(74,163,255,0.10), rgba(255,255,255,0.02));
     border: 1px solid #4aa3ff;
     border-radius: 20px;
-    padding: 22px 24px;
+    padding: 24px 28px;
     margin-top: 30px;
     box-shadow: 0 0 22px rgba(74,163,255,0.25);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
   }
+  .gift-owner::before {
+    content: "";
+    position: absolute;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(45deg, transparent, rgba(74,163,255,0.35), transparent);
+    top: -150%;
+    left: -150%;
+    transform: rotate(25deg);
+    transition: 0.7s;
+    pointer-events: none;
+  }
+  .gift-owner:hover::before { top: 100%; left: 100%; }
   .gift-owner:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 0 32px rgba(74,163,255,0.45);
+    transform: translateY(-6px) scale(1.01);
+    box-shadow: 0 0 40px rgba(74,163,255,0.55);
   }
-  .gift-owner .photo {
-    width: 96px;
-    height: 96px;
-    border-radius: 50%;
-    border: 3px solid #4aa3ff;
-    box-shadow: 0 0 16px rgba(74,163,255,0.55);
-    overflow: hidden;
-    background: radial-gradient(circle at 35% 30%, #12314f, #0f0f0f 75%);
+
+  .gift-owner .content-wrap {
+    position: relative;
+    z-index: 2;
     display: flex;
+    flex-direction: column;
     align-items: center;
-    justify-content: center;
-  }
-  .gift-owner .photo img {
     width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
   }
+
   .gift-owner .role {
     margin-top: 12px;
     color: #ffffff;
@@ -775,11 +780,21 @@
       <button class="btn" onclick="showContacts()">Zuho.uz</button>
     </div>
 
-    <!-- Sovg'a egasi (ko'k) -->
+    <!-- Sovg'a egasi (ko'k - porlaydigan va maxsus taklif bloki bilan) -->
     <div class="gift-owner" id="giftOwnerCard">
-      <div class="heart-circle-blue"><span>🖤</span></div>
-      <div class="role">Otaboy Sultonbeoyev Ilm va Saytimiz rivojiga 200 000 so'm do'nat qildingiz katta rahmat Alloh rozi bo'lsin sizdan ushbu arzimas sovg'alarimizni qabul qiling hurmat bilan Zuho.uz</div>
-      <div class="name">Otaboy Sultonboyev</div>
+      <div class="content-wrap">
+        <div class="heart-circle-blue"><span>🖤</span></div>
+        <div class="role">Otaboy Sultonboyev Ilm va Saytimiz rivojiga 200 000 so'm do'nat qildingiz katta rahmat Alloh rozi bo'lsin sizdan ushbu arzimas sovg'alarimizni qabul qiling hurmat bilan Zuho.uz</div>
+        <div class="name">Otaboy Sultonboyev</div>
+      </div>
+    </div>
+
+    <!-- Sovg'angizni qabul qiling (Otaboy uchun maxsus taklif bloki) -->
+    <div class="premium" style="margin-top: 26px;">
+      <span class="badge">Maxsus taklif</span>
+      <h2>Sovg'angizni <span>qabul qiling!</span></h2>
+      <p>Qadrli Otaboy, qo'shgan hissangiz va qo'llab-quvvatlovingiz uchun minnatdormiz. Sovg'angizni mamnuniyat bilan qabul qilib oling! Hurmat bilan, Zuho.uz</p>
+      <button class="btn" onclick="showContacts()">Zuho.uz</button>
     </div>
 
     <!-- Sovg'a egalari (yashil) -->
@@ -861,6 +876,7 @@
     }
   }
   addSparkles(document.getElementById('ownerCard'), 14);
+  addSparkles(document.getElementById('giftOwnerCard'), 14);
 
   function addColorSparkles(card, count, color) {
     for (let i = 0; i < count; i++) {
