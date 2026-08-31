@@ -577,24 +577,8 @@
     object-fit: cover;
     display: block;
   }
-  .gift-card .fullname {
-    color: #f2f2f2;
-    font-size: 14px;
-    font-weight: 700;
-    letter-spacing: 0.3px;
-    line-height: 1.35;
-    margin-top: 10px;
-  }
-  .gift-card .congrats {
-    margin-top: 6px;
-    color: #2ecc71;
-    font-size: 12.5px;
-    font-weight: 600;
-    letter-spacing: 0.2px;
-    line-height: 1.4;
-  }
 
-  /* Sovg'a egalari ustidagi 1 ta profil — ko'k rangda */
+  /* Sovg'a egasi ustidagi 1 ta profil — ko'k rangda */
   .gift-owner {
     position: relative;
     overflow: hidden;
@@ -621,6 +605,9 @@
     box-shadow: 0 0 16px rgba(74,163,255,0.55);
     overflow: hidden;
     background: radial-gradient(circle at 35% 30%, #12314f, #0f0f0f 75%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
   .gift-owner .photo img {
     width: 100%;
@@ -630,18 +617,45 @@
   }
   .gift-owner .role {
     margin-top: 12px;
-    color: #4aa3ff;
-    font-size: 11px;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    font-weight: 700;
+    color: #ffffff;
+    font-size: 13.5px;
+    letter-spacing: 0.3px;
+    font-weight: 500;
+    text-align: center;
+    max-width: 600px;
+    line-height: 1.5;
   }
   .gift-owner .name {
-    margin-top: 4px;
-    color: #ffffff;
+    margin-top: 6px;
+    color: #4aa3ff;
     font-size: 17px;
     font-weight: 700;
     letter-spacing: 0.3px;
+    text-align: center;
+  }
+
+  /* Moviy dumaloq ichidagi qora yurak animatsiyasi */
+  .heart-circle-blue {
+    width: 96px;
+    height: 96px;
+    border-radius: 50%;
+    border: 3px solid #4aa3ff;
+    box-shadow: 0 0 16px rgba(74,163,255,0.55);
+    background: radial-gradient(circle at 35% 30%, #12314f, #0f0f0f 75%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .heart-circle-blue span {
+    font-size: 42px;
+    line-height: 1;
+    filter: drop-shadow(0 0 8px rgba(74,163,255,0.7));
+    animation: blueHeartPulse 2s ease-in-out infinite;
+  }
+
+  @keyframes blueHeartPulse {
+    0%, 100% { transform: scale(0.9); }
+    50% { transform: scale(1.15); }
   }
 </style>
 </head>
@@ -763,9 +777,7 @@
 
     <!-- Sovg'a egasi (ko'k) -->
     <div class="gift-owner" id="giftOwnerCard">
-      <div class="photo">
-        <img src="OTABOY.jpg" alt="Otaboy Sultonboyev" onerror="this.style.display='none'">
-      </div>
+      <div class="heart-circle-blue"><span>🖤</span></div>
       <div class="role">Otaboy Sultonbeoyev Ilm va Saytimiz rivojiga 200 000 so'm do'nat qildingiz katta rahmat Alloh rozi bo'lsin sizdan ushbu arzimas sovg'alarimizni qabul qiling hurmat bilan Zuho.uz</div>
       <div class="name">Otaboy Sultonboyev</div>
     </div>
@@ -779,20 +791,14 @@
         <div class="gift-card">
           <div class="rank">1-sovg'a</div>
           <div class="avatar"><img src="sovga1.jpg" alt="Sovg'a rasmi" onerror="this.style.display='none'"></div>
-          <div class="fullname">Ism familiya</div>
-          <div class="congrats">Tabriklaymiz! Sovg'angizni qabul qiling</div>
         </div>
         <div class="gift-card">
           <div class="rank">2-sovg'a</div>
           <div class="avatar"><img src="sovga2.jpg" alt="Sovg'a rasmi" onerror="this.style.display='none'"></div>
-          <div class="fullname">Ism familiya</div>
-          <div class="congrats">Tabriklaymiz! Sovg'angizni qabul qiling</div>
         </div>
         <div class="gift-card">
           <div class="rank">3-sovg'a</div>
           <div class="avatar"><img src="sovga3.jpg" alt="Sovg'a rasmi" onerror="this.style.display='none'"></div>
-          <div class="fullname">Ism familiya</div>
-          <div class="congrats">Tabriklaymiz! Sovg'angizni qabul qiling</div>
         </div>
       </div>
     </div>
